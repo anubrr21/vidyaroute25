@@ -1,0 +1,2058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Paths - विद्याRoute</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS remains the same as in the original */
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --text-light: #2c3e50;
+            --text-dark: #ecf0f1;
+            --bg-light: #ffffff;
+            --bg-dark: #121212;
+            --card-light: #ffffff;
+            --card-dark: #1e1e1e;
+            --border-light: #ddd;
+            --border-dark: #444;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: var(--bg-light);
+            --bg-secondary: var(--light);
+            --text-primary: var(--text-light);
+            --text-secondary: #4a5568;
+            --card-bg: var(--card-light);
+            --border-color: var(--border-light);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: var(--bg-dark);
+            --bg-secondary: #2d3748;
+            --text-primary: var(--text-dark);
+            --text-secondary: #a0aec0;
+            --card-bg: var(--card-dark);
+            --border-color: var(--border-dark);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .bg-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        .text-primary {
+            color: var(--primary);
+        }
+
+        .bg-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            color: var(--text-primary);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .hover-scale {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .hover-scale:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glow {
+            text-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(15deg);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            color: white;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+            cursor: pointer;
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 40px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        .section-title.center::after {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .career-path-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+            height: 100%;
+        }
+
+        .career-path-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .pathway-step {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .pathway-step::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+        }
+
+        .pathway-step::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 20px;
+            width: 2px;
+            height: calc(100% + 12px);
+            background: var(--primary);
+        }
+
+        .pathway-step:last-child::after {
+            display: none;
+        }
+
+        .skill-tag {
+            display: inline-block;
+            background: rgba(52, 152, 219, 0.1);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin: 2px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(52, 152, 219, 0.2);
+        }
+
+        .salary-badge {
+            background: linear-gradient(135deg, var(--success), #27ae60);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .growth-badge {
+            background: linear-gradient(135deg, var(--warning), #e67e22);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .stream-active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .comparison-table th, .comparison-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .comparison-table th {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background-color: var(--bg-secondary);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        footer a {
+            transition: color 0.3s;
+        }
+        
+        footer a:hover {
+            color: var(--accent) !important;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        .career-stream-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--bg-secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <!-- Header/Navigation -->
+    <header class="bg-header shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="logo flex items-center">
+                    <img src="logo.jpeg" alt="VidyaRoute Logo" class="h-12 w-auto mr-3">
+                    <span class="text-white font-bold text-xl">विद्याRoute</span>
+                </a>
+                
+                <nav class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-white hover:text-accent font-medium">Home</a>
+                    <a href="assessment.html" class="text-white hover:text-accent font-medium">Assessment</a>
+                    <a href="colleges.html" class="text-white hover:text-accent font-medium">Colleges</a>
+                    <a href="career-paths.html" class="text-white hover:text-accent font-medium border-b-2 border-white">Career Paths</a>
+                    <a href="vocational.html" class="text-white hover:text-accent font-medium">Vocational</a>
+                    <a href="timeline.html" class="text-white hover:text-accent font-medium">Timeline</a>
+                    <a href="about.html" class="text-white hover:text-accent font-medium">About</a>
+                </nav>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <button id="loginBtn" class="bg-white text-primary px-4 py-2 rounded-lg hover:bg-accent hover:text-white transition">
+                        Login
+                    </button>
+                    <button id="mobileMenuBtn" class="md:hidden text-white">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu fixed inset-0 bg-primary z-40 p-6 md:hidden" style="display: none;">
+        <div class="flex justify-between items-center mb-8">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <span class="text-white">विद्याRoute</span>
+            </div>
+            <button id="closeMobileMenu" class="text-white">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+        
+        <nav class="flex flex-col space-y-6">
+            <a href="index.html" class="text-white hover:text-accent font-medium text-lg">Home</a>
+            <a href="assessment.html" class="text-white hover:text-accent font-medium text-lg">Assessment</a>
+            <a href="colleges.html" class="text-white hover:text-accent font-medium text-lg">Colleges</a>
+            <a href="career-paths.html" class="text-white hover:text-accent font-medium text-lg border-b-2 border-white">Career Paths</a>
+            <a href="vocational.html" class="text-white hover:text-accent font-medium text-lg">Vocational</a>
+            <a href="timeline.html" class="text-white hover:text-accent font-medium text-lg">Timeline</a>
+            <a href="about.html" class="text-white hover:text-accent font-medium text-lg">About</a>
+            <button id="mobileLoginBtn" class="bg-white text-primary px-4 py-3 rounded-lg font-semibold text-left mt-4">
+                Login
+            </button>
+        </nav>
+    </div>
+
+    <!-- Career Paths Hero Section -->
+    <section class="py-16 bg-gradient-to-r from-primary to-secondary text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Career Paths & Opportunities</h1>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">Explore detailed career pathways across different streams with salary projections, growth opportunities, and required skills</p>
+            <div class="flex justify-center space-x-4">
+                <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                    <i class="fas fa-road text-2xl mb-2"></i>
+                    <p>50+ Career Paths</p>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                    <i class="fas fa-chart-line text-2xl mb-2"></i>
+                    <p>Salary Insights</p>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                    <i class="fas fa-graduation-cap text-2xl mb-2"></i>
+                    <p>Course Mapping</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Career Streams Navigation -->
+    <section class="py-8 bg-gray-100 dark:bg-gray-800 sticky top-16 z-40 shadow-md">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap justify-center gap-4">
+                <button class="stream-filter btn-primary stream-active" data-stream="engineering">
+                    <i class="fas fa-cogs mr-2"></i> Engineering & Technology
+                </button>
+                <button class="stream-filter btn-outline" data-stream="medical">
+                    <i class="fas fa-heartbeat mr-2"></i> Medical & Healthcare
+                </button>
+                <button class="stream-filter btn-outline" data-stream="commerce">
+                    <i class="fas fa-chart-bar mr-2"></i> Commerce & Business
+                </button>
+                <button class="stream-filter btn-outline" data-stream="arts">
+                    <i class="fas fa-palette mr-2"></i> Arts & Humanities
+                </button>
+                <button class="stream-filter btn-outline" data-stream="vocational">
+                    <i class="fas fa-tools mr-2"></i> Vocational & Skill-based
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Career Streams Overview -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center">Career Streams <span class="gradient-text">Overview</span></h2>
+            <p class="text-xl text-center mb-12 max-w-3xl mx-auto text-gray-600 dark:text-gray-300">Compare different career streams based on key parameters to make an informed decision</p>
+            
+            <div class="bg-card p-6 rounded-xl mb-12">
+                <div class="chart-container">
+                    <canvas id="careerComparisonChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Engineering & Technology Stream -->
+            <div id="engineering-stream" class="career-stream">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold mb-4 text-primary">Engineering & Technology</h3>
+                    <p class="text-xl max-w-3xl mx-auto text-gray-600 dark:text-gray-300">Transform ideas into reality through innovation, design, and technology. Engineering offers diverse specializations with excellent growth potential.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-12">
+                    <div class="bg-card p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-4 text-primary">Popular Specializations</h4>
+                        <div class="space-y-4">
+                            <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary transition">
+                                <h5 class="font-semibold mb-2">Computer Science & Engineering</h5>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Software development, AI, Data Science, Cybersecurity</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="salary-badge">₹6-20 LPA</span>
+                                    <span class="growth-badge">High Growth</span>
+                                </div>
+                            </div>
+                            <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary transition">
+                                <h5 class="font-semibold mb-2">Mechanical Engineering</h5>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Automobile, Manufacturing, Robotics, Thermal Engineering</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="salary-badge">₹4-15 LPA</span>
+                                    <span class="growth-badge">Moderate Growth</span>
+                                </div>
+                            </div>
+                            <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary transition">
+                                <h5 class="font-semibold mb-2">Electronics & Communication</h5>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">VLSI, Embedded Systems, Telecommunications, IoT</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="salary-badge">₹5-18 LPA</span>
+                                    <span class="growth-badge">High Growth</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-card p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-4 text-primary">Career Progression</h4>
+                        <div class="pathway-step">
+                            <h5 class="font-semibold">Entry Level (0-2 years)</h5>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Junior Engineer, Software Developer, Trainee Engineer</p>
+                            <span class="salary-badge">₹4-8 LPA</span>
+                        </div>
+                        <div class="pathway-step">
+                            <h5 class="font-semibold">Mid Level (3-7 years)</h5>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Senior Engineer, Team Lead, Project Manager</p>
+                            <span class="salary-badge">₹10-25 LPA</span>
+                        </div>
+                        <div class="pathway-step">
+                            <h5 class="font-semibold">Senior Level (8+ years)</h5>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Principal Engineer, Engineering Manager, CTO</p>
+                            <span class="salary-badge">₹25-50+ LPA</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8 mb-12">
+                    <div class="bg-card p-6 rounded-xl text-center">
+                        <div class="career-stream-icon">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-3">Top Skills Required</h4>
+                        <div class="flex flex-wrap justify-center gap-2">
+                            <span class="skill-tag">Programming</span>
+                            <span class="skill-tag">Problem Solving</span>
+                            <span class="skill-tag">Mathematics</span>
+                            <span class="skill-tag">Analytical Thinking</span>
+                            <span class="skill-tag">Teamwork</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-card p-6 rounded-xl text-center">
+                        <div class="career-stream-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-3">Top Recruiters</h4>
+                        <div class="space-y-2 text-sm">
+                            <p>Google, Microsoft, Amazon</p>
+                            <p>TATA, L&T, Infosys</p>
+                            <p>ISRO, DRDO, BHEL</p>
+                            <p>Startups & MNCs</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-card p-6 rounded-xl text-center">
+                        <div class="career-stream-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-3">Recommended Courses</h4>
+                        <div class="space-y-2 text-sm">
+                            <p>B.Tech/B.E. in various specializations</p>
+                            <p>M.Tech for specialization</p>
+                            <p>Certifications in emerging technologies</p>
+                            <p>MBA for management roles</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NEW: Additional charts for Engineering stream -->
+                <div class="grid md:grid-cols-2 gap-8 mb-12">
+                    <div class="bg-card p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-4 text-primary">Salary Growth Projection</h4>
+                        <div class="chart-container">
+                            <canvas id="engineeringSalaryChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-card p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-4 text-primary">Specialization Demand</h4>
+                        <div class="chart-container">
+                            <canvas id="engineeringDemandChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-card p-6 rounded-xl">
+                    <h4 class="text-xl font-semibold mb-4 text-primary">Industry Distribution</h4>
+                    <div class="chart-container">
+                        <canvas id="engineeringIndustryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Medical & Healthcare Stream -->
+            <div id="medical-stream" class="career-stream" style="display: none;">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold mb-4 text-primary">Medical & Healthcare</h3>
+                    <p class="text-xl max-w-3xl mx-auto text-gray-600 dark:text-gray-300">Serve humanity through healthcare, research, and medical innovation. A noble profession with high respect and job security.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-12">
+                    <div class="bg-card p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-4 text-primary">Popular Specializations</h4>
+                        <div class="space-y-4">
+                            <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary transition">
+                                <h5 class="font-semibold mb-2">General Medicine (MBBS)</h5>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Physician, General Practitioner, Hospitalist</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="salary-badge">₹8-25 LPA</span>
+                                    <span class="growth-badge">Very High Growth</span>
+                                </div>
+                            </div>
+                            <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary transition">
+                                <h5 class="font-semibold mb-2">Dentistry (BDS)</h5>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Dental Surgeon, Orthodontist, Oral Pathologist</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="salary-badge">₹6-20 LPA</span>
+                                    <span class="growth-badge">High Growth</span>
+                                </div>
+                            </div>
+                            <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary transition">
+                                <h5 class="font-semibold mb-2">Pharmacy (B.Pharm)</h5>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Clinical Pharmacist, Drug Researcher, Pharma Industry</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="salary-badge">₹4-15 LPA</span>
+                                    <span class="growth-badge">Moderate Growth</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-card p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-4 text-primary">Career Progression</h4>
+                        <div class="pathway-step">
+                            <h5 class="font-semibold">Internship & Residency</h5>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Medical Intern, Junior Resident, House Surgeon</p>
+                            <span class="salary-badge">₹5-10 LPA</span>
+                        </div>
+                        <div class="pathway-step">
+                            <h5 class="font-semibold">Specialization (3-5 years)</h5>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Senior Resident, Specialist, Consultant</p>
+                            <span class="salary-badge">₹12-30 LPA</span>
+                        </div>
+                        <div class="pathway-step">
+                            <h5 class="font-semibold">Senior Practice (8+ years)</h5>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Senior Consultant, HOD, Hospital Administrator</p>
+                            <span class="salary-badge">₹30-80+ LPA</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8 mb-12">
+                    <div class="bg-card p-6 rounded-xl text-center">
+                        <div class="career-stream-icon">
+                            <i class="fas fa-stethoscope"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-3">Top Skills Required</h4>
+                        <div class="flex flex-wrap justify-center gap-2">
+                            <span class="skill-tag">Empathy</span>
+                            <span class="skill-tag">Scientific Knowledge</span>
+                            <span class="skill-tag">Attention to Detail</span>
+                            <span class="skill-tag">Communication</span>
+                            <span class="skill-tag">Stress Management</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-card p-6 rounded-xl text-center">
+                        <div class="career-stream-icon">
+                            <i class="fas fa-hospital"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-3">Employment Sectors</h4>
+                        <div class="space-y-2 text-sm">
+                            <p>Government & Private Hospitals</p>
+                            <p>Research Institutions</p>
+                            <p>Pharmaceutical Companies</p>
+                            <p>Medical Colleges</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-card p-6 rounded-xl text-center">
+                        <div class="career-stream-icon">
+                            <i class="fas fa-book-medical"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-3">Recommended Courses</h4>
+                        <div class="space-y-2 text-sm">
+                            <p>MBBS, BDS, BAMS, BHMS</p>
+                            <p>B.Pharm, B.Sc Nursing</p>
+                            <p>MD/MS for specialization</p>
+                            <p>Super-specialty courses</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NEW: Additional charts for Medical stream -->
+                <div class="grid md:grid-cols-2 gap-8 mb-12">
+                    <div class="bg-card p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-4 text-primary">Salary Growth Projection</h4>
+                        <div class="chart-container">
+                            <canvas id="medicalSalaryChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-card p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-4 text-primary">Specialization Distribution</h4>
+                        <div class="chart-container">
+                            <canvas id="medicalSpecializationChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-card p-6 rounded-xl">
+                    <h4 class="text-xl font-semibold mb-4 text-primary">Work Setting Distribution</h4>
+                    <div class="chart-container">
+                        <canvas id="medicalWorkSettingChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Commerce Stream -->
+            <div id="commerce-stream" class="career-stream" style="display: none;">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold mb-4 text-primary">Commerce & Business</h3>
+                    <p class="text-xl max-w-3xl mx-auto text-gray-600 dark:text-gray-300">Drive economic growth through finance, accounting, marketing, and business management. Diverse opportunities in corporate sector and entrepreneurship.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-12">
+                    <div class="bg-card p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-4 text-primary">Popular Specializations</h4>
+                        <div class="space-y-4">
+                            <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary transition">
+                                <h5 class="font-semibold mb-2">Chartered Accountancy (CA)</h5>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Auditing, Taxation, Financial Consulting, Corporate Finance</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="salary-badge">₹8-30 LPA</span>
+                                    <span class="growth-badge">High Growth</span>
+                                </div>
+                            </div>
+                            <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary transition">
+                                <h5 class="font-semibold mb-2">MBA & Business Management</h5>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Marketing, Finance, HR, Operations, Strategy</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="salary-badge">₹5-25 LPA</span>
+                                    <span class="growth-badge">Very High Growth</span>
+                                </div>
+                            </div>
+                            <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary transition">
+                                <h5 class="font-semibold mb-2">Company Secretary (CS)</h5>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Corporate Governance, Legal Compliance, Board Management</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="salary-badge">₹6-20 LPA</span>
+                                    <span class="growth-badge">Moderate Growth</span>
+                                </div>
+                            </div>
+                            <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary transition">
+                                <h5 class="font-semibold mb-2">Digital Marketing</h5>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">SEO, Social Media, Content Marketing, Analytics</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="salary-badge">₹4-20 LPA</span>
+                                    <span class="growth-badge">Very High Growth</span>
+                                </div>
+                            </div>
+                            <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary transition">
+                                <h5 class="font-semibold mb-2">Banking & Finance</h5>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Investment Banking, Retail Banking, Financial Analysis</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="salary-badge">₹4-18 LPA</span>
+                                    <span class="growth-badge">Moderate Growth</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-card p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-4 text-primary">Career Progression</h4>
+                        <div class="pathway-step">
+                            <h5 class="font-semibold">Entry Level (0-2 years)</h5>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Junior Analyst, Accountant, Marketing Trainee, Bank PO</p>
+                            <span class="salary-badge">₹4-7 LPA</span>
+                        </div>
+                        <div class="pathway-step">
+                            <h5 class="font-semibold">Mid Level (3-7 years)</h5>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Senior Analyst, Manager, Team Lead, Assistant Manager</p>
+                            <span class="salary-badge">₹8-20 LPA</span>
+                        </div>
+                        <div class="pathway-step">
+                            <h5 class="font-semibold">Senior Level (8+ years)</h5>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Director, Partner, CFO, CEO, Business Owner</p>
+                            <span class="salary-badge">₹25-60+ LPA</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8 mb-12">
+                    <div class="bg-card p-6 rounded-xl text-center">
+                        <div class="career-stream-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-3">Top Skills Required</h4>
+                        <div class="flex flex-wrap justify-center gap-2">
+                            <span class="skill-tag">Analytical Thinking</span>
+                            <span class="skill-tag">Numerical Ability</span>
+                            <span class="skill-tag">Communication</span>
+                            <span class="skill-tag">Business Acumen</span>
+                            <span class="skill-tag">Leadership</span>
+                            <span class="skill-tag">Negotiation</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-card p-6 rounded-xl text-center">
+                        <div class="career-stream-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-3">Top Recruiters</h4>
+                        <div class="space-y-2 text-sm">
+                            <p>Big 4 Accounting Firms</p>
+                            <p>Investment Banks</p>
+                            <p>FMCG Companies</p>
+                            <p>IT & Tech Companies</p>
+                            <p>Banks & Financial Institutions</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-card p-6 rounded-xl text-center">
+                        <div class="career-stream-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-3">Recommended Courses</h4>
+                        <div class="space-y-2 text-sm">
+                            <p>B.Com, BBA, BMS</p>
+                            <p>CA, CS, CMA</p>
+                            <p>MBA from top institutes</p>
+                            <p>CFA, FRM certifications</p>
+                            <p>Digital Marketing courses</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-12">
+                    <div class="bg-card p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-4 text-primary">Salary Growth Projection</h4>
+                        <div class="chart-container">
+                            <canvas id="commerceSalaryChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-card p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-4 text-primary">Demand Trends</h4>
+                        <div class="chart-container">
+                            <canvas id="commerceDemandChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-card p-6 rounded-xl">
+                    <h4 class="text-xl font-semibold mb-4 text-primary">Industry Distribution</h4>
+                    <div class="chart-container">
+                        <canvas id="commerceIndustryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Arts & Humanities Stream -->
+            <div id="arts-stream" class="career-stream" style="display: none;">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold mb-4 text-primary">Arts & Humanities</h3>
+                    <p class="text-xl max-w-3xl mx-auto text-gray-600 dark:text-gray-300">Explore human culture, creativity, and social sciences. Diverse career opportunities in education, media, civil services, and creative industries.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-12">
+                    <div class="bg-card p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-4 text-primary">Popular Specializations</h4>
+                        <div class="space-y-4">
+                            <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary transition">
+                                <h5 class="font-semibold mb-2">Psychology & Counseling</h5>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Clinical Psychology, Counseling, Organizational Psychology</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="salary-badge">₹3-15 LPA</span>
+                                    <span class="growth-badge">Moderate Growth</span>
+                                </div>
+                            </div>
+                            <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary transition">
+                                <h5 class="font-semibold mb-2">Journalism & Mass Communication</h5>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">News Reporting, Content Writing, PR, Digital Media</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="salary-badge">₹3-12 LPA</span>
+                                    <span class="growth-badge">Moderate Growth</span>
+                                </div>
+                            </div>
+                            <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary transition">
+                                <h5 class="font-semibold mb-2">Teaching & Education</h5>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">School Teacher, Professor, Education Administrator</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="salary-badge">₹4-18 LPA</span>
+                                    <span class="growth-badge">Stable Growth</span>
+                                </div>
+                            </div>
+                            <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary transition">
+                                <h5 class="font-semibold mb-2">Design & Fine Arts</h5>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Graphic Design, Fashion Design, Interior Design, Fine Arts</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="salary-badge">₹4-20 LPA</span>
+                                    <span class="growth-badge">High Growth</span>
+                                </div>
+                            </div>
+                            <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary transition">
+                                <h5 class="font-semibold mb-2">Social Work & NGOs</h5>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Community Development, NGO Management, Social Research</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="salary-badge">₹3-10 LPA</span>
+                                    <span class="growth-badge">Moderate Growth</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-card p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-4 text-primary">Career Progression</h4>
+                        <div class="pathway-step">
+                            <h5 class="font-semibold">Entry Level (0-2 years)</h5>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Junior Writer, Assistant, Trainee Teacher, Research Assistant</p>
+                            <span class="salary-badge">₹3-5 LPA</span>
+                        </div>
+                        <div class="pathway-step">
+                            <h5 class="font-semibold">Mid Level (3-7 years)</h5>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Content Lead, Counselor, Senior Teacher, Project Manager</p>
+                            <span class="salary-badge">₹6-12 LPA</span>
+                        </div>
+                        <div class="pathway-step">
+                            <h5 class="font-semibold">Senior Level (8+ years)</h5>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Editor, Professor, Director, Principal, Author</p>
+                            <span class="salary-badge">₹15-30+ LPA</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8 mb-12">
+                    <div class="bg-card p-6 rounded-xl text-center">
+                        <div class="career-stream-icon">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-3">Top Skills Required</h4>
+                        <div class="flex flex-wrap justify-center gap-2">
+                            <span class="skill-tag">Creative Thinking</span>
+                            <span class="skill-tag">Communication</span>
+                            <span class="skill-tag">Research Skills</span>
+                            <span class="skill-tag">Critical Analysis</span>
+                            <span class="skill-tag">Empathy</span>
+                            <span class="skill-tag">Adaptability</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-card p-6 rounded-xl text-center">
+                        <div class="career-stream-icon">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-3">Employment Sectors</h4>
+                        <div class="space-y-2 text-sm">
+                            <p>Education Institutions</p>
+                            <p>Media & Publishing</p>
+                            <p>Government Services</p>
+                            <p>NGOs & Social Sector</p>
+                            <p>Creative Industries</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-card p-6 rounded-xl text-center">
+                        <div class="career-stream-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-3">Recommended Courses</h4>
+                        <div class="space-y-2 text-sm">
+                            <p>B.A. in various specializations</p>
+                            <p>M.A. for advanced studies</p>
+                            <p>B.Ed. for teaching</p>
+                            <p>Design & Fine Arts degrees</p>
+                            <p>Mass Communication courses</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-12">
+                    <div class="bg-card p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-4 text-primary">Salary Growth Projection</h4>
+                        <div class="chart-container">
+                            <canvas id="artsSalaryChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-card p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-4 text-primary">Specialization Distribution</h4>
+                        <div class="chart-container">
+                            <canvas id="artsSpecializationChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-card p-6 rounded-xl">
+                    <h4 class="text-xl font-semibold mb-4 text-primary">Career Satisfaction & Work-Life Balance</h4>
+                    <div class="chart-container">
+                        <canvas id="artsSatisfactionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vocational & Skill-based Stream -->
+            <div id="vocational-stream" class="career-stream" style="display: none;">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold mb-4 text-primary">Vocational & Skill-based</h3>
+                    <p class="text-xl max-w-3xl mx-auto text-gray-600 dark:text-gray-300">Master practical skills for immediate employment and entrepreneurship. High demand for skilled technicians and professionals across industries.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-12">
+                    <div class="bg-card p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-4 text-primary">Popular Specializations</h4>
+                        <div class="space-y-4">
+                            <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary transition">
+                                <h5 class="font-semibold mb-2">IT & Web Development</h5>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Web Development, Mobile App Development, IT Support</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="salary-badge">₹3-15 LPA</span>
+                                    <span class="growth-badge">High Growth</span>
+                                </div>
+                            </div>
+                            <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary transition">
+                                <h5 class="font-semibold mb-2">Automotive Technology</h5>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Automobile Repair, Electric Vehicles, Service Technician</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="salary-badge">₹3-12 LPA</span>
+                                    <span class="growth-badge">Moderate Growth</span>
+                                </div>
+                            </div>
+                            <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary transition">
+                                <h5 class="font-semibold mb-2">Hospitality & Tourism</h5>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Hotel Management, Chef, Tourism Guide, Event Management</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="salary-badge">₹3-10 LPA</span>
+                                    <span class="growth-badge">Moderate Growth</span>
+                                </div>
+                            </div>
+                            <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary transition">
+                                <h5 class="font-semibold mb-2">Beauty & Wellness</h5>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Beautician, Hair Stylist, Spa Therapist, Makeup Artist</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="salary-badge">₹3-18 LPA</span>
+                                    <span class="growth-badge">High Growth</span>
+                                </div>
+                            </div>
+                            <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary transition">
+                                <h5 class="font-semibold mb-2">Electrical & Plumbing</h5>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Electrician, Plumber, HVAC Technician, Maintenance</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="salary-badge">₹4-15 LPA</span>
+                                    <span class="growth-badge">Stable Growth</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-card p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-4 text-primary">Career Progression</h4>
+                        <div class="pathway-step">
+                            <h5 class="font-semibold">Entry Level (0-2 years)</h5>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Trainee, Apprentice, Junior Technician, Assistant</p>
+                            <span class="salary-badge">₹3-5 LPA</span>
+                        </div>
+                        <div class="pathway-step">
+                            <h5 class="font-semibold">Mid Level (3-7 years)</h5>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Technician, Supervisor, Team Lead, Specialist</p>
+                            <span class="salary-badge">₹5-10 LPA</span>
+                        </div>
+                        <div class="pathway-step">
+                            <h5 class="font-semibold">Senior Level (8+ years)</h5>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Master Technician, Business Owner, Trainer, Consultant</p>
+                            <span class="salary-badge">₹10-25+ LPA</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8 mb-12">
+                    <div class="bg-card p-6 rounded-xl text-center">
+                        <div class="career-stream-icon">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-3">Top Skills Required</h4>
+                        <div class="flex flex-wrap justify-center gap-2">
+                            <span class="skill-tag">Technical Skills</span>
+                            <span class="skill-tag">Problem Solving</span>
+                            <span class="skill-tag">Customer Service</span>
+                            <span class="skill-tag">Attention to Detail</span>
+                            <span class="skill-tag">Hands-on Work</span>
+                            <span class="skill-tag">Time Management</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-card p-6 rounded-xl text-center">
+                        <div class="career-stream-icon">
+                            <i class="fas fa-industry"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-3">Employment Opportunities</h4>
+                        <div class="space-y-2 text-sm">
+                            <p>Manufacturing Industries</p>
+                            <p>Service Sector</p>
+                            <p>Self-Employment</p>
+                            <p>IT Companies</p>
+                            <p>Hospitality Sector</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-card p-6 rounded-xl text-center">
+                        <div class="career-stream-icon">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-3">Recommended Courses</h4>
+                        <div class="space-y-2 text-sm">
+                            <p>ITI & Diploma courses</p>
+                            <p>Certificate programs</p>
+                            <p>Apprenticeships</p>
+                            <p>Skill development courses</p>
+                            <p>Entrepreneurship training</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-12">
+                    <div class="bg-card p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-4 text-primary">Salary Growth Projection</h4>
+                        <div class="chart-container">
+                            <canvas id="vocationalSalaryChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-card p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-4 text-primary">Job Market Demand</h4>
+                        <div class="chart-container">
+                            <canvas id="vocationalDemandChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-card p-6 rounded-xl">
+                    <h4 class="text-xl font-semibold mb-4 text-primary">Industry-wise Distribution</h4>
+                    <div class="chart-container">
+                        <canvas id="vocationalIndustryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Career Comparison Section -->
+    <section class="py-16 bg-gray-100 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center text-gray-800 dark:text-white">Career Streams <span class="gradient-text">Comparison</span></h2>
+            <p class="text-xl text-center mb-12 max-w-3xl mx-auto text-gray-600 dark:text-gray-300">Compare different career streams based on key parameters to make an informed decision</p>
+            
+            <div class="bg-card p-6 rounded-xl">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Engineering</th>
+                            <th>Medical</th>
+                            <th>Commerce</th>
+                            <th>Arts</th>
+                            <th>Vocational</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Average Starting Salary</td>
+                            <td>₹6-10 LPA</td>
+                            <td>₹8-12 LPA</td>
+                            <td>₹4-7 LPA</td>
+                            <td>₹3-5 LPA</td>
+                            <td>₹3-6 LPA</td>
+                        </tr>
+                        <tr>
+                            <td>Growth Potential</td>
+                            <td>High</td>
+                            <td>Very High</td>
+                            <td>Moderate to High</td>
+                            <td>Moderate</td>
+                            <td>Moderate</td>
+                        </tr>
+                        <tr>
+                            <td>Job Security</td>
+                            <td>High</td>
+                            <td>Very High</td>
+                            <td>Moderate</td>
+                            <td>Moderate</td>
+                            <td>High</td>
+                        </tr>
+                        <tr>
+                            <td>Education Duration</td>
+                            <td>4 years</td>
+                            <td>5.5+ years</td>
+                            <td>3-4 years</td>
+                            <td>3 years</td>
+                            <td>6 months - 2 years</td>
+                        </tr>
+                        <tr>
+                            <td>Investment Required</td>
+                            <td>Moderate to High</td>
+                            <td>High</td>
+                            <td>Low to Moderate</td>
+                            <td>Low</td>
+                            <td>Low</td>
+                        </tr>
+                        <tr>
+                            <td>Entrepreneurship Scope</td>
+                            <td>High</td>
+                            <td>Moderate</td>
+                            <td>High</td>
+                            <td>Moderate</td>
+                            <td>High</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Career Planning Tools -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center">Career <span class="gradient-text">Planning Tools</span></h2>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-card p-6 rounded-xl text-center hover-scale">
+                    <div class="career-stream-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Career Assessment</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4">Discover your ideal career path based on your interests, skills, and personality</p>
+                    <a href="assessment.html" class="btn-primary">Take Assessment</a>
+                </div>
+
+                <div class="bg-card p-6 rounded-xl text-center hover-scale">
+                    <div class="career-stream-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Find Colleges</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4">Explore colleges that offer programs in your chosen career field</p>
+                    <a href="colleges.html" class="btn-primary">Browse Colleges</a>
+                </div>
+
+                <div class="bg-card p-6 rounded-xl text-center hover-scale">
+                    <div class="career-stream-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Plan Timeline</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4">Create a personalized timeline for your academic and career journey</p>
+                    <a href="timeline.html" class="btn-primary">Create Timeline</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-16 bg-gray-100 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center">Career Path <span class="gradient-text">FAQs</span></h2>
+            
+            <div class="max-w-3xl mx-auto">
+                <div class="bg-card p-6 rounded-lg mb-4">
+                    <h3 class="text-xl font-semibold mb-3 text-primary">How do I choose the right career path?</h3>
+                    <p class="text-gray-700 dark:text-gray-300">Consider your interests, skills, values, and personality. Take our career assessment, research different fields, talk to professionals, and consider job market trends and growth opportunities.</p>
+                </div>
+                
+                <div class="bg-card p-6 rounded-lg mb-4">
+                    <h3 class="text-xl font-semibold mb-3 text-primary">What if I'm interested in multiple career fields?</h3>
+                    <p class="text-gray-700 dark:text-gray-300">Many careers today are interdisciplinary. You can pursue dual degrees, minors, or certifications to combine interests. Also, consider careers that bridge multiple fields like biomedical engineering or digital marketing.</p>
+                </div>
+                
+                <div class="bg-card p-6 rounded-lg mb-4">
+                    <h3 class="text-xl font-semibold mb-3 text-primary">How important is salary when choosing a career?</h3>
+                    <p class="text-gray-700 dark:text-gray-300">While salary is important for financial stability, also consider job satisfaction, work-life balance, growth opportunities, and alignment with your values. A high-paying job you dislike may lead to burnout.</p>
+                </div>
+                
+                <div class="bg-card p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3 text-primary">Can I change careers later in life?</h3>
+                    <p class="text-gray-700 dark:text-gray-300">Absolutely! Career changes are common. Many skills are transferable, and additional education or certifications can help you transition. The key is to plan carefully and leverage your existing experience.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary py-12 text-white">
+        <div class="container mx-auto px-4">
+            <div class="footer-grid">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <img src="logo.jpeg" alt="VidyaRoute Logo" class="h-10 w-auto mr-2">
+                        <span class="text-xl font-bold">विद्याRoute</span>
+                    </div>
+                    <p class="mb-4">Empowering students to make informed decisions about their academic and career journey.</p>
+                    <p class="text-sm">"Your Pathway to Success"</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="hover:text-accent">Home</a></li>
+                        <li><a href="assessment.html" class="hover:text-accent">Assessment</a></li>
+                        <li><a href="colleges.html" class="hover:text-accent">Colleges</a></li>
+                        <li><a href="career-paths.html" class="hover:text-accent">Career Paths</a></li>
+                        <li><a href="vocational.html" class="hover:text-accent">Vocational Courses</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Resources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" id="privacyLink" class="hover:text-accent">Privacy Policy</a></li>
+                        <li><a href="#" id="termsLink" class="hover:text-accent">Terms of Service</a></li>
+                        <li><a href="about.html" class="hover:text-accent">About Us</a></li>
+                        <li><a href="about.html#faq" class="hover:text-accent">FAQ</a></li>
+                        <li><a href="about.html#contact" class="hover:text-accent">Contact Us</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Connect With Us</h3>
+                    <div class="flex space-x-4 mb-4">
+                        <a href="https://github.com/anubrr21" target="_blank" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary hover:bg-accent hover:text-white">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://linkedin.com/in/anubrata-bhattacharyya" target="_blank" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary hover:bg-accent hover:text-white">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="https://wa.me/918977039397" target="_blank" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary hover:bg-accent hover:text-white">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="mailto:info@vidyaroute.com" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary hover:bg-accent hover:text-white">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                    <p class="text-sm">© 2025 विद्याRoute. All rights reserved.</p>
+                    <p class="text-sm mt-2">Made with ❤️ by PseudoCoderz</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Career Paths Data
+        const careerStreams = {
+            engineering: {
+                name: "Engineering & Technology",
+                description: "Transform ideas into reality through innovation, design, and technology.",
+                specializations: [
+                    { name: "Computer Science", salary: "₹6-20 LPA", growth: "High" },
+                    { name: "Mechanical", salary: "₹4-15 LPA", growth: "Moderate" },
+                    { name: "Electronics", salary: "₹5-18 LPA", growth: "High" },
+                    { name: "Civil", salary: "₹4-12 LPA", growth: "Moderate" },
+                    { name: "Electrical", salary: "₹5-16 LPA", growth: "Moderate" }
+                ],
+                skills: ["Programming", "Mathematics", "Analytical Thinking", "Problem Solving", "Teamwork"],
+                progression: [
+                    { stage: "Entry Level (0-2 years)", roles: "Junior Engineer, Developer", salary: "₹4-8 LPA" },
+                    { stage: "Mid Level (3-7 years)", roles: "Senior Engineer, Team Lead", salary: "₹10-25 LPA" },
+                    { stage: "Senior Level (8+ years)", roles: "Principal Engineer, Manager", salary: "₹25-50+ LPA" }
+                ],
+                salaryProjection: {
+                    labels: ["0-2 years", "3-5 years", "6-8 years", "9-12 years", "13+ years"],
+                    data: [6, 12, 18, 25, 35]
+                }
+            },
+            medical: {
+                name: "Medical & Healthcare",
+                description: "Serve humanity through healthcare, research, and medical innovation.",
+                specializations: [
+                    { name: "General Medicine", salary: "₹8-25 LPA", growth: "Very High" },
+                    { name: "Dentistry", salary: "₹6-20 LPA", growth: "High" },
+                    { name: "Pharmacy", salary: "₹4-15 LPA", growth: "Moderate" },
+                    { name: "Nursing", salary: "₹3-12 LPA", growth: "High" },
+                    { name: "Physiotherapy", salary: "₹4-18 LPA", growth: "Moderate" }
+                ],
+                skills: ["Empathy", "Scientific Knowledge", "Attention to Detail", "Communication", "Stress Management"],
+                progression: [
+                    { stage: "Internship & Residency", roles: "Medical Intern, Junior Resident", salary: "₹5-10 LPA" },
+                    { stage: "Specialization (3-5 years)", roles: "Senior Resident, Specialist", salary: "₹12-30 LPA" },
+                    { stage: "Senior Practice (8+ years)", roles: "Senior Consultant, HOD", salary: "₹30-80+ LPA" }
+                ],
+                salaryProjection: {
+                    labels: ["Internship", "Residency", "Junior Doctor", "Specialist", "Senior Consultant"],
+                    data: [5, 8, 15, 25, 40]
+                }
+            },
+            commerce: {
+                name: "Commerce & Business",
+                description: "Drive economic growth through finance, accounting, and business management.",
+                specializations: [
+                    { name: "Chartered Accountancy", salary: "₹8-30 LPA", growth: "High" },
+                    { name: "Company Secretary", salary: "₹6-20 LPA", growth: "Moderate" },
+                    { name: "Business Management", salary: "₹5-25 LPA", growth: "High" },
+                    { name: "Banking & Finance", salary: "₹4-18 LPA", growth: "Moderate" },
+                    { name: "Digital Marketing", salary: "₹4-20 LPA", growth: "Very High" }
+                ],
+                skills: ["Numerical Ability", "Analytical Skills", "Communication", "Business Acumen", "Negotiation"],
+                progression: [
+                    { stage: "Entry Level (0-2 years)", roles: "Junior Analyst, Accountant", salary: "₹4-7 LPA" },
+                    { stage: "Mid Level (3-7 years)", roles: "Senior Analyst, Manager", salary: "₹8-20 LPA" },
+                    { stage: "Senior Level (8+ years)", roles: "Director, Partner, CFO", salary: "₹25-60+ LPA" }
+                ],
+                salaryProjection: {
+                    labels: ["0-2 years", "3-5 years", "6-8 years", "9-12 years", "13+ years"],
+                    data: [5, 10, 15, 22, 35]
+                }
+            },
+            arts: {
+                name: "Arts & Humanities",
+                description: "Explore human culture, creativity, and social sciences for meaningful careers.",
+                specializations: [
+                    { name: "Psychology", salary: "₹3-15 LPA", growth: "Moderate" },
+                    { name: "Journalism", salary: "₹3-12 LPA", growth: "Moderate" },
+                    { name: "Teaching", salary: "₹4-18 LPA", growth: "Stable" },
+                    { name: "Social Work", salary: "₹3-10 LPA", growth: "Moderate" },
+                    { name: "Design & Fine Arts", salary: "₹4-20 LPA", growth: "High" }
+                ],
+                skills: ["Creative Thinking", "Communication", "Research", "Critical Analysis", "Empathy"],
+                progression: [
+                    { stage: "Entry Level (0-2 years)", roles: "Junior Writer, Assistant", salary: "₹3-5 LPA" },
+                    { stage: "Mid Level (3-7 years)", roles: "Content Lead, Counselor", salary: "₹6-12 LPA" },
+                    { stage: "Senior Level (8+ years)", roles: "Editor, Professor, Director", salary: "₹15-30+ LPA" }
+                ],
+                salaryProjection: {
+                    labels: ["0-2 years", "3-5 years", "6-8 years", "9-12 years", "13+ years"],
+                    data: [4, 6, 9, 14, 20]
+                }
+            },
+            vocational: {
+                name: "Vocational & Skill-based",
+                description: "Master practical skills for immediate employment and entrepreneurship opportunities.",
+                specializations: [
+                    { name: "IT & Web Development", salary: "₹3-15 LPA", growth: "High" },
+                    { name: "Automotive Repair", salary: "₹3-12 LPA", growth: "Moderate" },
+                    { name: "Hospitality", salary: "₹3-10 LPA", growth: "Moderate" },
+                    { name: "Beauty & Wellness", salary: "₹3-18 LPA", growth: "High" },
+                    { name: "Electrical & Plumbing", salary: "₹4-15 LPA", growth: "Stable" }
+                ],
+                skills: ["Technical Skills", "Problem Solving", "Customer Service", "Attention to Detail", "Hands-on Work"],
+                progression: [
+                    { stage: "Entry Level (0-2 years)", roles: "Trainee, Apprentice", salary: "₹3-5 LPA" },
+                    { stage: "Mid Level (3-7 years)", roles: "Technician, Supervisor", salary: "₹5-10 LPA" },
+                    { stage: "Senior Level (8+ years)", roles: "Master Technician, Business Owner", salary: "₹10-25+ LPA" }
+                ],
+                salaryProjection: {
+                    labels: ["0-2 years", "3-5 years", "6-8 years", "9-12 years", "13+ years"],
+                    data: [4, 6, 8, 12, 18]
+                }
+            }
+        };
+
+        // Initialize the page
+        function initCareerPathsPage() {
+            setupEventListeners();
+            initCharts();
+            
+            // Theme toggle functionality
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = themeToggle.querySelector('i');
+            const body = document.body;
+            
+            themeToggle.addEventListener('click', () => {
+                if (body.getAttribute('data-theme') === 'light') {
+                    body.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                } else {
+                    body.setAttribute('data-theme', 'light');
+                    localStorage.setItem('theme', 'light');
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                }
+            });
+
+            // Load saved theme
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                body.setAttribute('data-theme', savedTheme);
+                if (savedTheme === 'dark') {
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                }
+            }
+
+            // Mobile menu functionality
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const closeMobileMenu = document.getElementById('closeMobileMenu');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.style.display = 'block';
+            });
+            
+            closeMobileMenu.addEventListener('click', () => {
+                mobileMenu.style.display = 'none';
+            });
+
+            // Fade in animation for elements
+            const fadeElements = document.querySelectorAll('.fade-in');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            fadeElements.forEach(el => observer.observe(el));
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Stream filter buttons
+            document.querySelectorAll('.stream-filter').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const stream = e.target.getAttribute('data-stream');
+                    switchCareerStream(stream);
+                });
+            });
+
+            // Privacy and Terms modals
+            document.getElementById('privacyLink').addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('Privacy Policy would be displayed here.');
+            });
+            
+            document.getElementById('termsLink').addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('Terms of Service would be displayed here.');
+            });
+        }
+
+        // Switch career stream
+        function switchCareerStream(stream) {
+            // Update active button
+            document.querySelectorAll('.stream-filter').forEach(button => {
+                button.classList.remove('stream-active', 'btn-primary');
+                button.classList.add('btn-outline');
+            });
+            
+            const activeButton = document.querySelector(`.stream-filter[data-stream="${stream}"]`);
+            activeButton.classList.add('stream-active', 'btn-primary');
+            activeButton.classList.remove('btn-outline');
+            
+            // Hide all streams
+            document.querySelectorAll('.career-stream').forEach(streamElement => {
+                streamElement.style.display = 'none';
+            });
+            
+            // Show selected stream
+            document.getElementById(`${stream}-stream`).style.display = 'block';
+            
+            // Update charts for the selected stream
+            updateStreamCharts(stream);
+        }
+
+        // Initialize charts
+        function initCharts() {
+            // Career comparison chart
+            const comparisonCtx = document.getElementById('careerComparisonChart').getContext('2d');
+            new Chart(comparisonCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Starting Salary', 'Growth Potential', 'Job Security', 'Entrepreneurship', 'Work-Life Balance'],
+                    datasets: [
+                        {
+                            label: 'Engineering',
+                            data: [8, 9, 8, 9, 6],
+                            backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                            borderColor: 'rgba(52, 152, 219, 1)',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Medical',
+                            data: [9, 10, 10, 6, 5],
+                            backgroundColor: 'rgba(231, 76, 60, 0.2)',
+                            borderColor: 'rgba(231, 76, 60, 1)',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Commerce',
+                            data: [6, 7, 7, 8, 7],
+                            backgroundColor: 'rgba(46, 204, 113, 0.2)',
+                            borderColor: 'rgba(46, 204, 113, 1)',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Arts',
+                            data: [4, 6, 6, 7, 8],
+                            backgroundColor: 'rgba(155, 89, 182, 0.2)',
+                            borderColor: 'rgba(155, 89, 182, 1)',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Vocational',
+                            data: [5, 7, 8, 9, 7],
+                            backgroundColor: 'rgba(241, 196, 15, 0.2)',
+                            borderColor: 'rgba(241, 196, 15, 1)',
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: true
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 10
+                        }
+                    }
+                }
+            });
+
+            // Engineering salary chart
+            const engineeringCtx = document.getElementById('engineeringSalaryChart').getContext('2d');
+            new Chart(engineeringCtx, {
+                type: 'line',
+                data: {
+                    labels: careerStreams.engineering.salaryProjection.labels,
+                    datasets: [{
+                        label: 'Average Salary (LPA)',
+                        data: careerStreams.engineering.salaryProjection.data,
+                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                        borderColor: 'rgba(52, 152, 219, 1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Salary (LPA)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Engineering demand chart
+            const engineeringDemandCtx = document.getElementById('engineeringDemandChart').getContext('2d');
+            new Chart(engineeringDemandCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Computer Science', 'Electronics', 'Mechanical', 'Civil', 'Electrical'],
+                    datasets: [{
+                        label: 'Demand Score (out of 10)',
+                        data: [9, 8, 7, 6, 7],
+                        backgroundColor: [
+                            'rgba(52, 152, 219, 0.7)',
+                            'rgba(46, 204, 113, 0.7)',
+                            'rgba(155, 89, 182, 0.7)',
+                            'rgba(241, 196, 15, 0.7)',
+                            'rgba(230, 126, 34, 0.7)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 10
+                        }
+                    }
+                }
+            });
+
+            // Engineering industry chart
+            const engineeringIndustryCtx = document.getElementById('engineeringIndustryChart').getContext('2d');
+            new Chart(engineeringIndustryCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['IT & Software', 'Manufacturing', 'Infrastructure', 'Automotive', 'Research', 'Others'],
+                    datasets: [{
+                        data: [30, 20, 15, 15, 10, 10],
+                        backgroundColor: [
+                            'rgba(52, 152, 219, 0.8)',
+                            'rgba(46, 204, 113, 0.8)',
+                            'rgba(155, 89, 182, 0.8)',
+                            'rgba(241, 196, 15, 0.8)',
+                            'rgba(230, 126, 34, 0.8)',
+                            'rgba(149, 165, 166, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Medical salary chart
+            const medicalCtx = document.getElementById('medicalSalaryChart').getContext('2d');
+            new Chart(medicalCtx, {
+                type: 'line',
+                data: {
+                    labels: careerStreams.medical.salaryProjection.labels,
+                    datasets: [{
+                        label: 'Average Salary (LPA)',
+                        data: careerStreams.medical.salaryProjection.data,
+                        backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                        borderColor: 'rgba(231, 76, 60, 1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Salary (LPA)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Medical specialization chart
+            const medicalSpecializationCtx = document.getElementById('medicalSpecializationChart').getContext('2d');
+            new Chart(medicalSpecializationCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['General Medicine', 'Dentistry', 'Pharmacy', 'Nursing', 'Physiotherapy', 'Others'],
+                    datasets: [{
+                        data: [35, 15, 20, 15, 10, 5],
+                        backgroundColor: [
+                            'rgba(52, 152, 219, 0.8)',
+                            'rgba(46, 204, 113, 0.8)',
+                            'rgba(155, 89, 182, 0.8)',
+                            'rgba(241, 196, 15, 0.8)',
+                            'rgba(230, 126, 34, 0.8)',
+                            'rgba(149, 165, 166, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Medical work setting chart
+            const medicalWorkSettingCtx = document.getElementById('medicalWorkSettingChart').getContext('2d');
+            new Chart(medicalWorkSettingCtx, {
+                type: 'polarArea',
+                data: {
+                    labels: ['Hospitals', 'Clinics', 'Research', 'Pharma Industry', 'Academia', 'Others'],
+                    datasets: [{
+                        data: [40, 25, 10, 15, 5, 5],
+                        backgroundColor: [
+                            'rgba(52, 152, 219, 0.8)',
+                            'rgba(46, 204, 113, 0.8)',
+                            'rgba(155, 89, 182, 0.8)',
+                            'rgba(241, 196, 15, 0.8)',
+                            'rgba(230, 126, 34, 0.8)',
+                            'rgba(149, 165, 166, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Commerce salary chart
+            const commerceCtx = document.getElementById('commerceSalaryChart').getContext('2d');
+            new Chart(commerceCtx, {
+                type: 'line',
+                data: {
+                    labels: ['0-2 years', '3-5 years', '6-8 years', '9-12 years', '13+ years'],
+                    datasets: [{
+                        label: 'Average Salary (LPA)',
+                        data: [5, 10, 15, 22, 35],
+                        backgroundColor: 'rgba(46, 204, 113, 0.1)',
+                        borderColor: 'rgba(46, 204, 113, 1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Salary (LPA)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Commerce demand chart
+            const commerceDemandCtx = document.getElementById('commerceDemandChart').getContext('2d');
+            new Chart(commerceDemandCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['CA', 'MBA', 'Digital Marketing', 'Banking', 'Finance'],
+                    datasets: [{
+                        label: 'Demand Score (out of 10)',
+                        data: [9, 8, 9, 7, 8],
+                        backgroundColor: [
+                            'rgba(52, 152, 219, 0.7)',
+                            'rgba(46, 204, 113, 0.7)',
+                            'rgba(155, 89, 182, 0.7)',
+                            'rgba(241, 196, 15, 0.7)',
+                            'rgba(230, 126, 34, 0.7)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 10
+                        }
+                    }
+                }
+            });
+
+            // Commerce industry chart
+            const commerceIndustryCtx = document.getElementById('commerceIndustryChart').getContext('2d');
+            new Chart(commerceIndustryCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Accounting Firms', 'Banks', 'IT Companies', 'Manufacturing', 'Consulting', 'Others'],
+                    datasets: [{
+                        data: [25, 20, 15, 15, 15, 10],
+                        backgroundColor: [
+                            'rgba(52, 152, 219, 0.8)',
+                            'rgba(46, 204, 113, 0.8)',
+                            'rgba(155, 89, 182, 0.8)',
+                            'rgba(241, 196, 15, 0.8)',
+                            'rgba(230, 126, 34, 0.8)',
+                            'rgba(149, 165, 166, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Arts salary chart
+            const artsSalaryCtx = document.getElementById('artsSalaryChart').getContext('2d');
+            new Chart(artsSalaryCtx, {
+                type: 'line',
+                data: {
+                    labels: ['0-2 years', '3-5 years', '6-8 years', '9-12 years', '13+ years'],
+                    datasets: [{
+                        label: 'Average Salary (LPA)',
+                        data: [4, 6, 9, 14, 20],
+                        backgroundColor: 'rgba(155, 89, 182, 0.1)',
+                        borderColor: 'rgba(155, 89, 182, 1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Salary (LPA)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Arts specialization chart
+            const artsSpecializationCtx = document.getElementById('artsSpecializationChart').getContext('2d');
+            new Chart(artsSpecializationCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Teaching', 'Media', 'Design', 'Psychology', 'Social Work', 'Others'],
+                    datasets: [{
+                        data: [30, 20, 15, 15, 10, 10],
+                        backgroundColor: [
+                            'rgba(52, 152, 219, 0.8)',
+                            'rgba(46, 204, 113, 0.8)',
+                            'rgba(155, 89, 182, 0.8)',
+                            'rgba(241, 196, 15, 0.8)',
+                            'rgba(230, 126, 34, 0.8)',
+                            'rgba(149, 165, 166, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Arts satisfaction chart
+            const artsSatisfactionCtx = document.getElementById('artsSatisfactionChart').getContext('2d');
+            new Chart(artsSatisfactionCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Job Satisfaction', 'Work-Life Balance', 'Creativity', 'Social Impact', 'Growth Opportunities', 'Job Security'],
+                    datasets: [{
+                        label: 'Arts & Humanities',
+                        data: [8, 9, 9, 8, 6, 7],
+                        backgroundColor: 'rgba(155, 89, 182, 0.2)',
+                        borderColor: 'rgba(155, 89, 182, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: true
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 10
+                        }
+                    }
+                }
+            });
+
+            // Vocational salary chart
+            const vocationalSalaryCtx = document.getElementById('vocationalSalaryChart').getContext('2d');
+            new Chart(vocationalSalaryCtx, {
+                type: 'line',
+                data: {
+                    labels: ['0-2 years', '3-5 years', '6-8 years', '9-12 years', '13+ years'],
+                    datasets: [{
+                        label: 'Average Salary (LPA)',
+                        data: [4, 6, 8, 12, 18],
+                        backgroundColor: 'rgba(241, 196, 15, 0.1)',
+                        borderColor: 'rgba(241, 196, 15, 1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Salary (LPA)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Vocational demand chart
+            const vocationalDemandCtx = document.getElementById('vocationalDemandChart').getContext('2d');
+            new Chart(vocationalDemandCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['IT Skills', 'Automotive', 'Healthcare', 'Hospitality', 'Construction', 'Beauty'],
+                    datasets: [{
+                        label: 'Demand Score (out of 10)',
+                        data: [9, 7, 8, 6, 7, 8],
+                        backgroundColor: [
+                            'rgba(52, 152, 219, 0.7)',
+                            'rgba(46, 204, 113, 0.7)',
+                            'rgba(155, 89, 182, 0.7)',
+                            'rgba(241, 196, 15, 0.7)',
+                            'rgba(230, 126, 34, 0.7)',
+                            'rgba(149, 165, 166, 0.7)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 10
+                        }
+                    }
+                }
+            });
+
+            // Vocational industry chart
+            const vocationalIndustryCtx = document.getElementById('vocationalIndustryChart').getContext('2d');
+            new Chart(vocationalIndustryCtx, {
+                type: 'polarArea',
+                data: {
+                    labels: ['Manufacturing', 'Services', 'IT', 'Healthcare', 'Construction', 'Retail'],
+                    datasets: [{
+                        data: [25, 20, 15, 15, 15, 10],
+                        backgroundColor: [
+                            'rgba(52, 152, 219, 0.8)',
+                            'rgba(46, 204, 113, 0.8)',
+                            'rgba(155, 89, 182, 0.8)',
+                            'rgba(241, 196, 15, 0.8)',
+                            'rgba(230, 126, 34, 0.8)',
+                            'rgba(149, 165, 166, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update stream-specific charts
+        function updateStreamCharts(stream) {
+            // This function would update charts when switching between streams
+            // For now, we've initialized all charts at the beginning
+        }
+
+        // Initialize the page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initCareerPathsPage);
+    </script>
+</body>
+</html>

@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Timeline - विद्याRoute</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --text-light: #2c3e50;
+            --text-dark: #ecf0f1;
+            --bg-light: #ffffff;
+            --bg-dark: #121212;
+            --card-light: #ffffff;
+            --card-dark: #1e1e1e;
+            --border-light: #ddd;
+            --border-dark: #444;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: var(--bg-light);
+            --bg-secondary: var(--light);
+            --text-primary: var(--text-light);
+            --text-secondary: #4a5568;
+            --card-bg: var(--card-light);
+            --border-color: var(--border-light);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: var(--bg-dark);
+            --bg-secondary: #2d3748;
+            --text-primary: var(--text-dark);
+            --text-secondary: #a0aec0;
+            --card-bg: var(--card-dark);
+            --border-color: var(--border-dark);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .bg-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        .text-primary {
+            color: var(--primary);
+        }
+
+        .bg-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            color: var(--text-primary);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .hover-scale {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .hover-scale:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glow {
+            text-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(15deg);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            color: white;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+            cursor: pointer;
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 40px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        .section-title.center::after {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .timeline-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--bg-secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: var(--primary);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: var(--card-bg);
+            border: 4px solid var(--primary);
+            border-radius: 50%;
+            top: 15px;
+            right: -13px;
+            z-index: 1;
+        }
+
+        .left {
+            left: 0;
+        }
+
+        .right {
+            left: 50%;
+        }
+
+        .left::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            right: 30px;
+            border: medium solid var(--primary);
+            border-width: 10px 0 10px 10px;
+            border-color: transparent transparent transparent var(--primary);
+        }
+
+        .right::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            left: 30px;
+            border: medium solid var(--primary);
+            border-width: 10px 10px 10px 0;
+            border-color: transparent var(--primary) transparent transparent;
+        }
+
+        .right::after {
+            left: -13px;
+        }
+
+        .timeline-content {
+            padding: 20px;
+            background-color: var(--card-bg);
+            position: relative;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .timeline-content.active {
+            border-left: 4px solid var(--accent);
+        }
+
+        .timeline-content.completed {
+            border-left: 4px solid var(--success);
+        }
+
+        .timeline-content.upcoming {
+            border-left: 4px solid var(--warning);
+        }
+
+        .milestone-tag {
+            display: inline-block;
+            background: rgba(52, 152, 219, 0.1);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin: 2px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(52, 152, 219, 0.2);
+        }
+
+        .priority-high {
+            background: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+            border-color: rgba(231, 76, 60, 0.2);
+        }
+
+        .priority-medium {
+            background: rgba(241, 196, 15, 0.1);
+            color: #f1c40f;
+            border-color: rgba(241, 196, 15, 0.2);
+        }
+
+        .priority-low {
+            background: rgba(46, 204, 113, 0.1);
+            color: #2ecc71;
+            border-color: rgba(46, 204, 113, 0.2);
+        }
+
+        .calendar-day {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .calendar-day:hover {
+            background-color: var(--bg-secondary);
+        }
+
+        .calendar-day.event {
+            background-color: rgba(52, 152, 219, 0.2);
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .calendar-day.today {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .calendar-day.past {
+            color: var(--text-secondary);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: var(--bg-secondary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        footer a {
+            transition: color 0.3s;
+        }
+        
+        footer a:hover {
+            color: var(--accent) !important;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.open {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 0.8rem;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <!-- Header/Navigation -->
+    <header class="bg-header shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="logo flex items-center">
+                    <img src="logo.jpeg" alt="VidyaRoute Logo" class="h-12 w-auto mr-3">
+                    <span class="text-white font-bold text-xl">विद्याRoute</span>
+                </a>
+                
+                <nav class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-white hover:text-accent font-medium">Home</a>
+                    <a href="assessment.html" class="text-white hover:text-accent font-medium">Assessment</a>
+                    <a href="colleges.html" class="text-white hover:text-accent font-medium">Colleges</a>
+                    <a href="career-paths.html" class="text-white hover:text-accent font-medium">Career Paths</a>
+                    <a href="vocational.html" class="text-white hover:text-accent font-medium">Vocational</a>
+                    <a href="timeline.html" class="text-white hover:text-accent font-medium border-b-2 border-white">Timeline</a>
+                    <a href="about.html" class="text-white hover:text-accent font-medium">About</a>
+                </nav>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <button id="loginBtn" class="bg-white text-primary px-4 py-2 rounded-lg hover:bg-accent hover:text-white transition">
+                        Login
+                    </button>
+                    <button id="mobileMenuBtn" class="md:hidden text-white">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu fixed inset-0 bg-primary z-40 p-6 md:hidden" style="display: none;">
+        <div class="flex justify-between items-center mb-8">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <span class="text-white">विद्याRoute</span>
+            </div>
+            <button id="closeMobileMenu" class="text-white">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+        
+        <nav class="flex flex-col space-y-6">
+            <a href="index.html" class="text-white hover:text-accent font-medium text-lg">Home</a>
+            <a href="assessment.html" class="text-white hover:text-accent font-medium text-lg">Assessment</a>
+            <a href="colleges.html" class="text-white hover:text-accent font-medium text-lg">Colleges</a>
+            <a href="career-paths.html" class="text-white hover:text-accent font-medium text-lg">Career Paths</a>
+            <a href="vocational.html" class="text-white hover:text-accent font-medium text-lg">Vocational</a>
+            <a href="timeline.html" class="text-white hover:text-accent font-medium text-lg border-b-2 border-white">Timeline</a>
+            <a href="about.html" class="text-white hover:text-accent font-medium text-lg">About</a>
+            <button id="mobileLoginBtn" class="bg-white text-primary px-4 py-3 rounded-lg font-semibold text-left mt-4">
+                Login
+            </button>
+        </nav>
+    </div>
+
+    <!-- Timeline Hero Section -->
+    <section class="py-16 bg-gradient-to-r from-primary to-secondary text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Career Timeline & Planning</h1>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">Plan your academic journey with our interactive timeline and never miss important deadlines</p>
+            <div class="flex justify-center space-x-4">
+                <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                    <i class="fas fa-calendar-alt text-2xl mb-2"></i>
+                    <p>Personalized Timeline</p>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                    <i class="fas fa-bell text-2xl mb-2"></i>
+                    <p>Smart Reminders</p>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                    <i class="fas fa-tasks text-2xl mb-2"></i>
+                    <p>Progress Tracking</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Navigation -->
+    <section class="py-8 bg-gray-100 dark:bg-gray-800 sticky top-16 z-40 shadow-md">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap justify-center gap-4">
+                <button class="timeline-filter btn-primary timeline-active" data-timeline="all">
+                    <i class="fas fa-th-large mr-2"></i> All Milestones
+                </button>
+                <button class="timeline-filter btn-outline" data-timeline="academic">
+                    <i class="fas fa-graduation-cap mr-2"></i> Academic
+                </button>
+                <button class="timeline-filter btn-outline" data-timeline="exams">
+                    <i class="fas fa-file-alt mr-2"></i> Exams
+                </button>
+                <button class="timeline-filter btn-outline" data-timeline="applications">
+                    <i class="fas fa-edit mr-2"></i> Applications
+                </button>
+                <button class="timeline-filter btn-outline" data-timeline="preparation">
+                    <i class="fas fa-book-open mr-2"></i> Preparation
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Overview -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center">Your Career <span class="gradient-text">Timeline</span></h2>
+            <p class="text-xl text-center mb-12 max-w-3xl mx-auto text-gray-600 dark:text-gray-300">Track your progress through important academic and career milestones with our interactive timeline</p>
+            
+            <!-- Progress Overview -->
+            <div class="bg-card p-6 rounded-xl mb-12">
+                <h3 class="text-xl font-semibold mb-4 text-primary">Your Progress Overview</h3>
+                <div class="grid md:grid-cols-4 gap-6 mb-6">
+                    <div class="text-center">
+                        <div class="timeline-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold">Completed</h4>
+                        <p class="text-2xl font-bold text-success">8</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Milestones</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="timeline-icon">
+                            <i class="fas fa-spinner"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold">In Progress</h4>
+                        <p class="text-2xl font-bold text-primary">5</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Milestones</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="timeline-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold">Upcoming</h4>
+                        <p class="text-2xl font-bold text-warning">12</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Milestones</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="timeline-icon">
+                            <i class="fas fa-calendar-day"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold">Next Deadline</h4>
+                        <p class="text-2xl font-bold text-accent">15 Days</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">JEE Main Registration</p>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <div class="flex justify-between mb-2">
+                        <span>Overall Progress</span>
+                        <span class="text-primary font-semibold">32%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 32%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Timeline -->
+            <div class="timeline">
+                <!-- 2024 Timeline -->
+                <div class="timeline-year text-center mb-8">
+                    <h3 class="text-2xl font-bold text-primary inline-block px-4 py-2 bg-card rounded-lg">2024</h3>
+                </div>
+
+                <div class="timeline-item left fade-in" data-category="academic">
+                    <div class="timeline-content completed">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-semibold text-primary">Class 10 Board Exams</h4>
+                            <span class="milestone-tag priority-high">Completed</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">February - March 2024</p>
+                        <p class="mb-3">Successfully completed Class 10 board examinations with strong foundation in core subjects.</p>
+                        <div class="flex flex-wrap gap-1">
+                            <span class="milestone-tag">Academic</span>
+                            <span class="milestone-tag">Completed</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item right fade-in" data-category="preparation">
+                    <div class="timeline-content completed">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-semibold text-primary">Stream Selection</h4>
+                            <span class="milestone-tag priority-high">Completed</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">April 2024</p>
+                        <p class="mb-3">Selected Science stream with Mathematics based on aptitude assessment and career interests.</p>
+                        <div class="flex flex-wrap gap-1">
+                            <span class="milestone-tag">Academic</span>
+                            <span class="milestone-tag">Completed</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item left fade-in" data-category="preparation">
+                    <div class="timeline-content active">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-semibold text-primary">Class 11 Foundation Building</h4>
+                            <span class="milestone-tag priority-medium">In Progress</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">June 2024 - Present</p>
+                        <p class="mb-3">Building strong foundation in Physics, Chemistry, and Mathematics for competitive exams.</p>
+                        <div class="flex items-center mt-3">
+                            <div class="w-full bg-gray-300 rounded-full h-2 dark:bg-gray-600 mr-3">
+                                <div class="bg-primary h-2 rounded-full" style="width: 65%"></div>
+                            </div>
+                            <span class="text-sm">65%</span>
+                        </div>
+                        <div class="flex flex-wrap gap-1 mt-2">
+                            <span class="milestone-tag">Preparation</span>
+                            <span class="milestone-tag">In Progress</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item right fade-in" data-category="preparation">
+                    <div class="timeline-content active">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-semibold text-primary">JEE/NEET Foundation Course</h4>
+                            <span class="milestone-tag priority-medium">In Progress</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">July 2024 - Present</p>
+                        <p class="mb-3">Enrolled in foundation course for JEE/NEET preparation with regular tests and doubt sessions.</p>
+                        <div class="flex items-center mt-3">
+                            <div class="w-full bg-gray-300 rounded-full h-2 dark:bg-gray-600 mr-3">
+                                <div class="bg-primary h-2 rounded-full" style="width: 40%"></div>
+                            </div>
+                            <span class="text-sm">40%</span>
+                        </div>
+                        <div class="flex flex-wrap gap-1 mt-2">
+                            <span class="milestone-tag">Preparation</span>
+                            <span class="milestone-tag">In Progress</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2025 Timeline -->
+                <div class="timeline-year text-center my-12">
+                    <h3 class="text-2xl font-bold text-primary inline-block px-4 py-2 bg-card rounded-lg">2025</h3>
+                </div>
+
+                <div class="timeline-item left fade-in" data-category="exams">
+                    <div class="timeline-content upcoming">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-semibold text-primary">Class 12 Pre-Board Exams</h4>
+                            <span class="milestone-tag priority-medium">Upcoming</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">December 2024 - January 2025</p>
+                        <p class="mb-3">First pre-board examinations to assess preparation level for final boards.</p>
+                        <div class="flex justify-between items-center mt-3">
+                            <div class="flex items-center text-warning">
+                                <i class="fas fa-clock mr-1"></i>
+                                <span>45 days remaining</span>
+                            </div>
+                            <button class="btn-primary text-sm py-1 px-3">Set Reminder</button>
+                        </div>
+                        <div class="flex flex-wrap gap-1 mt-2">
+                            <span class="milestone-tag">Exams</span>
+                            <span class="milestone-tag">Upcoming</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item right fade-in" data-category="exams">
+                    <div class="timeline-content upcoming">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-semibold text-primary">JEE Main - Session 1</h4>
+                            <span class="milestone-tag priority-high">Upcoming</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">January 2025</p>
+                        <p class="mb-3">First attempt at JEE Main examination for engineering admissions.</p>
+                        <div class="flex justify-between items-center mt-3">
+                            <div class="flex items-center text-warning">
+                                <i class="fas fa-clock mr-1"></i>
+                                <span>75 days remaining</span>
+                            </div>
+                            <button class="btn-primary text-sm py-1 px-3">Study Plan</button>
+                        </div>
+                        <div class="flex flex-wrap gap-1 mt-2">
+                            <span class="milestone-tag">Exams</span>
+                            <span class="milestone-tag priority-high">High Priority</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item left fade-in" data-category="academic">
+                    <div class="timeline-content upcoming">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-semibold text-primary">Class 12 Board Exams</h4>
+                            <span class="milestone-tag priority-high">Upcoming</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">February - March 2025</p>
+                        <p class="mb-3">Final school board examinations covering entire Class 12 syllabus.</p>
+                        <div class="flex justify-between items-center mt-3">
+                            <div class="flex items-center text-warning">
+                                <i class="fas fa-clock mr-1"></i>
+                                <span>120 days remaining</span>
+                            </div>
+                            <button class="btn-primary text-sm py-1 px-3">Revision Plan</button>
+                        </div>
+                        <div class="flex flex-wrap gap-1 mt-2">
+                            <span class="milestone-tag">Academic</span>
+                            <span class="milestone-tag priority-high">High Priority</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item right fade-in" data-category="exams">
+                    <div class="timeline-content upcoming">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-semibold text-primary">JEE Main - Session 2</h4>
+                            <span class="milestone-tag priority-medium">Upcoming</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">April 2025</p>
+                        <p class="mb-3">Second attempt at JEE Main examination (if needed) for better score.</p>
+                        <div class="flex justify-between items-center mt-3">
+                            <div class="flex items-center text-warning">
+                                <i class="fas fa-clock mr-1"></i>
+                                <span>165 days remaining</span>
+                            </div>
+                            <button class="btn-primary text-sm py-1 px-3">Study Plan</button>
+                        </div>
+                        <div class="flex flex-wrap gap-1 mt-2">
+                            <span class="milestone-tag">Exams</span>
+                            <span class="milestone-tag">Upcoming</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item left fade-in" data-category="applications">
+                    <div class="timeline-content upcoming">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-semibold text-primary">College Applications Begin</h4>
+                            <span class="milestone-tag priority-medium">Upcoming</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">May - June 2025</p>
+                        <p class="mb-3">Start applying to various engineering colleges based on JEE scores and preferences.</p>
+                        <div class="flex justify-between items-center mt-3">
+                            <div class="flex items-center text-warning">
+                                <i class="fas fa-clock mr-1"></i>
+                                <span>195 days remaining</span>
+                            </div>
+                            <button class="btn-primary text-sm py-1 px-3">Prepare Documents</button>
+                        </div>
+                        <div class="flex flex-wrap gap-1 mt-2">
+                            <span class="milestone-tag">Applications</span>
+                            <span class="milestone-tag">Upcoming</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item right fade-in" data-category="exams">
+                    <div class="timeline-content upcoming">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-semibold text-primary">JEE Advanced</h4>
+                            <span class="milestone-tag priority-high">Upcoming</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">June 2025</p>
+                        <p class="mb-3">Qualifying examination for admission to IITs (if eligible through JEE Main).</p>
+                        <div class="flex justify-between items-center mt-3">
+                            <div class="flex items-center text-warning">
+                                <i class="fas fa-clock mr-1"></i>
+                                <span>225 days remaining</span>
+                            </div>
+                            <button class="btn-primary text-sm py-1 px-3">Advanced Prep</button>
+                        </div>
+                        <div class="flex flex-wrap gap-1 mt-2">
+                            <span class="milestone-tag">Exams</span>
+                            <span class="milestone-tag priority-high">High Priority</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item left fade-in" data-category="applications">
+                    <div class="timeline-content upcoming">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-semibold text-primary">College Admission Process</h4>
+                            <span class="milestone-tag priority-medium">Upcoming</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">July - August 2025</p>
+                        <p class="mb-3">Complete admission formalities, document verification, and fee payment for selected college.</p>
+                        <div class="flex justify-between items-center mt-3">
+                            <div class="flex items-center text-warning">
+                                <i class="fas fa-clock mr-1"></i>
+                                <span>255 days remaining</span>
+                            </div>
+                            <button class="btn-primary text-sm py-1 px-3">Checklist</button>
+                        </div>
+                        <div class="flex flex-wrap gap-1 mt-2">
+                            <span class="milestone-tag">Applications</span>
+                            <span class="milestone-tag">Upcoming</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2026 Timeline -->
+                <div class="timeline-year text-center my-12">
+                    <h3 class="text-2xl font-bold text-primary inline-block px-4 py-2 bg-card rounded-lg">2026 & Beyond</h3>
+                </div>
+
+                <div class="timeline-item right fade-in" data-category="academic">
+                    <div class="timeline-content upcoming">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-semibold text-primary">Begin Engineering College</h4>
+                            <span class="milestone-tag priority-low">Upcoming</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">August 2025</p>
+                        <p class="mb-3">Start your engineering journey with orientation and beginning of first semester.</p>
+                        <div class="flex justify-between items-center mt-3">
+                            <div class="flex items-center text-warning">
+                                <i class="fas fa-clock mr-1"></i>
+                                <span>285 days remaining</span>
+                            </div>
+                            <button class="btn-primary text-sm py-1 px-3">College Prep</button>
+                        </div>
+                        <div class="flex flex-wrap gap-1 mt-2">
+                            <span class="milestone-tag">Academic</span>
+                            <span class="milestone-tag">Upcoming</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item left fade-in" data-category="academic">
+                    <div class="timeline-content upcoming">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-semibold text-primary">Internship Opportunities</h4>
+                            <span class="milestone-tag priority-low">Upcoming</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Summer 2026</p>
+                        <p class="mb-3">Apply for summer internships after second year to gain industry experience.</p>
+                        <div class="flex justify-between items-center mt-3">
+                            <div class="flex items-center text-warning">
+                                <i class="fas fa-clock mr-1"></i>
+                                <span>600+ days remaining</span>
+                            </div>
+                            <button class="btn-primary text-sm py-1 px-3">Skill Development</button>
+                        </div>
+                        <div class="flex flex-wrap gap-1 mt-2">
+                            <span class="milestone-tag">Academic</span>
+                            <span class="milestone-tag">Future</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Calendar & Reminders Section -->
+    <section class="py-16 bg-gray-100 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center">Calendar & <span class="gradient-text">Reminders</span></h2>
+            <p class="text-xl text-center mb-12 max-w-3xl mx-auto text-gray-600 dark:text-gray-300">Stay organized with our interactive calendar and never miss important deadlines</p>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-card p-6 rounded-xl">
+                    <h3 class="text-xl font-semibold mb-4 text-primary">Upcoming Deadlines</h3>
+                    <div class="space-y-4">
+                        <div class="p-4 border-l-4 border-accent bg-secondary bg-opacity-20 rounded-r-lg">
+                            <div class="flex justify-between items-start">
+                                <h4 class="font-semibold">JEE Main Registration</h4>
+                                <span class="text-accent font-semibold">15 days</span>
+                            </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Deadline: December 15, 2024</p>
+                            <p class="text-sm mt-1">Register for JEE Main Session 1 on official website</p>
+                        </div>
+                        <div class="p-4 border-l-4 border-warning bg-secondary bg-opacity-20 rounded-r-lg">
+                            <div class="flex justify-between items-start">
+                                <h4 class="font-semibold">Class 12 Pre-Boards</h4>
+                                <span class="text-warning font-semibold">45 days</span>
+                            </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Starts: December 20, 2024</p>
+                            <p class="text-sm mt-1">First pre-board examination preparation</p>
+                        </div>
+                        <div class="p-4 border-l-4 border-primary bg-secondary bg-opacity-20 rounded-r-lg">
+                            <div class="flex justify-between items-start">
+                                <h4 class="font-semibold">School Project Submission</h4>
+                                <span class="text-primary font-semibold">30 days</span>
+                            </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Deadline: December 5, 2024</p>
+                            <p class="text-sm mt-1">Submit Physics and Chemistry practical projects</p>
+                        </div>
+                    </div>
+                    <button class="btn-primary w-full mt-6">View All Reminders</button>
+                </div>
+
+                <div class="bg-card p-6 rounded-xl">
+                    <h3 class="text-xl font-semibold mb-4 text-primary">Study Progress</h3>
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>Physics Preparation</span>
+                                <span class="text-primary font-semibold">65%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 65%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>Chemistry Preparation</span>
+                                <span class="text-primary font-semibold">55%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 55%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>Mathematics Preparation</span>
+                                <span class="text-primary font-semibold">70%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 70%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>Overall JEE Preparation</span>
+                                <span class="text-primary font-semibold">40%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 40%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-primary w-full mt-6">Update Progress</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Study Planning Tools -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center">Study <span class="gradient-text">Planning Tools</span></h2>
+            <p class="text-xl text-center mb-12 max-w-3xl mx-auto text-gray-600 dark:text-gray-300">Optimize your preparation with our smart study planning and time management tools</p>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-card p-6 rounded-xl text-center hover-scale">
+                    <div class="timeline-icon">
+                        <i class="fas fa-calendar-plus"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Custom Study Schedule</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4">Create personalized study timetables based on your syllabus, available time, and learning pace.</p>
+                    <button class="btn-primary">Create Schedule</button>
+                </div>
+
+                <div class="bg-card p-6 rounded-xl text-center hover-scale">
+                    <div class="timeline-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Progress Analytics</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4">Track your preparation with detailed analytics and identify areas that need more focus.</p>
+                    <button class="btn-primary">View Analytics</button>
+                </div>
+
+                <div class="bg-card p-6 rounded-xl text-center hover-scale">
+                    <div class="timeline-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Smart Reminders</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4">Get timely notifications for deadlines, revision schedules, and important exam updates.</p>
+                    <button class="btn-primary">Set Reminders</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-16 bg-gray-100 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center">Timeline <span class="gradient-text">FAQs</span></h2>
+            
+            <div class="max-w-3xl mx-auto">
+                <div class="bg-card p-6 rounded-lg mb-4">
+                    <h3 class="text-xl font-semibold mb-3 text-primary">How do I customize my timeline?</h3>
+                    <p class="text-gray-700 dark:text-gray-300">You can customize your timeline by selecting your target stream (Engineering, Medical, Commerce, etc.) and your current academic year. The timeline will automatically adjust to show relevant milestones and deadlines for your chosen path.</p>
+                </div>
+                
+                <div class="bg-card p-6 rounded-lg mb-4">
+                    <h3 class="text-xl font-semibold mb-3 text-primary">Can I sync the timeline with my calendar?</h3>
+                    <p class="text-gray-700 dark:text-gray-300">Yes, you can export important dates and deadlines to your Google Calendar, Apple Calendar, or any other calendar app that supports .ics files. This helps you stay organized across all your devices.</p>
+                </div>
+                
+                <div class="bg-card p-6 rounded-lg mb-4">
+                    <h3 class="text-xl font-semibold mb-3 text-primary">How often is the timeline updated?</h3>
+                    <p class="text-gray-700 dark:text-gray-300">Our timeline is updated regularly with the latest exam dates, application deadlines, and other important information from official sources. You'll also receive notifications about any changes to your saved timeline.</p>
+                </div>
+                
+                <div class="bg-card p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3 text-primary">Can I share my timeline with parents or mentors?</h3>
+                    <p class="text-gray-700 dark:text-gray-300">Absolutely! You can generate a shareable link to your timeline or export it as a PDF to share with parents, teachers, or mentors who are supporting your academic journey.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary py-12 text-white">
+        <div class="container mx-auto px-4">
+            <div class="footer-grid">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <img src="logo.jpeg" alt="VidyaRoute Logo" class="h-10 w-auto mr-2">
+                        <span class="text-xl font-bold">विद्याRoute</span>
+                    </div>
+                    <p class="mb-4">Empowering students to make informed decisions about their academic and career journey.</p>
+                    <p class="text-sm">"Your Pathway to Success"</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="hover:text-accent">Home</a></li>
+                        <li><a href="assessment.html" class="hover:text-accent">Assessment</a></li>
+                        <li><a href="colleges.html" class="hover:text-accent">Colleges</a></li>
+                        <li><a href="career-paths.html" class="hover:text-accent">Career Paths</a></li>
+                        <li><a href="vocational.html" class="hover:text-accent">Vocational Courses</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Resources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" id="privacyLink" class="hover:text-accent">Privacy Policy</a></li>
+                        <li><a href="#" id="termsLink" class="hover:text-accent">Terms of Service</a></li>
+                        <li><a href="about.html" class="hover:text-accent">About Us</a></li>
+                        <li><a href="about.html#faq" class="hover:text-accent">FAQ</a></li>
+                        <li><a href="about.html#contact" class="hover:text-accent">Contact Us</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Connect With Us</h3>
+                    <div class="flex space-x-4 mb-4">
+                        <a href="https://github.com/anubrr21" target="_blank" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary hover:bg-accent hover:text-white">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://linkedin.com/in/anubrata-bhattacharyya" target="_blank" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary hover:bg-accent hover:text-white">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="https://wa.me/918977039397" target="_blank" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary hover:bg-accent hover:text-white">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="mailto:info@vidyaroute.com" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary hover:bg-accent hover:text-white">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                    <p class="text-sm">© 2025 विद्याRoute. All rights reserved.</p>
+                    <p class="text-sm mt-2">Made with ❤️ by PseudoCoderz</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Add Milestone Modal -->
+    <div id="milestoneModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-primary">Add Custom Milestone</h3>
+                <button class="close-modal text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="milestoneForm">
+                <div class="mb-4">
+                    <label for="milestoneTitle" class="block mb-2">Milestone Title</label>
+                    <input type="text" id="milestoneTitle" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary dark:bg-gray-700 dark:text-white dark:border-gray-600" required>
+                </div>
+                <div class="mb-4">
+                    <label for="milestoneDate" class="block mb-2">Date</label>
+                    <input type="date" id="milestoneDate" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary dark:bg-gray-700 dark:text-white dark:border-gray-600" required>
+                </div>
+                <div class="mb-4">
+                    <label for="milestoneCategory" class="block mb-2">Category</label>
+                    <select id="milestoneCategory" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary dark:bg-gray-700 dark:text-white dark:border-gray-600" required>
+                        <option value="academic">Academic</option>
+                        <option value="exams">Exams</option>
+                        <option value="applications">Applications</option>
+                        <option value="preparation">Preparation</option>
+                        <option value="personal">Personal</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="milestonePriority" class="block mb-2">Priority</label>
+                    <select id="milestonePriority" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary dark:bg-gray-700 dark:text-white dark:border-gray-600" required>
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="milestoneDescription" class="block mb-2">Description</label>
+                    <textarea id="milestoneDescription" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary dark:bg-gray-700 dark:text-white dark:border-gray-600"></textarea>
+                </div>
+                <button type="submit" class="btn-primary w-full">
+                    Add Milestone
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Initialize the page
+        function initTimelinePage() {
+            setupEventListeners();
+            
+            // Theme toggle functionality
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = themeToggle.querySelector('i');
+            const body = document.body;
+            
+            themeToggle.addEventListener('click', () => {
+                if (body.getAttribute('data-theme') === 'light') {
+                    body.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                } else {
+                    body.setAttribute('data-theme', 'light');
+                    localStorage.setItem('theme', 'light');
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                }
+            });
+
+            // Load saved theme
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                body.setAttribute('data-theme', savedTheme);
+                if (savedTheme === 'dark') {
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                }
+            }
+
+            // Mobile menu functionality
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const closeMobileMenu = document.getElementById('closeMobileMenu');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.style.display = 'block';
+            });
+            
+            closeMobileMenu.addEventListener('click', () => {
+                mobileMenu.style.display = 'none';
+            });
+
+            // Fade in animation for elements
+            const fadeElements = document.querySelectorAll('.fade-in');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            fadeElements.forEach(el => observer.observe(el));
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Timeline filter buttons
+            document.querySelectorAll('.timeline-filter').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const timeline = e.target.getAttribute('data-timeline');
+                    filterTimeline(timeline);
+                });
+            });
+
+            // Add milestone button
+            document.getElementById('loginBtn').addEventListener('click', () => {
+                document.getElementById('milestoneModal').classList.add('open');
+            });
+
+            // Close modal buttons
+            document.querySelectorAll('.close-modal').forEach(button => {
+                button.addEventListener('click', () => {
+                    document.querySelectorAll('.modal').forEach(modal => {
+                        modal.classList.remove('open');
+                    });
+                });
+            });
+
+            // Milestone form submission
+            document.getElementById('milestoneForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                addCustomMilestone();
+            });
+
+            // Privacy and Terms modals
+            document.getElementById('privacyLink').addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('Privacy Policy would be displayed here.');
+            });
+            
+            document.getElementById('termsLink').addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('Terms of Service would be displayed here.');
+            });
+        }
+
+        // Filter timeline by category
+        function filterTimeline(category) {
+            // Update active button
+            document.querySelectorAll('.timeline-filter').forEach(button => {
+                button.classList.remove('timeline-active', 'btn-primary');
+                button.classList.add('btn-outline');
+            });
+            
+            const activeButton = document.querySelector(`.timeline-filter[data-timeline="${category}"]`);
+            activeButton.classList.add('timeline-active', 'btn-primary');
+            activeButton.classList.remove('btn-outline');
+            
+            // Show/hide timeline items based on category
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            
+            timelineItems.forEach(item => {
+                if (category === 'all') {
+                    item.style.display = 'block';
+                } else {
+                    const itemCategory = item.getAttribute('data-category');
+                    if (itemCategory === category) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                }
+            });
+        }
+
+        // Add custom milestone
+        function addCustomMilestone() {
+            const title = document.getElementById('milestoneTitle').value;
+            const date = document.getElementById('milestoneDate').value;
+            const category = document.getElementById('milestoneCategory').value;
+            const priority = document.getElementById('milestonePriority').value;
+            const description = document.getElementById('milestoneDescription').value;
+            
+            // Format date for display
+            const formattedDate = new Date(date).toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            // Create new timeline item
+            const timeline = document.querySelector('.timeline');
+            const newItem = document.createElement('div');
+            newItem.className = 'timeline-item left fade-in';
+            newItem.setAttribute('data-category', category);
+            
+            // Determine position (left or right) based on existing items
+            const existingItems = document.querySelectorAll('.timeline-item');
+            const position = existingItems.length % 2 === 0 ? 'left' : 'right';
+            newItem.className = `timeline-item ${position} fade-in`;
+            
+            newItem.innerHTML = `
+                <div class="timeline-content upcoming">
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="font-semibold text-primary">${title}</h4>
+                        <span class="milestone-tag priority-${priority}">Custom</span>
+                    </div>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">${formattedDate}</p>
+                    <p class="mb-3">${description}</p>
+                    <div class="flex flex-wrap gap-1">
+                        <span class="milestone-tag">${category}</span>
+                        <span class="milestone-tag">Custom</span>
+                    </div>
+                </div>
+            `;
+            
+            // Add to timeline (before the last year marker if exists, or at the end)
+            const lastYearMarker = document.querySelector('.timeline-year:last-child');
+            if (lastYearMarker) {
+                timeline.insertBefore(newItem, lastYearMarker);
+            } else {
+                timeline.appendChild(newItem);
+            }
+            
+            // Close modal and reset form
+            document.getElementById('milestoneModal').classList.remove('open');
+            document.getElementById('milestoneForm').reset();
+            
+            // Show success message
+            alert('Custom milestone added successfully!');
+        }
+
+        // Initialize the page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initTimelinePage);
+    </script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vidyaroute - Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+    }
+    header {
+      width: 100%;
+      padding: 1rem 2rem;
+      background: rgba(0, 0, 0, 0.3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    h1 {
+      margin: 0;
+    }
+    .card {
+      margin-top: 2rem;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: transform 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #ff4b2b;
+      color: white;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #ff3a1a;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Vidyaroute</h1>
+    <button id="logoutBtn">Logout</button>
+  </header>
+
+  <div class="card">
+    <h2>Welcome, <span id="username"></span>!</h2>
+    <p>Email: <span id="email"></span></p>
+  </div>
+
+  <script>
+    async function loadProfile() {
+      const res = await fetch("http://localhost:5000/api/user/me", {
+        credentials: "include"
+      });
+      const data = await res.json();
+      if (data.ok) {
+        document.getElementById("username").innerText = data.user.name;
+        document.getElementById("email").innerText = data.user.email;
+      } else {
+        window.location.href = "login.html";
+      }
+    }
+
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+      await fetch("http://localhost:5000/api/auth/logout", {
+        method: "POST",
+        credentials: "include"
+      });
+      window.location.href = "login.html";
+    });
+
+    loadProfile();
+  </script>
+</body>
+</html>

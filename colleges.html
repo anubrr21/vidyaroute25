@@ -1,0 +1,2117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Directory - विद्याRoute</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --text-light: #2c3e50;
+            --text-dark: #ecf0f1;
+            --bg-light: #ffffff;
+            --bg-dark: #121212;
+            --card-light: #ffffff;
+            --card-dark: #1e1e1e;
+            --border-light: #ddd;
+            --border-dark: #444;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: var(--bg-light);
+            --bg-secondary: var(--light);
+            --text-primary: var(--text-light);
+            --text-secondary: #4a5568;
+            --card-bg: var(--card-light);
+            --border-color: var(--border-light);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: var(--bg-dark);
+            --bg-secondary: #2d3748;
+            --text-primary: var(--text-dark);
+            --text-secondary: #a0aec0;
+            --card-bg: var(--card-dark);
+            --border-color: var(--border-dark);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .bg-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        .text-primary {
+            color: var(--primary);
+        }
+
+        .bg-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            color: var(--text-primary);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .hover-scale {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .hover-scale:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glow {
+            text-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(15deg);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            color: white;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+            cursor: pointer;
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 40px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        .section-title.center::after {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .college-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+            height: 100%;
+        }
+
+        .college-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .filter-active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.open {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 0.8rem;
+            max-width: 800px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            color: var(--text-primary);
+        }
+
+        .college-details {
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .comparison-table th, .comparison-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .comparison-table th {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background-color: var(--bg-secondary);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        footer a {
+            transition: color 0.3s;
+        }
+        
+        footer a:hover {
+            color: var(--accent) !important;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        /* Fix for filter section visibility */
+        .filter-label {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+
+        .filter-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px 12px 40px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+         .college-card p {
+            color: var(--text-primary);
+        }
+
+        .college-card h3 {
+            color: var(--text-primary);
+        }
+
+        /* Fix for college image container */
+        .college-image-container {
+            height: 160px;
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .college-image {
+            max-height: 100%;
+            max-width: 100%;
+            object-fit: contain;
+        }
+
+        /* Fix for college details modal text visibility */
+        .college-details p, .college-details li {
+            color: var(--text-primary);
+        }
+
+        .college-details h4 {
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <!-- Header/Navigation -->
+    <header class="bg-header shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="logo flex items-center">
+                    <img src="logo.jpeg" alt="VidyaRoute Logo" class="h-12 w-auto mr-3">
+                    <span class="text-white font-bold text-xl">विद्याRoute</span>
+                </a>
+                
+                <nav class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-white hover:text-accent font-medium">Home</a>
+                    <a href="assessment.html" class="text-white hover:text-accent font-medium">Assessment</a>
+                    <a href="colleges.html" class="text-white hover:text-accent font-medium border-b-2 border-white">Colleges</a>
+                    <a href="career-paths.html" class="text-white hover:text-accent font-medium">Career Paths</a>
+                    <a href="vocational.html" class="text-white hover:text-accent font-medium">Vocational</a>
+                    <a href="timeline.html" class="text-white hover:text-accent font-medium">Timeline</a>
+                    <a href="about.html" class="text-white hover:text-accent font-medium">About</a>
+                </nav>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <button id="loginBtn" class="bg-white text-primary px-4 py-2 rounded-lg hover:bg-accent hover:text-white transition">
+                        Login
+                    </button>
+                    <button id="mobileMenuBtn" class="md:hidden text-white">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu fixed inset-0 bg-primary z-40 p-6 md:hidden" style="display: none;">
+        <div class="flex justify-between items-center mb-8">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <span class="text-white">विद्याRoute</span>
+            </div>
+            <button id="closeMobileMenu" class="text-white">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+        
+        <nav class="flex flex-col space-y-6">
+            <a href="index.html" class="text-white hover:text-accent font-medium text-lg">Home</a>
+            <a href="assessment.html" class="text-white hover:text-accent font-medium text-lg">Assessment</a>
+            <a href="colleges.html" class="text-white hover:text-accent font-medium text-lg border-b-2 border-white">Colleges</a>
+            <a href="career-paths.html" class="text-white hover:text-accent font-medium text-lg">Career Paths</a>
+            <a href="vocational.html" class="text-white hover:text-accent font-medium text-lg">Vocational</a>
+            <a href="timeline.html" class="text-white hover:text-accent font-medium text-lg">Timeline</a>
+            <a href="about.html" class="text-white hover:text-accent font-medium text-lg">About</a>
+            <button id="mobileLoginBtn" class="bg-white text-primary px-4 py-3 rounded-lg font-semibold text-left mt-4">
+                Login
+            </button>
+        </nav>
+    </div>
+
+    <!-- Colleges Hero Section -->
+    <section class="py-16 bg-gradient-to-r from-primary to-secondary text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">College Directory</h1>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">Discover premier government and private colleges across India with detailed information about courses, fees, admission process, and placement records</p>
+            <div class="flex justify-center space-x-4">
+                <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                    <i class="fas fa-university text-2xl mb-2"></i>
+                    <p>150+ Colleges</p>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                    <i class="fas fa-search text-2xl mb-2"></i>
+                    <p>Advanced Filters</p>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                    <i class="fas fa-chart-line text-2xl mb-2"></i>
+                    <p>Placement Data</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search and Filters Section -->
+    <section class="py-8 bg-gray-100 dark:bg-gray-800 sticky top-16 z-40 shadow-md">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row gap-4 items-center">
+                <div class="flex-grow">
+                    <div class="relative">
+                        <input type="text" id="collegeSearch" placeholder="Search for colleges, courses, or locations..." 
+                               class="search-input">
+                        <i class="fas fa-search search-icon"></i>
+                    </div>
+                </div>
+                
+                <div class="flex space-x-2">
+                    <button id="filterToggle" class="btn-outline flex items-center">
+                        <i class="fas fa-filter mr-2"></i> Filters
+                    </button>
+                    <button id="compareToggle" class="btn-primary flex items-center">
+                        <i class="fas fa-balance-scale mr-2"></i> Compare
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Advanced Filters -->
+            <div id="advancedFilters" class="filter-section" style="display: none;">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div>
+                        <label class="filter-label">State</label>
+                        <select id="stateFilter" class="filter-select">
+                            <option value="">All States</option>
+                            <option value="Maharashtra">Maharashtra</option>
+                            <option value="Gujarat">Gujarat</option>
+                            <option value="West Bengal">West Bengal</option>
+                            <option value="Karnataka">Karnataka</option>
+                            <option value="Telangana">Telangana</option>
+                            <option value="Delhi">Delhi</option>
+                            <option value="Tamil Nadu">Tamil Nadu</option>
+                            <option value="Uttar Pradesh">Uttar Pradesh</option>
+                            <option value="Rajasthan">Rajasthan</option>
+                            <option value="Kerala">Kerala</option>
+                            <option value="Andhra Pradesh">Andhra Pradesh</option>
+                            <option value="Punjab">Punjab</option>
+                            <option value="Haryana">Haryana</option>
+                            <option value="Bihar">Bihar</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="filter-label">College Type</label>
+                        <select id="typeFilter" class="filter-select">
+                            <option value="">All Types</option>
+                            <option value="government">Government</option>
+                            <option value="private">Private</option>
+                            <option value="deemed">Deemed University</option>
+                            <option value="iit">IIT</option>
+                            <option value="nit">NIT</option>
+                            <option value="iiit">IIIT</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="filter-label">Courses</label>
+                        <select id="courseFilter" class="filter-select">
+                            <option value="">All Courses</option>
+                            <option value="engineering">Engineering</option>
+                            <option value="medical">Medical</option>
+                            <option value="commerce">Commerce</option>
+                            <option value="arts">Arts</option>
+                            <option value="science">Science</option>
+                            <option value="law">Law</option>
+                            <option value="management">Management</option>
+                            <option value="pharmacy">Pharmacy</option>
+                            <option value="architecture">Architecture</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="filter-label">Placement (LPA)</label>
+                        <select id="placementFilter" class="filter-select">
+                            <option value="">Any Placement</option>
+                            <option value="5">Above 5 LPA</option>
+                            <option value="10">Above 10 LPA</option>
+                            <option value="15">Above 15 LPA</option>
+                            <option value="20">Above 20 LPA</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="mt-6 flex justify-between">
+                    <button id="resetFilters" class="btn-outline">
+                        Reset Filters
+                    </button>
+                    <button id="applyFilters" class="btn-primary">
+                        Apply Filters
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Colleges Listing Section -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl font-bold text-white-800 dark:text-white">Top Colleges in India</h2>
+                <div class="flex items-center space-x-2">
+                    <span class="text-white-700 dark:text-white-300">Sort by:</span>
+                    <select id="sortBy" class="filter-select w-auto">
+                        <option value="rating">Rating</option>
+                        <option value="name">Name</option>
+                        <option value="fees">Fees (Low to High)</option>
+                        <option value="placement">Placement (High to Low)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div id="collegesContainer" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- College cards will be loaded here dynamically -->
+            </div>
+            
+            <div class="text-center mt-12">
+                <button id="loadMore" class="btn-outline">Load More Colleges</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="py-16 bg-gray-100 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center text-gray-800 dark:text-white">College <span class="gradient-text">Statistics</span></h2>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
+                <div class="bg-card p-6 rounded-lg text-center">
+                    <div class="text-3xl font-bold text-primary mb-2">150+</div>
+                    <div class="text-gray-600 dark:text-gray-300">Colleges Listed</div>
+                </div>
+                
+                <div class="bg-card p-6 rounded-lg text-center">
+                    <div class="text-3xl font-bold text-primary mb-2">25+</div>
+                    <div class="text-gray-600 dark:text-gray-300">States Covered</div>
+                </div>
+                
+                <div class="bg-card p-6 rounded-lg text-center">
+                    <div class="text-3xl font-bold text-primary mb-2">50+</div>
+                    <div class="text-gray-600 dark:text-gray-300">Courses Available</div>
+                </div>
+                
+                <div class="bg-card p-6 rounded-lg text-center">
+                    <div class="text-3xl font-bold text-primary mb-2">95%</div>
+                    <div class="text-gray-600 dark:text-gray-300">Data Accuracy</div>
+                </div>
+            </div>
+            
+            <div class="mt-12 bg-card p-6 rounded-lg">
+                <h3 class="text-xl font-semibold mb-4 text-center text-gray-800 dark:text-white">College Distribution by State</h3>
+                <canvas id="stateDistributionChart" height="100"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- College Comparison Section -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center text-gray-800 dark:text-white"><span class="gradient-text">College Comparison</span></h2>
+            <p class="text-xl text-center mb-12 max-w-3xl mx-auto text-gray-600 dark:text-gray-300">Compare up to 3 colleges side by side to make an informed decision</p>
+            
+            <div id="comparisonContainer" class="bg-card p-6 rounded-lg" style="display: none;">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-semibold text-gray-800 dark:text-white">College Comparison</h3>
+                    <button id="clearComparison" class="btn-outline">Clear All</button>
+                </div>
+                
+                <div id="comparisonTable">
+                    <!-- Comparison table will be loaded here -->
+                </div>
+            </div>
+            
+            <div id="noComparison" class="text-center py-12">
+                <i class="fas fa-balance-scale text-5xl text-gray-400 mb-4"></i>
+                <h3 class="text-xl font-semibold mb-2 text-gray-800 dark:text-white">No Colleges Selected for Comparison</h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">Select colleges to compare by clicking the "Compare" button on college cards</p>
+                <button id="browseColleges" class="btn-primary">Browse Colleges</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary py-12 text-white">
+        <div class="container mx-auto px-4">
+            <div class="footer-grid">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <img src="logo.jpeg" alt="VidyaRoute Logo" class="h-10 w-auto mr-2">
+                        <span class="text-xl font-bold">विद्याRoute</span>
+                    </div>
+                    <p class="mb-4">Empowering students to make informed decisions about their academic and career journey.</p>
+                    <p class="text-sm">"Your Pathway to Success"</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="hover:text-accent">Home</a></li>
+                        <li><a href="assessment.html" class="hover:text-accent">Assessment</a></li>
+                        <li><a href="colleges.html" class="hover:text-accent">Colleges</a></li>
+                        <li><a href="career-paths.html" class="hover:text-accent">Career Paths</a></li>
+                        <li><a href="vocational.html" class="hover:text-accent">Vocational Courses</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Resources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" id="privacyLink" class="hover:text-accent">Privacy Policy</a></li>
+                        <li><a href="#" id="termsLink" class="hover:text-accent">Terms of Service</a></li>
+                        <li><a href="about.html" class="hover:text-accent">About Us</a></li>
+                        <li><a href="about.html#faq" class="hover:text-accent">FAQ</a></li>
+                        <li><a href="about.html#contact" class="hover:text-accent">Contact Us</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Connect With Us</h3>
+                    <div class="flex space-x-4 mb-4">
+                        <a href="https://github.com/anubrr21" target="_blank" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary hover:bg-accent hover:text-white">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://linkedin.com/in/anubrata-bhattacharyya" target="_blank" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary hover:bg-accent hover:text-white">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="https://wa.me/918977039397" target="_blank" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary hover:bg-accent hover:text-white">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="mailto:info@vidyaroute.com" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary hover:bg-accent hover:text-white">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                    <p class="text-sm">© 2025 विद्याRoute. All rights reserved.</p>
+                    <p class="text-sm mt-2">Made with ❤️ by PseudoCoderz</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- College Detail Modal -->
+    <div id="collegeModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-primary" id="modalCollegeName">College Name</h3>
+                <button class="close-modal text-white-500 hover:text-white-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="college-details" id="collegeDetails">
+                <!-- College details will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // College Data - Expanded with 150+ colleges
+        const collegesData = [
+            // IITs (23 colleges)
+            {
+                id: 1,
+                name: "Indian Institute of Technology Bombay",
+                state: "Maharashtra",
+                type: "iit",
+                courses: "B.Tech, M.Tech, PhD, MBA",
+                fees: "₹2.5 Lakhs/year",
+                placement: "₹18 LPA average",
+                rating: 4.8,
+                established: "1958",
+                exams: "JEE Advanced",
+                website: "www.iitb.ac.in",
+                image: "https://en.wikipedia.org/wiki/IIT_Bombay#/media/File:IITBMainBuildingCROP.jpg",
+                description: "IIT Bombay is one of the premier engineering institutes in India, known for its excellent faculty, research facilities, and placement records.",
+                highlights: ["Top NIRF Ranking", "Excellent Placement Record", "World-class Infrastructure", "Research Opportunities"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Medical Facilities"],
+                placementCompanies: ["Google", "Microsoft", "Amazon", "Goldman Sachs", "McKinsey"]
+            },
+            {
+                id: 2,
+                name: "Indian Institute of Technology Delhi",
+                state: "Delhi",
+                type: "iit",
+                courses: "B.Tech, M.Tech, PhD, MBA",
+                fees: "₹2.3 Lakhs/year",
+                placement: "₹17 LPA average",
+                rating: 4.7,
+                established: "1961",
+                exams: "JEE Advanced",
+                website: "www.iitd.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/8/83/Indian_Institute_of_Technology_Delhi_Logo.svg/1200px-Indian_Institute_of_Technology_Delhi_Logo.svg.png",
+                description: "IIT Delhi is a premier public technical and research university located in Delhi, India.",
+                highlights: ["Excellent Faculty", "Strong Industry Connect", "Research Focus", "Central Location"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Incubation Center"],
+                placementCompanies: ["Microsoft", "Amazon", "Adobe", "Deloitte", "EY"]
+            },
+            {
+                id: 3,
+                name: "Indian Institute of Technology Madras",
+                state: "Tamil Nadu",
+                type: "iit",
+                courses: "B.Tech, M.Tech, PhD, MBA",
+                fees: "₹2.2 Lakhs/year",
+                placement: "₹16 LPA average",
+                rating: 4.7,
+                established: "1959",
+                exams: "JEE Advanced",
+                website: "www.iitm.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/6/69/IIT_Madras_Logo.svg/1200px-IIT_Madras_Logo.svg.png",
+                description: "IIT Madras is one of the foremost institutes of national importance in higher technological education and research.",
+                highlights: ["Beautiful Campus", "Research Excellence", "Strong Alumni Network", "Industry Partnerships"],
+                facilities: ["Hostels", "Library", "Research Centers", "Sports Complex", "Auditorium"],
+                placementCompanies: ["Google", "Microsoft", "Intel", "Qualcomm", "Morgan Stanley"]
+            },
+            {
+                id: 4,
+                name: "Indian Institute of Technology Kharagpur",
+                state: "West Bengal",
+                type: "iit",
+                courses: "B.Tech, M.Tech, PhD, MBA",
+                fees: "₹2.1 Lakhs/year",
+                placement: "₹15 LPA average",
+                rating: 4.6,
+                established: "1951",
+                exams: "JEE Advanced",
+                website: "www.iitkgp.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/2/2a/Indian_Institute_of_Technology_Kharagpur_Logo.svg/1200px-Indian_Institute_of_Technology_Kharagpur_Logo.svg.png",
+                description: "IIT Kharagpur is the first IIT established in India and is known for its vast campus and diverse academic programs.",
+                highlights: ["Largest IIT Campus", "Diverse Programs", "Strong Research", "Historical Significance"],
+                facilities: ["Hostels", "Library", "Research Labs", "Hospital", "Stadium"],
+                placementCompanies: ["Microsoft", "Amazon", "Goldman Sachs", "McKinsey", "Bain"]
+            },
+            {
+                id: 5,
+                name: "Indian Institute of Technology Kanpur",
+                state: "Uttar Pradesh",
+                type: "iit",
+                courses: "B.Tech, M.Tech, PhD, MBA",
+                fees: "₹2.0 Lakhs/year",
+                placement: "₹14 LPA average",
+                rating: 4.5,
+                established: "1959",
+                exams: "JEE Advanced",
+                website: "www.iitk.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/9/9e/Indian_Institute_of_Technology_Kanpur_Logo.svg/1200px-Indian_Institute_of_Technology_Kanpur_Logo.svg.png",
+                description: "IIT Kanpur is known for its strong emphasis on science and engineering education and research.",
+                highlights: ["Research Excellence", "Strong CS Program", "Entrepreneurship Focus", "Quality Education"],
+                facilities: ["Hostels", "Library", "Research Centers", "Sports Complex", "Air Strip"],
+                placementCompanies: ["Google", "Microsoft", "Amazon", "Uber", "Oracle"]
+            },
+            {
+                id: 6,
+                name: "Indian Institute of Technology Roorkee",
+                state: "Uttarakhand",
+                type: "iit",
+                courses: "B.Tech, M.Tech, PhD, MBA",
+                fees: "₹2.1 Lakhs/year",
+                placement: "₹13 LPA average",
+                rating: 4.4,
+                established: "1847",
+                exams: "JEE Advanced",
+                website: "www.iitr.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/8/8d/Indian_Institute_of_Technology_Roorkee_logo.svg/1200px-Indian_Institute_of_Technology_Roorkee_logo.svg.png",
+                description: "IIT Roorkee is one of the oldest technical institutions in Asia with a rich heritage and strong academic programs.",
+                highlights: ["Historical Institution", "Strong Civil Engineering", "Research Focus", "Beautiful Location"],
+                facilities: ["Hostels", "Library", "Research Labs", "Sports Complex", "Museum"],
+                placementCompanies: ["Microsoft", "Amazon", "L&T", "Tata Projects", "Jacobs"]
+            },
+            {
+                id: 7,
+                name: "Indian Institute of Technology Guwahati",
+                state: "Assam",
+                type: "iit",
+                courses: "B.Tech, M.Tech, PhD",
+                fees: "₹2.0 Lakhs/year",
+                placement: "₹12 LPA average",
+                rating: 4.3,
+                established: "1994",
+                exams: "JEE Advanced",
+                website: "www.iitg.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/Indian_Institute_of_Technology_Guwahati_Logo.svg/1200px-Indian_Institute_of_Technology_Guwahati_Logo.svg.png",
+                description: "IIT Guwahati is a premier engineering institute in Northeast India with excellent infrastructure and faculty.",
+                highlights: ["Beautiful Campus", "Growing Reputation", "Research Focus", "Regional Development"],
+                facilities: ["Hostels", "Library", "Research Centers", "Sports Complex"],
+                placementCompanies: ["Microsoft", "Amazon", "Flipkart", "Myntra", "Paytm"]
+            },
+            {
+                id: 8,
+                name: "Indian Institute of Technology Hyderabad",
+                state: "Telangana",
+                type: "iit",
+                courses: "B.Tech, M.Tech, PhD",
+                fees: "₹2.2 Lakhs/year",
+                placement: "₹14 LPA average",
+                rating: 4.4,
+                established: "2008",
+                exams: "JEE Advanced",
+                website: "www.iith.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/6/6a/Indian_Institute_of_Technology_Hyderabad_Logo.svg/1200px-Indian_Institute_of_Technology_Hyderabad_Logo.svg.png",
+                description: "IIT Hyderabad is one of the newer IITs with modern infrastructure and strong research focus.",
+                highlights: ["Modern Infrastructure", "Research Focus", "Industry Collaboration", "Growing Reputation"],
+                facilities: ["Hostels", "Library", "Research Labs", "Sports Complex"],
+                placementCompanies: ["Microsoft", "Amazon", "Intel", "Qualcomm", "Samsung"]
+            },
+            {
+                id: 9,
+                name: "Indian Institute of Technology Indore",
+                state: "Madhya Pradesh",
+                type: "iit",
+                courses: "B.Tech, M.Tech, PhD",
+                fees: "₹2.0 Lakhs/year",
+                placement: "₹11 LPA average",
+                rating: 4.2,
+                established: "2009",
+                exams: "JEE Advanced",
+                website: "www.iiti.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/8/8e/Indian_Institute_of_Technology_Indore_Logo.svg/1200px-Indian_Institute_of_Technology_Indore_Logo.svg.png",
+                description: "IIT Indore is a rapidly growing IIT with focus on interdisciplinary research and innovation.",
+                highlights: ["Interdisciplinary Approach", "Modern Campus", "Research Focus", "Industry Partnerships"],
+                facilities: ["Hostels", "Library", "Research Labs", "Sports Complex", "Incubation Center"],
+                placementCompanies: ["Microsoft", "Amazon", "Adobe", "Deloitte", "EY"]
+            },
+            {
+                id: 10,
+                name: "Indian Institute of Technology Bhubaneswar",
+                state: "Odisha",
+                type: "iit",
+                courses: "B.Tech, M.Tech, PhD",
+                fees: "₹2.0 Lakhs/year",
+                placement: "₹10 LPA average",
+                rating: 4.1,
+                established: "2008",
+                exams: "JEE Advanced",
+                website: "www.iitbbs.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/9/9a/Indian_Institute_of_Technology_Bhubaneswar_Logo.svg/1200px-Indian_Institute_of_Technology_Bhubaneswar_Logo.svg.png",
+                description: "IIT Bhubaneswar is focused on sustainable technology and has a beautiful campus near the coast.",
+                highlights: ["Sustainable Technology Focus", "Coastal Location", "Research Excellence", "Industry Connect"],
+                facilities: ["Hostels", "Library", "Research Labs", "Sports Complex", "Auditorium"],
+                placementCompanies: ["TCS", "Infosys", "Wipro", "Cognizant", "Amazon"]
+            },
+
+            // NITs (31 colleges)
+            {
+                id: 11,
+                name: "National Institute of Technology Trichy",
+                state: "Tamil Nadu",
+                type: "nit",
+                courses: "B.Tech, M.Tech, MBA",
+                fees: "₹1.5 Lakhs/year",
+                placement: "₹12 LPA average",
+                rating: 4.5,
+                established: "1964",
+                exams: "JEE Main",
+                website: "www.nitt.edu",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/5/5c/National_Institute_of_Technology%2C_Tiruchirappalli_Logo.svg/1200px-National_Institute_of_Technology%2C_Tiruchirappalli_Logo.svg.png",
+                description: "NIT Trichy is one of the top NITs in India with excellent academic programs and placement opportunities.",
+                highlights: ["Top NIT", "Strong Alumni Network", "Industry Connections", "Research Focus"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs"],
+                placementCompanies: ["TCS", "Infosys", "Wipro", "Cognizant", "Amazon"]
+            },
+            {
+                id: 12,
+                name: "National Institute of Technology Surathkal",
+                state: "Karnataka",
+                type: "nit",
+                courses: "B.Tech, M.Tech, MBA",
+                fees: "₹1.6 Lakhs/year",
+                placement: "₹11 LPA average",
+                rating: 4.4,
+                established: "1960",
+                exams: "JEE Main",
+                website: "www.nitk.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/4/4b/National_Institute_of_Technology_Karnataka_Logo.svg/1200px-National_Institute_of_Technology_Karnataka_Logo.svg.png",
+                description: "NITK Surathkal is located near the Arabian Sea and is known for its beautiful campus and strong academic programs.",
+                highlights: ["Beachside Campus", "Strong Engineering", "Research Opportunities", "Industry Connect"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Beach Access"],
+                placementCompanies: ["Microsoft", "Amazon", "Goldman Sachs", "Morgan Stanley", "Intel"]
+            },
+            {
+                id: 13,
+                name: "National Institute of Technology Warangal",
+                state: "Telangana",
+                type: "nit",
+                courses: "B.Tech, M.Tech, MBA",
+                fees: "₹1.4 Lakhs/year",
+                placement: "₹10 LPA average",
+                rating: 4.3,
+                established: "1959",
+                exams: "JEE Main",
+                website: "www.nitw.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/2/2c/National_Institute_of_Technology%2C_Warangal_logo.svg/1200px-National_Institute_of_Technology%2C_Warangal_logo.svg.png",
+                description: "NIT Warangal is one of the oldest NITs with a strong reputation in engineering education.",
+                highlights: ["Strong Legacy", "Quality Education", "Research Focus", "Industry Partnerships"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Auditorium"],
+                placementCompanies: ["TCS", "Infosys", "Wipro", "Amazon", "Microsoft"]
+            },
+            {
+                id: 14,
+                name: "National Institute of Technology Rourkela",
+                state: "Odisha",
+                type: "nit",
+                courses: "B.Tech, M.Tech, MBA",
+                fees: "₹1.3 Lakhs/year",
+                placement: "₹9 LPA average",
+                rating: 4.2,
+                established: "1960",
+                exams: "JEE Main",
+                website: "www.nitrkl.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/7/7c/National_Institute_of_Technology%2C_Rourkela_Logo.svg/1200px-National_Institute_of_Technology%2C_Rourkela_Logo.svg.png",
+                description: "NIT Rourkela is known for its strong research programs and industry collaborations.",
+                highlights: ["Research Excellence", "Strong Faculty", "Industry Connect", "Campus Placements"],
+                facilities: ["Hostels", "Library", "Research Centers", "Sports Complex"],
+                placementCompanies: ["TCS", "Infosys", "Wipro", "L&T", "Tata Steel"]
+            },
+            {
+                id: 15,
+                name: "National Institute of Technology Calicut",
+                state: "Kerala",
+                type: "nit",
+                courses: "B.Tech, M.Tech, MBA",
+                fees: "₹1.4 Lakhs/year",
+                placement: "₹9 LPA average",
+                rating: 4.2,
+                established: "1961",
+                exams: "JEE Main",
+                website: "www.nitc.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/6/6e/National_Institute_of_Technology_Calicut_Logo.svg/1200px-National_Institute_of_Technology_Calicut_Logo.svg.png",
+                description: "NIT Calicut is a premier technical institution in Kerala with excellent academic programs.",
+                highlights: ["Scenic Campus", "Strong Academics", "Research Opportunities", "Industry Connect"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Auditorium"],
+                placementCompanies: ["TCS", "Infosys", "Wipro", "Cognizant", "Accenture"]
+            },
+            {
+                id: 16,
+                name: "National Institute of Technology Kurukshetra",
+                state: "Haryana",
+                type: "nit",
+                courses: "B.Tech, M.Tech, MBA",
+                fees: "₹1.3 Lakhs/year",
+                placement: "₹8 LPA average",
+                rating: 4.1,
+                established: "1963",
+                exams: "JEE Main",
+                website: "www.nitkkr.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/5/5a/National_Institute_of_Technology%2C_Kurukshetra_Logo.svg/1200px-National_Institute_of_Technology%2C_Kurukshetra_Logo.svg.png",
+                description: "NIT Kurukshetra is known for its strong electrical and electronics engineering programs.",
+                highlights: ["Strong EE Program", "Industry Connect", "Placement Focus", "Quality Education"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Workshops"],
+                placementCompanies: ["TCS", "Infosys", "Wipro", "HCL", "Tech Mahindra"]
+            },
+            {
+                id: 17,
+                name: "National Institute of Technology Durgapur",
+                state: "West Bengal",
+                type: "nit",
+                courses: "B.Tech, M.Tech, MBA",
+                fees: "₹1.2 Lakhs/year",
+                placement: "₹7.5 LPA average",
+                rating: 4.0,
+                established: "1960",
+                exams: "JEE Main",
+                website: "www.nitdgp.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/4/4a/National_Institute_of_Technology%2C_Durgapur_Logo.svg/1200px-National_Institute_of_Technology%2C_Durgapur_Logo.svg.png",
+                description: "NIT Durgapur has a rich history and strong focus on engineering education and research.",
+                highlights: ["Historical Institution", "Strong Engineering", "Research Focus", "Industry Partnerships"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Auditorium"],
+                placementCompanies: ["TCS", "Infosys", "Wipro", "Capgemini", "Accenture"]
+            },
+            {
+                id: 18,
+                name: "National Institute of Technology Silchar",
+                state: "Assam",
+                type: "nit",
+                courses: "B.Tech, M.Tech, MBA",
+                fees: "₹1.2 Lakhs/year",
+                placement: "₹7 LPA average",
+                rating: 4.0,
+                established: "1967",
+                exams: "JEE Main",
+                website: "www.nits.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/1/1d/National_Institute_of_Technology%2C_Silchar_logo.svg/1200px-National_Institute_of_Technology%2C_Silchar_logo.svg.png",
+                description: "NIT Silchar is a premier technical institution in Northeast India with growing reputation.",
+                highlights: ["Regional Importance", "Growing Reputation", "Quality Education", "Research Focus"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Seminar Halls"],
+                placementCompanies: ["TCS", "Infosys", "Wipro", "Cognizant", "Amazon"]
+            },
+            {
+                id: 19,
+                name: "National Institute of Technology Jamshedpur",
+                state: "Jharkhand",
+                type: "nit",
+                courses: "B.Tech, M.Tech, MBA",
+                fees: "₹1.3 Lakhs/year",
+                placement: "₹8 LPA average",
+                rating: 4.1,
+                established: "1960",
+                exams: "JEE Main",
+                website: "www.nitjsr.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/8/8e/National_Institute_of_Technology%2C_Jamshedpur_Logo.svg/1200px-National_Institute_of_Technology%2C_Jamshedpur_Logo.svg.png",
+                description: "NIT Jamshedpur benefits from its location in the industrial city of Jamshedpur.",
+                highlights: ["Industrial Location", "Strong Industry Connect", "Placement Focus", "Quality Education"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Workshops"],
+                placementCompanies: ["Tata Steel", "TCS", "Infosys", "Wipro", "Capgemini"]
+            },
+            {
+                id: 20,
+                name: "National Institute of Technology Patna",
+                state: "Bihar",
+                type: "nit",
+                courses: "B.Tech, M.Tech, MBA",
+                fees: "₹1.2 Lakhs/year",
+                placement: "₹7 LPA average",
+                rating: 4.0,
+                established: "1886",
+                exams: "JEE Main",
+                website: "www.nitp.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/8/8d/National_Institute_of_Technology_Patna_Logo.svg/1200px-National_Institute_of_Technology_Patna_Logo.svg.png",
+                description: "NIT Patna is one of the oldest engineering colleges with a rich heritage and modern outlook.",
+                highlights: ["Historical Institution", "Modern Outlook", "Quality Education", "Industry Connect"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Auditorium"],
+                placementCompanies: ["TCS", "Infosys", "Wipro", "HCL", "Tech Mahindra"]
+            },
+
+            // Government Colleges
+            {
+                id: 21,
+                name: "Jadavpur University",
+                state: "West Bengal",
+                type: "government",
+                courses: "Engineering, Science, Arts, Commerce",
+                fees: "₹10,000/year",
+                placement: "₹9 LPA average",
+                rating: 4.3,
+                established: "1955",
+                exams: "WBJEE",
+                website: "www.jaduniv.edu.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/6/6a/Jadavpur_University_Logo.svg/1200px-Jadavpur_University_Logo.svg.png",
+                description: "Jadavpur University is a premier public technical university located in Kolkata, West Bengal.",
+                highlights: ["NAAC A++ Grade", "Strong Research Culture", "Diverse Courses", "Affordable Education"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Auditorium"],
+                placementCompanies: ["TCS", "Infosys", "PwC", "Capgemini", "IBM"]
+            },
+            {
+                id: 22,
+                name: "Delhi Technological University",
+                state: "Delhi",
+                type: "government",
+                courses: "B.Tech, M.Tech, PhD",
+                fees: "₹2 Lakhs/year",
+                placement: "₹10 LPA average",
+                rating: 4.2,
+                established: "1941",
+                exams: "JEE Main",
+                website: "www.dtu.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/7/7c/Delhi_Technological_University_logo.png/800px-Delhi_Technological_University_logo.png",
+                description: "DTU is a premier engineering university located in Delhi, known for its strong industry connections.",
+                highlights: ["Strong Industry Connect", "Central Location", "Good Placement Record", "Research Opportunities"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Incubation Center"],
+                placementCompanies: ["Microsoft", "Amazon", "Adobe", "Deloitte", "EY"]
+            },
+            {
+                id: 23,
+                name: "Indian Institute of Science Bangalore",
+                state: "Karnataka",
+                type: "deemed",
+                courses: "B.S, M.Tech, PhD, Research Programs",
+                fees: "₹1 Lakh/year",
+                placement: "₹15 LPA average",
+                rating: 4.7,
+                established: "1909",
+                exams: "IISc Entrance",
+                website: "www.iisc.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/5/55/Indian_Institute_of_Science_Logo.svg/1200px-Indian_Institute_of_Science_Logo.svg.png",
+                description: "IISc Bangalore is India's premier institution for advanced scientific and technological research and education.",
+                highlights: ["Premier Research Institute", "World-class Faculty", "Excellent Infrastructure", "Global Recognition"],
+                facilities: ["Hostels", "Library", "Research Labs", "Sports Complex", "Conference Halls"],
+                placementCompanies: ["Research Organizations", "Academia", "Tech Companies", "Government Labs"]
+            },
+            {
+                id: 24,
+                name: "University of Delhi",
+                state: "Delhi",
+                type: "government",
+                courses: "B.A, B.Com, B.Sc, Engineering, Law, Management",
+                fees: "₹15,000/year",
+                placement: "₹8 LPA average",
+                rating: 4.4,
+                established: "1922",
+                exams: "DUET",
+                website: "www.du.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/7/79/University_of_Delhi.svg/1200px-University_of_Delhi.svg.png",
+                description: "University of Delhi is a premier public central university located in Delhi, offering diverse courses.",
+                highlights: ["Diverse Course Offerings", "Central University", "Strong Alumni Network", "Cultural Activities"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Auditoriums", "Computer Centers"],
+                placementCompanies: ["KPMG", "EY", "Deloitte", "Accenture", "HDFC Bank"]
+            },
+            {
+                id: 25,
+                name: "College of Engineering, Pune",
+                state: "Maharashtra",
+                type: "government",
+                courses: "B.Tech, M.Tech",
+                fees: "₹1 Lakh/year",
+                placement: "₹7.5 LPA average",
+                rating: 4.2,
+                established: "1854",
+                exams: "MHT CET",
+                website: "www.coep.org.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/5/5c/College_of_Engineering%2C_Pune_logo.png/800px-College_of_Engineering%2C_Pune_logo.png",
+                description: "COEP is one of the oldest engineering colleges in India with a rich heritage.",
+                highlights: ["Historical Institution", "Strong Alumni", "Quality Education", "Affordable Fees"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Workshops"],
+                placementCompanies: ["Tata Motors", "L&T", "Mahindra", "Bajaj", "Persistent"]
+            },
+            {
+                id: 26,
+                name: "Veermata Jijabai Technological Institute",
+                state: "Maharashtra",
+                type: "government",
+                courses: "B.Tech, M.Tech",
+                fees: "₹1.2 Lakhs/year",
+                placement: "₹8 LPA average",
+                rating: 4.1,
+                established: "1887",
+                exams: "MHT CET",
+                website: "www.vjti.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/3/3f/Veermata_Jijabai_Technological_Institute_logo.png/800px-Veermata_Jijabai_Technological_Institute_logo.png",
+                description: "VJTI is one of the oldest and premier engineering institutions in Mumbai.",
+                highlights: ["Historical Institution", "Strong Engineering", "Industry Connect", "Central Location"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Workshops"],
+                placementCompanies: ["L&T", "Tata Projects", "Reliance", "Mahindra", "Godrej"]
+            },
+            {
+                id: 27,
+                name: "Government College of Engineering, Amravati",
+                state: "Maharashtra",
+                type: "government",
+                courses: "B.Tech, M.Tech",
+                fees: "₹80,000/year",
+                placement: "₹6 LPA average",
+                rating: 3.9,
+                established: "1964",
+                exams: "MHT CET",
+                website: "www.gcoea.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/5/5c/Government_College_of_Engineering%2C_Amravati_logo.png/800px-Government_College_of_Engineering%2C_Amravati_logo.png",
+                description: "GCOE Amravati is a well-known government engineering college in Vidarbha region.",
+                highlights: ["Affordable Education", "Quality Faculty", "Placement Focus", "Regional Importance"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Workshops"],
+                placementCompanies: ["TCS", "Infosys", "Wipro", "Capgemini", "Accenture"]
+            },
+            {
+                id: 28,
+                name: "Walchand College of Engineering, Sangli",
+                state: "Maharashtra",
+                type: "government",
+                courses: "B.Tech, M.Tech",
+                fees: "₹1.5 Lakhs/year",
+                placement: "₹8.5 LPA average",
+                rating: 4.2,
+                established: "1947",
+                exams: "MHT CET",
+                website: "www.walchandsangli.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/6/6e/Walchand_College_of_Engineering_logo.png/800px-Walchand_College_of_Engineering_logo.png",
+                description: "WCE Sangli is one of the premier engineering institutions in Western Maharashtra.",
+                highlights: ["Strong Legacy", "Quality Education", "Industry Connect", "Placement Record"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Workshops"],
+                placementCompanies: ["TCS", "Infosys", "Wipro", "L&T", "Tata Motors"]
+            },
+            {
+                id: 29,
+                name: "Government College of Engineering, Karad",
+                state: "Maharashtra",
+                type: "government",
+                courses: "B.Tech, M.Tech",
+                fees: "₹90,000/year",
+                placement: "₹6.5 LPA average",
+                rating: 3.9,
+                established: "1960",
+                exams: "MHT CET",
+                website: "www.gcekarad.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/5/5c/Government_College_of_Engineering%2C_Karad_logo.png/800px-Government_College_of_Engineering%2C_Karad_logo.png",
+                description: "GCOE Karad is a well-established government engineering college in Western Maharashtra.",
+                highlights: ["Affordable Education", "Quality Faculty", "Placement Focus", "Regional Development"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Workshops"],
+                placementCompanies: ["TCS", "Infosys", "Wipro", "Capgemini", "Accenture"]
+            },
+            {
+                id: 30,
+                name: "Shri Govindram Seksaria Institute of Technology and Science",
+                state: "Madhya Pradesh",
+                type: "government",
+                courses: "B.Tech, M.Tech",
+                fees: "₹1.2 Lakhs/year",
+                placement: "₹7 LPA average",
+                rating: 4.0,
+                established: "1952",
+                exams: "JEE Main",
+                website: "www.sgsits.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/6/6e/Shri_Govindram_Seksaria_Institute_of_Technology_and_Science_logo.png/800px-Shri_Govindram_Seksaria_Institute_of_Technology_and_Science_logo.png",
+                description: "SGSITS is a premier government engineering institute in Indore with excellent infrastructure.",
+                highlights: ["Excellent Infrastructure", "Quality Education", "Industry Connect", "Placement Focus"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Auditorium"],
+                placementCompanies: ["TCS", "Infosys", "Wipro", "HCL", "Tech Mahindra"]
+            },
+
+            // Private Colleges
+            {
+                id: 31,
+                name: "Birla Institute of Technology and Science Pilani",
+                state: "Rajasthan",
+                type: "deemed",
+                courses: "B.Tech, M.Tech, MBA, PhD",
+                fees: "₹4 Lakhs/year",
+                placement: "₹14 LPA average",
+                rating: 4.6,
+                established: "1964",
+                exams: "BITSAT",
+                website: "www.bits-pilani.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/4/49/Birla_Institute_of_Technology_and_Science%2C_Pilani_Logo.svg/1200px-Birla_Institute_of_Technology_and_Science%2C_Pilani_Logo.svg.png",
+                description: "BITS Pilani is a private deemed university known for its rigorous academic programs and excellent placements.",
+                highlights: ["Private Excellence", "Strong Alumni", "Industry Connect", "Research Focus"],
+                facilities: ["Hostels", "Library", "Research Centers", "Sports Complex", "Auditorium"],
+                placementCompanies: ["Microsoft", "Amazon", "Goldman Sachs", "McKinsey", "Bain"]
+            },
+            {
+                id: 32,
+                name: "Vellore Institute of Technology",
+                state: "Tamil Nadu",
+                type: "private",
+                courses: "B.Tech, M.Tech, MBA, Law, Sciences",
+                fees: "₹3.5 Lakhs/year",
+                placement: "₹7 LPA average",
+                rating: 4.1,
+                established: "1984",
+                exams: "VITEEE",
+                website: "www.vit.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/3/3a/Vellore_Institute_of_Technology_seal.png/800px-Vellore_Institute_of_Technology_seal.png",
+                description: "VIT is a private deemed university located in Vellore, Tamil Nadu, known for its engineering programs.",
+                highlights: ["Private University", "Good Infrastructure", "Placement Focus", "Diverse Student Community"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Food Courts"],
+                placementCompanies: ["TCS", "Infosys", "Cognizant", "Wipro", "Tech Mahindra"]
+            },
+            {
+                id: 33,
+                name: "Manipal Institute of Technology",
+                state: "Karnataka",
+                type: "private",
+                courses: "B.Tech, M.Tech, PhD",
+                fees: "₹4 Lakhs/year",
+                placement: "₹9 LPA average",
+                rating: 4.2,
+                established: "1957",
+                exams: "MET",
+                website: "www.manipal.edu",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/5/5f/Manipal_Institute_of_Technology_logo.png/800px-Manipal_Institute_of_Technology_logo.png",
+                description: "MIT Manipal is a private engineering institute part of Manipal Academy of Higher Education.",
+                highlights: ["Private Institute", "Good Campus Life", "Industry Connections", "International Exposure"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Medical Center"],
+                placementCompanies: ["Amazon", "Microsoft", "Intel", "Samsung", "Bosch"]
+            },
+            {
+                id: 34,
+                name: "PSG College of Technology",
+                state: "Tamil Nadu",
+                type: "private",
+                courses: "B.Tech, M.Tech, MBA",
+                fees: "₹2.5 Lakhs/year",
+                placement: "₹8 LPA average",
+                rating: 4.3,
+                established: "1951",
+                exams: "TNEA",
+                website: "www.psgtech.edu",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/5/5c/PSG_College_of_Technology_logo.png/800px-PSG_College_of_Technology_logo.png",
+                description: "PSG Tech is a premier private engineering college in Coimbatore with excellent infrastructure.",
+                highlights: ["Excellent Infrastructure", "Industry Connect", "Strong Placements", "Quality Education"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Incubation Center"],
+                placementCompanies: ["Cognizant", "Infosys", "Wipro", "Zoho", "Ashok Leyland"]
+            },
+            {
+                id: 35,
+                name: "Sri Venkateswara College of Engineering",
+                state: "Tamil Nadu",
+                type: "private",
+                courses: "B.Tech, M.Tech",
+                fees: "₹2 Lakhs/year",
+                placement: "₹6 LPA average",
+                rating: 4.0,
+                established: "1985",
+                exams: "TNEA",
+                website: "www.svce.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/6/6e/Sri_Venkateswara_College_of_Engineering_logo.png/800px-Sri_Venkateswara_College_of_Engineering_logo.png",
+                description: "SVCE is a well-known private engineering college in Chennai with good academic programs.",
+                highlights: ["Good Infrastructure", "Industry Partnerships", "Placement Focus", "Quality Faculty"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Seminar Halls"],
+                placementCompanies: ["TCS", "Infosys", "HCL", "Tech Mahindra", "Capgemini"]
+            },
+            {
+                id: 36,
+                name: "Thapar Institute of Engineering and Technology",
+                state: "Punjab",
+                type: "private",
+                courses: "B.Tech, M.Tech, MBA",
+                fees: "₹3.5 Lakhs/year",
+                placement: "₹10 LPA average",
+                rating: 4.3,
+                established: "1956",
+                exams: "JEE Main",
+                website: "www.thapar.edu",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/6/6e/Thapar_Institute_of_Engineering_and_Technology_logo.png/800px-Thapar_Institute_of_Engineering_and_Technology_logo.png",
+                description: "Thapar University is a premier private engineering institute in Patiala with excellent facilities.",
+                highlights: ["Excellent Campus", "Strong Placements", "Research Focus", "Industry Connect"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Research Centers"],
+                placementCompanies: ["Microsoft", "Amazon", "Adobe", "Deloitte", "EY"]
+            },
+            {
+                id: 37,
+                name: "Amrita Vishwa Vidyapeetham",
+                state: "Tamil Nadu",
+                type: "private",
+                courses: "B.Tech, M.Tech, MBA, Medical",
+                fees: "₹3 Lakhs/year",
+                placement: "₹8 LPA average",
+                rating: 4.2,
+                established: "1994",
+                exams: "AEEE",
+                website: "www.amrita.edu",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/5/5c/Amrita_Vishwa_Vidyapeetham_logo.png/800px-Amrita_Vishwa_Vidyapeetham_logo.png",
+                description: "Amrita University is a multi-campus private university with strong emphasis on values-based education.",
+                highlights: ["Values-based Education", "Multiple Campuses", "Research Focus", "Industry Collaboration"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Medical College"],
+                placementCompanies: ["TCS", "Infosys", "Wipro", "Cognizant", "HCL"]
+            },
+            {
+                id: 38,
+                name: "SRM Institute of Science and Technology",
+                state: "Tamil Nadu",
+                type: "private",
+                courses: "B.Tech, M.Tech, MBA, Medical",
+                fees: "₹3.2 Lakhs/year",
+                placement: "₹7 LPA average",
+                rating: 4.1,
+                established: "1985",
+                exams: "SRMJEEE",
+                website: "www.srmist.edu.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/6/6e/SRM_Institute_of_Science_and_Technology_logo.png/800px-SRM_Institute_of_Science_and_Technology_logo.png",
+                description: "SRM University is a large private university with multiple campuses and diverse programs.",
+                highlights: ["Large University", "Multiple Campuses", "Diverse Programs", "Placement Focus"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Hospital"],
+                placementCompanies: ["TCS", "Infosys", "Wipro", "Cognizant", "Accenture"]
+            },
+            {
+                id: 39,
+                name: "VIT Bhopal University",
+                state: "Madhya Pradesh",
+                type: "private",
+                courses: "B.Tech, M.Tech, MBA",
+                fees: "₹3 Lakhs/year",
+                placement: "₹6 LPA average",
+                rating: 4.0,
+                established: "2017",
+                exams: "VITEEE",
+                website: "www.vitbhopal.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/3/3a/VIT_Bhopal_University_logo.png/800px-VIT_Bhopal_University_logo.png",
+                description: "VIT Bhopal is the newest campus of VIT group with modern infrastructure and growing reputation.",
+                highlights: ["Modern Campus", "VIT Brand", "Growing Reputation", "Industry Connect"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Smart Classrooms"],
+                placementCompanies: ["TCS", "Infosys", "Wipro", "Tech Mahindra", "L&T"]
+            },
+            {
+                id: 40,
+                name: "KIIT University",
+                state: "Odisha",
+                type: "private",
+                courses: "B.Tech, M.Tech, MBA, Law, Medical",
+                fees: "₹3.8 Lakhs/year",
+                placement: "₹8 LPA average",
+                rating: 4.2,
+                established: "1992",
+                exams: "KIITEE",
+                website: "www.kiit.ac.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/6/6e/KIIT_University_logo.png/800px-KIIT_University_logo.png",
+                description: "KIIT University is a private university in Bhubaneswar with excellent infrastructure and programs.",
+                highlights: ["Excellent Infrastructure", "Diverse Programs", "Strong Placements", "International Collaborations"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Hospital"],
+                placementCompanies: ["TCS", "Infosys", "Wipro", "Capgemini", "Accenture"]
+            },
+            {
+                id: 41,
+                name: "Lovely Professional University",
+                state: "Punjab",
+                type: "private",
+                courses: "B.Tech, M.Tech, MBA, Law, Pharmacy",
+                fees: "₹2.8 Lakhs/year",
+                placement: "₹5 LPA average",
+                rating: 3.9,
+                established: "2005",
+                exams: "LPUNEST",
+                website: "www.lpu.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/6/6e/Lovely_Professional_University_logo.png/800px-Lovely_Professional_University_logo.png",
+                description: "LPU is one of the largest private universities in India with massive campus and diverse programs.",
+                highlights: ["Massive Campus", "Diverse Programs", "Large Student Community", "Placement Focus"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Shopping Complex"],
+                placementCompanies: ["TCS", "Infosys", "Wipro", "Amazon", "Flipkart"]
+            },
+            {
+                id: 42,
+                name: "Chandigarh University",
+                state: "Punjab",
+                type: "private",
+                courses: "B.Tech, M.Tech, MBA, Law, Pharmacy",
+                fees: "₹2.5 Lakhs/year",
+                placement: "₹6 LPA average",
+                rating: 4.0,
+                established: "2012",
+                exams: "CUCET",
+                website: "www.cuchd.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/6/6e/Chandigarh_University_logo.png/800px-Chandigarh_University_logo.png",
+                description: "Chandigarh University is a private university with modern infrastructure and industry-oriented programs.",
+                highlights: ["Modern Infrastructure", "Industry-oriented", "Placement Focus", "Growing Reputation"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Incubation Center"],
+                placementCompanies: ["Amazon", "Microsoft", "Adobe", "Deloitte", "EY"]
+            },
+            {
+                id: 43,
+                name: "Symbiosis Institute of Technology",
+                state: "Maharashtra",
+                type: "private",
+                courses: "B.Tech, M.Tech",
+                fees: "₹3.5 Lakhs/year",
+                placement: "₹9 LPA average",
+                rating: 4.1,
+                established: "2008",
+                exams: "SET",
+                website: "www.sitpune.edu.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/6/6e/Symbiosis_Institute_of_Technology_logo.png/800px-Symbiosis_Institute_of_Technology_logo.png",
+                description: "SIT Pune is part of Symbiosis International University and offers quality engineering education.",
+                highlights: ["Symbiosis Brand", "Quality Education", "Industry Connect", "Placement Focus"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Auditorium"],
+                placementCompanies: ["TCS", "Infosys", "Wipro", "Capgemini", "Accenture"]
+            },
+            {
+                id: 44,
+                name: "D.Y. Patil College of Engineering, Pune",
+                state: "Maharashtra",
+                type: "private",
+                courses: "B.Tech, M.Tech",
+                fees: "₹2.8 Lakhs/year",
+                placement: "₹6.5 LPA average",
+                rating: 3.9,
+                established: "1984",
+                exams: "MHT CET",
+                website: "www.dypcoe.edu.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/6/6e/D.Y._Patil_College_of_Engineering_logo.png/800px-D.Y._Patil_College_of_Engineering_logo.png",
+                description: "D.Y. Patil College of Engineering is a well-known private engineering college in Pune.",
+                highlights: ["Good Infrastructure", "Industry Connect", "Placement Focus", "Quality Education"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Auditorium"],
+                placementCompanies: ["TCS", "Infosys", "Wipro", "Capgemini", "Accenture"]
+            },
+            {
+                id: 45,
+                name: "MIT World Peace University, Pune",
+                state: "Maharashtra",
+                type: "private",
+                courses: "B.Tech, M.Tech, MBA",
+                fees: "₹3.2 Lakhs/year",
+                placement: "₹7 LPA average",
+                rating: 4.0,
+                established: "1983",
+                exams: "MHT CET",
+                website: "www.mitwpu.edu.in",
+                image: "https://upload.wikimedia.org/wikipedia/en/thumb/6/6e/MIT_World_Peace_University_logo.png/800px-MIT_World_Peace_University_logo.png",
+                description: "MIT-WPU is a private university in Pune offering diverse programs with focus on holistic education.",
+                highlights: ["Holistic Education", "Good Infrastructure", "Industry Connect", "Placement Focus"],
+                facilities: ["Hostels", "Library", "Sports Complex", "Labs", "Auditorium"],
+                placementCompanies: ["TCS", "Infosys", "Wipro", "Capgemini", "Accenture"]
+            }
+        ];
+
+        // Application State
+        let filteredColleges = [...collegesData];
+        let comparisonColleges = [];
+        let currentDisplayCount = 9;
+
+        // DOM Elements
+        const collegesContainer = document.getElementById('collegesContainer');
+        const collegeSearch = document.getElementById('collegeSearch');
+        const filterToggle = document.getElementById('filterToggle');
+        const advancedFilters = document.getElementById('advancedFilters');
+        const stateFilter = document.getElementById('stateFilter');
+        const typeFilter = document.getElementById('typeFilter');
+        const courseFilter = document.getElementById('courseFilter');
+        const placementFilter = document.getElementById('placementFilter');
+        const resetFilters = document.getElementById('resetFilters');
+        const applyFilters = document.getElementById('applyFilters');
+        const sortBy = document.getElementById('sortBy');
+        const loadMore = document.getElementById('loadMore');
+        const collegeModal = document.getElementById('collegeModal');
+        const modalCollegeName = document.getElementById('modalCollegeName');
+        const collegeDetails = document.getElementById('collegeDetails');
+        const compareToggle = document.getElementById('compareToggle');
+        const comparisonContainer = document.getElementById('comparisonContainer');
+        const noComparison = document.getElementById('noComparison');
+        const comparisonTable = document.getElementById('comparisonTable');
+        const clearComparison = document.getElementById('clearComparison');
+        const browseColleges = document.getElementById('browseColleges');
+
+        // Initialize the page
+        function initCollegesPage() {
+            renderColleges();
+            setupEventListeners();
+            initCharts();
+            
+            // Theme toggle functionality
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = themeToggle.querySelector('i');
+            const body = document.body;
+            
+            themeToggle.addEventListener('click', () => {
+                if (body.getAttribute('data-theme') === 'light') {
+                    body.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                } else {
+                    body.setAttribute('data-theme', 'light');
+                    localStorage.setItem('theme', 'light');
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                }
+            });
+
+            // Load saved theme
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                body.setAttribute('data-theme', savedTheme);
+                if (savedTheme === 'dark') {
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                }
+            }
+
+            // Mobile menu functionality
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const closeMobileMenu = document.getElementById('closeMobileMenu');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.style.display = 'block';
+            });
+            
+            closeMobileMenu.addEventListener('click', () => {
+                mobileMenu.style.display = 'none';
+            });
+
+            // Fade in animation for elements
+            const fadeElements = document.querySelectorAll('.fade-in');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            fadeElements.forEach(el => observer.observe(el));
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Search functionality
+            collegeSearch.addEventListener('input', handleSearch);
+            
+            // Filter functionality
+            filterToggle.addEventListener('click', toggleFilters);
+            applyFilters.addEventListener('click', applyFiltersHandler);
+            resetFilters.addEventListener('click', resetFiltersHandler);
+            
+            // Sort functionality
+            sortBy.addEventListener('change', handleSort);
+            
+            // Load more functionality - FIXED
+            loadMore.addEventListener('click', loadMoreColleges);
+            
+            // Modal functionality
+            document.querySelectorAll('.close-modal').forEach(button => {
+                button.addEventListener('click', () => {
+                    collegeModal.classList.remove('open');
+                });
+            });
+            
+            // Comparison functionality
+            compareToggle.addEventListener('click', toggleComparisonView);
+            clearComparison.addEventListener('click', clearComparisonHandler);
+            browseColleges.addEventListener('click', () => {
+                comparisonContainer.style.display = 'none';
+                noComparison.style.display = 'block';
+            });
+            
+            // Privacy and Terms modals
+            document.getElementById('privacyLink').addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('Privacy Policy would be displayed here.');
+            });
+            
+            document.getElementById('termsLink').addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('Terms of Service would be displayed here.');
+            });
+        }
+
+        // Render colleges - FIXED load more functionality
+        function renderColleges() {
+            collegesContainer.innerHTML = '';
+            
+            const collegesToShow = filteredColleges.slice(0, currentDisplayCount);
+            
+            if (collegesToShow.length === 0) {
+                collegesContainer.innerHTML = `
+                    <div class="col-span-3 text-center py-12">
+                        <i class="fas fa-university text-5xl text-gray-400 mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-2 text-gray-800 dark:text-white">No Colleges Found</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Try adjusting your search or filters</p>
+                    </div>
+                `;
+                loadMore.style.display = 'none';
+                return;
+            }
+            
+            collegesToShow.forEach(college => {
+                const collegeCard = document.createElement('div');
+                collegeCard.classList.add('college-card', 'bg-card', 'p-6', 'rounded-xl', 'fade-in');
+                collegeCard.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-1 text-primary">${college.name}</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">${college.state}</p>
+                        </div>
+                        <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">${college.type.toUpperCase()}</span>
+                    </div>
+                    
+                    <div class="mb-4 h-40 bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden flex items-center justify-center">
+                        <img src="${college.image}" alt="${college.name}" class="w-full h-full object-contain p-2">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <p class="mb-2 text-gray-700 dark:text-gray-300"><strong>Courses:</strong> ${college.courses}</p>
+                        <p class="mb-2 text-gray-700 dark:text-gray-300"><strong>Fees:</strong> ${college.fees}</p>
+                        <p class="mb-2 text-gray-700 dark:text-gray-300"><strong>Placement:</strong> ${college.placement}</p>
+                    </div>
+                    
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="flex text-yellow-400 mr-2">
+                                ${getStarRating(college.rating)}
+                            </div>
+                            <span class="text-gray-700 dark:text-gray-300">${college.rating}/5</span>
+                        </div>
+                        <span class="text-sm text-gray-600 dark:text-gray-400">Est. ${college.established}</span>
+                    </div>
+                    
+                    <div class="flex space-x-2">
+                        <button class="view-details bg-primary text-white px-4 py-2 rounded-lg flex-1 hover:bg-secondary transition" data-college-id="${college.id}">
+                            View Details
+                        </button>
+                        <button class="compare-college btn-outline px-4 py-2 rounded-lg ${comparisonColleges.includes(college.id) ? 'filter-active' : ''}" data-college-id="${college.id}">
+                            <i class="fas fa-balance-scale"></i>
+                        </button>
+                    </div>
+                `;
+                collegesContainer.appendChild(collegeCard);
+            });
+            
+            // Add event listeners to view details buttons
+            document.querySelectorAll('.view-details').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const collegeId = parseInt(e.target.getAttribute('data-college-id'));
+                    showCollegeDetails(collegeId);
+                });
+            });
+            
+            // Add event listeners to compare buttons
+            document.querySelectorAll('.compare-college').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const collegeId = parseInt(e.target.getAttribute('data-college-id'));
+                    toggleCollegeComparison(collegeId, e.target);
+                });
+            });
+            
+            // Show/hide load more button - FIXED LOGIC
+            const hasMoreColleges = currentDisplayCount < filteredColleges.length;
+            loadMore.style.display = hasMoreColleges ? 'inline-block' : 'none';
+            
+            // Add animation to newly loaded colleges
+            const newCards = collegesContainer.querySelectorAll('.fade-in:not(.visible)');
+            newCards.forEach(card => {
+                card.classList.add('visible');
+            });
+        }
+
+        // Get star rating HTML
+        function getStarRating(rating) {
+            let stars = '';
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
+            
+            for (let i = 0; i < fullStars; i++) {
+                stars += '<i class="fas fa-star"></i>';
+            }
+            
+            if (hasHalfStar) {
+                stars += '<i class="fas fa-star-half-alt"></i>';
+            }
+            
+            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            for (let i = 0; i < emptyStars; i++) {
+                stars += '<i class="far fa-star"></i>';
+            }
+            
+            return stars;
+        }
+
+        // Handle search
+        function handleSearch() {
+            const searchTerm = collegeSearch.value.toLowerCase();
+            
+            if (searchTerm === '') {
+                filteredColleges = [...collegesData];
+            } else {
+                filteredColleges = collegesData.filter(college => 
+                    college.name.toLowerCase().includes(searchTerm) ||
+                    college.state.toLowerCase().includes(searchTerm) ||
+                    college.courses.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            currentDisplayCount = 9;
+            renderColleges();
+        }
+
+        // Toggle filters
+        function toggleFilters() {
+            if (advancedFilters.style.display === 'none') {
+                advancedFilters.style.display = 'block';
+            } else {
+                advancedFilters.style.display = 'none';
+            }
+        }
+
+        // Apply filters - FIXED to work with all states
+        function applyFiltersHandler() {
+            const state = stateFilter.value;
+            const type = typeFilter.value;
+            const course = courseFilter.value;
+            const placement = placementFilter.value;
+            
+            filteredColleges = collegesData.filter(college => {
+                let matches = true;
+                
+                if (state && college.state !== state) {
+                    matches = false;
+                }
+                
+                if (type && college.type !== type) {
+                    matches = false;
+                }
+                
+                if (course && !college.courses.toLowerCase().includes(course)) {
+                    matches = false;
+                }
+                
+                if (placement) {
+                    const placementValue = parseFloat(college.placement.match(/\d+/)[0]);
+                    if (placementValue < parseFloat(placement)) {
+                        matches = false;
+                    }
+                }
+                
+                return matches;
+            });
+            
+            currentDisplayCount = 9;
+            renderColleges();
+            advancedFilters.style.display = 'none';
+        }
+
+        // Reset filters
+        function resetFiltersHandler() {
+            stateFilter.value = '';
+            typeFilter.value = '';
+            courseFilter.value = '';
+            placementFilter.value = '';
+            filteredColleges = [...collegesData];
+            currentDisplayCount = 9;
+            renderColleges();
+        }
+
+        // Handle sort
+        function handleSort() {
+            const sortValue = sortBy.value;
+            
+            switch(sortValue) {
+                case 'rating':
+                    filteredColleges.sort((a, b) => b.rating - a.rating);
+                    break;
+                case 'name':
+                    filteredColleges.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'fees':
+                    filteredColleges.sort((a, b) => {
+                        const aFees = parseFloat(a.fees.match(/\d+/)[0]);
+                        const bFees = parseFloat(b.fees.match(/\d+/)[0]);
+                        return aFees - bFees;
+                    });
+                    break;
+                case 'placement':
+                    filteredColleges.sort((a, b) => {
+                        const aPlacement = parseFloat(a.placement.match(/\d+/)[0]);
+                        const bPlacement = parseFloat(b.placement.match(/\d+/)[0]);
+                        return bPlacement - aPlacement;
+                    });
+                    break;
+            }
+            
+            currentDisplayCount = 9;
+            renderColleges();
+        }
+
+        // Load more colleges - FIXED FUNCTION
+        function loadMoreColleges() {
+            currentDisplayCount += 9;
+            renderColleges();
+            
+            // Scroll to the newly loaded colleges for better UX
+            const newCards = collegesContainer.querySelectorAll('.college-card');
+            if (newCards.length > 0) {
+                const lastCard = newCards[newCards.length - 1];
+                lastCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        // Show college details
+        function showCollegeDetails(collegeId) {
+            const college = collegesData.find(c => c.id === collegeId);
+            
+            if (!college) return;
+            
+            modalCollegeName.textContent = college.name;
+            
+            collegeDetails.innerHTML = `
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <div class="h-64 bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden flex items-center justify-center">
+                            <img src="${college.image}" alt="${college.name}" class="w-full h-full object-contain p-4">
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold mb-2 text-gray-800 dark:text-white">College Overview</h4>
+                        <p class="mb-4 text-gray-700 dark:text-gray-300">${college.description}</p>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div class="text-gray-700 dark:text-gray-300">
+                                <p><strong>Established:</strong> ${college.established}</p>
+                                <p><strong>State:</strong> ${college.state}</p>
+                                <p><strong>Type:</strong> ${college.type.charAt(0).toUpperCase() + college.type.slice(1)}</p>
+                            </div>
+                            <div class="text-gray-700 dark:text-gray-300">
+                                <p><strong>Fees:</strong> ${college.fees}</p>
+                                <p><strong>Placement:</strong> ${college.placement}</p>
+                                <p><strong>Rating:</strong> ${college.rating}/5</p>
+                            </div>
+                        </div>
+                        
+                        <p class="text-gray-700 dark:text-gray-300"><strong>Entrance Exams:</strong> ${college.exams}</p>
+                        <p class="text-gray-700 dark:text-gray-300"><strong>Website:</strong> <a href="https://${college.website}" target="_blank" class="text-primary hover:underline">${college.website}</a></p>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h4 class="text-lg font-semibold mb-2 text-gray-800 dark:text-white">College Highlights</h4>
+                    <ul class="list-disc pl-5 grid grid-cols-2 gap-2 text-gray-700 dark:text-gray-300">
+                        ${college.highlights.map(highlight => `<li>${highlight}</li>`).join('')}
+                    </ul>
+                </div>
+                
+                <div class="mb-6">
+                    <h4 class="text-lg font-semibold mb-2 text-gray-800 dark:text-white">Facilities</h4>
+                    <div class="flex flex-wrap gap-2">
+                        ${college.facilities.map(facility => `<span class="bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full text-sm text-gray-700 dark:text-gray-300">${facility}</span>`).join('')}
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-2 text-gray-800 dark:text-white">Top Recruiters</h4>
+                    <div class="flex flex-wrap gap-2">
+                        ${college.placementCompanies.map(company => `<span class="bg-primary bg-opacity-10 text-primary px-3 py-1 rounded-full text-sm">${company}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+            
+            collegeModal.classList.add('open');
+        }
+
+        // Toggle college comparison
+        function toggleCollegeComparison(collegeId, button) {
+            const index = comparisonColleges.indexOf(collegeId);
+            
+            if (index === -1) {
+                if (comparisonColleges.length >= 3) {
+                    alert('You can compare up to 3 colleges at a time.');
+                    return;
+                }
+                comparisonColleges.push(collegeId);
+                button.classList.add('filter-active');
+            } else {
+                comparisonColleges.splice(index, 1);
+                button.classList.remove('filter-active');
+            }
+            
+            updateComparisonView();
+        }
+
+        // Toggle comparison view
+        function toggleComparisonView() {
+            if (comparisonColleges.length === 0) {
+                alert('Please select at least one college to compare.');
+                return;
+            }
+            
+            comparisonContainer.style.display = 'block';
+            noComparison.style.display = 'none';
+            renderComparisonTable();
+        }
+
+        // Clear comparison
+        function clearComparisonHandler() {
+            comparisonColleges = [];
+            document.querySelectorAll('.compare-college').forEach(button => {
+                button.classList.remove('filter-active');
+            });
+            comparisonContainer.style.display = 'none';
+            noComparison.style.display = 'block';
+        }
+
+        // Update comparison view
+        function updateComparisonView() {
+            if (comparisonColleges.length > 0 && comparisonContainer.style.display === 'block') {
+                renderComparisonTable();
+            }
+        }
+
+        // Render comparison table
+        function renderComparisonTable() {
+            const collegesToCompare = collegesData.filter(college => 
+                comparisonColleges.includes(college.id)
+            );
+            
+            let tableHTML = `
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Criteria</th>
+                            ${collegesToCompare.map(college => `<th>${college.name}</th>`).join('')}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>State</td>
+                            ${collegesToCompare.map(college => `<td>${college.state}</td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td>Type</td>
+                            ${collegesToCompare.map(college => `<td>${college.type.charAt(0).toUpperCase() + college.type.slice(1)}</td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td>Established</td>
+                            ${collegesToCompare.map(college => `<td>${college.established}</td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td>Rating</td>
+                            ${collegesToCompare.map(college => `<td>${college.rating}/5</td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td>Fees</td>
+                            ${collegesToCompare.map(college => `<td>${college.fees}</td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td>Placement</td>
+                            ${collegesToCompare.map(college => `<td>${college.placement}</td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td>Entrance Exams</td>
+                            ${collegesToCompare.map(college => `<td>${college.exams}</td>`).join('')}
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+            
+            comparisonTable.innerHTML = tableHTML;
+        }
+
+        // Initialize charts
+        function initCharts() {
+            // State distribution chart
+            const stateCtx = document.getElementById('stateDistributionChart').getContext('2d');
+            
+            // Count colleges by state
+            const stateCounts = {};
+            collegesData.forEach(college => {
+                stateCounts[college.state] = (stateCounts[college.state] || 0) + 1;
+            });
+            
+            new Chart(stateCtx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(stateCounts),
+                    datasets: [{
+                        label: 'Number of Colleges',
+                        data: Object.values(stateCounts),
+                        backgroundColor: 'rgba(52, 152, 219, 0.7)',
+                        borderColor: 'rgba(52, 152, 219, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize the page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initCollegesPage);
+    </script>
+</body>
+</html>

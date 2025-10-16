@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - विद्याRoute</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --text-light: #2c3e50;
+            --text-dark: #ecf0f1;
+            --bg-light: #ffffff;
+            --bg-dark: #121212;
+            --card-light: #ffffff;
+            --card-dark: #1e1e1e;
+            --border-light: #ddd;
+            --border-dark: #444;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: var(--bg-light);
+            --bg-secondary: var(--light);
+            --text-primary: var(--text-light);
+            --text-secondary: #4a5568;
+            --card-bg: var(--card-light);
+            --border-color: var(--border-light);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: var(--bg-dark);
+            --bg-secondary: #2d3748;
+            --text-primary: var(--text-dark);
+            --text-secondary: #a0aec0;
+            --card-bg: var(--card-dark);
+            --border-color: var(--border-dark);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .bg-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        .text-primary {
+            color: var(--primary);
+        }
+
+        .bg-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            color: var(--text-primary);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .hover-scale {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .hover-scale:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glow {
+            text-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(15deg);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            color: white;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+            cursor: pointer;
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 40px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        .section-title.center::after {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .team-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--bg-secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .testimonial-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .testimonial-card::before {
+            content: "";
+            font-size: 5rem;
+            color: var(--primary);
+            opacity: 0.2;
+            position: absolute;
+            top: 10px;
+            left: 15px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        footer a {
+            transition: color 0.3s;
+        }
+        
+        footer a:hover {
+            color: var(--accent) !important;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.open {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 0.8rem;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            color: var(--text-primary);
+        }
+
+        .contact-form input, .contact-form textarea, .contact-form select {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+            transition: border-color 0.3s;
+        }
+
+        .contact-form input:focus, .contact-form textarea:focus, .contact-form select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .team-member-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .team-member-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .team-member-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 15px;
+            border: 3px solid var(--primary);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .social-link {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            transition: all 0.3s;
+        }
+
+        .social-link:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.1);
+        }
+        
+    </style>
+</head>
+<body data-theme="dark">
+    <!-- Header/Navigation -->
+    <header class="bg-header shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="logo flex items-center">
+                    <img src="logo.jpeg" alt="VidyaRoute Logo" class="h-12 w-auto mr-3">
+                    <span class="text-white font-bold text-xl">विद्याRoute</span>
+                </a>
+                
+                <nav class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-white hover:text-accent font-medium">Home</a>
+                    <a href="assessment.html" class="text-white hover:text-accent font-medium">Assessment</a>
+                    <a href="colleges.html" class="text-white hover:text-accent font-medium">Colleges</a>
+                    <a href="career-paths.html" class="text-white hover:text-accent font-medium">Career Paths</a>
+                    <a href="vocational.html" class="text-white hover:text-accent font-medium">Vocational</a>
+                    <a href="timeline.html" class="text-white hover:text-accent font-medium">Timeline</a>
+                    <a href="about.html" class="text-white hover:text-accent font-medium border-b-2 border-white">About</a>
+                </nav>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <button id="loginBtn" class="bg-white text-primary px-4 py-2 rounded-lg hover:bg-accent hover:text-white transition">
+                        Login
+                    </button>
+                    <button id="mobileMenuBtn" class="md:hidden text-white">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu fixed inset-0 bg-primary z-40 p-6 md:hidden" style="display: none;">
+        <div class="flex justify-between items-center mb-8">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <span class="text-white">विद्याRoute</span>
+            </div>
+            <button id="closeMobileMenu" class="text-white">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+        
+        <nav class="flex flex-col space-y-6">
+            <a href="index.html" class="text-white hover:text-accent font-medium text-lg">Home</a>
+            <a href="assessment.html" class="text-white hover:text-accent font-medium text-lg">Assessment</a>
+            <a href="colleges.html" class="text-white hover:text-accent font-medium text-lg">Colleges</a>
+            <a href="career-paths.html" class="text-white hover:text-accent font-medium text-lg">Career Paths</a>
+            <a href="vocational.html" class="text-white hover:text-accent font-medium text-lg">Vocational</a>
+            <a href="timeline.html" class="text-white hover:text-accent font-medium text-lg">Timeline</a>
+            <a href="about.html" class="text-white hover:text-accent font-medium text-lg border-b-2 border-white">About</a>
+            <button id="mobileLoginBtn" class="bg-white text-primary px-4 py-3 rounded-lg font-semibold text-left mt-4">
+                Login
+            </button>
+        </nav>
+    </div>
+
+    <!-- About Hero Section -->
+    <section class="py-16 bg-gradient-to-r from-primary to-secondary text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">About विद्याRoute</h1>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">Empowering students to make informed decisions about their academic and career journey</p>
+            <div class="flex justify-center space-x-4">
+                <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                    <i class="fas fa-rocket text-2xl mb-2"></i>
+                    <p>Our Mission</p>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                    <i class="fas fa-eye text-2xl mb-2"></i>
+                    <p>Our Vision</p>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                    <i class="fas fa-users text-2xl mb-2"></i>
+                    <p>Our Team</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Story Section -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center">Our <span class="gradient-text">Story</span></h2>
+            <p class="text-xl text-center mb-12 max-w-3xl mx-auto text-gray-600 dark:text-gray-300">How विद्याRoute began and our journey to revolutionize career guidance in India</p>
+            
+            <div class="bg-card p-8 rounded-xl">
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4 text-primary">The Beginning</h3>
+                        <p class="mb-6">विद्याRoute was founded in 2025 by a group of passionate educators and technology enthusiasts who recognized a critical gap in the Indian education system. Despite having immense potential, millions of students were making career decisions based on limited information, societal pressure, or outdated guidance.</p>
+                        <p class="mb-6">We witnessed brilliant minds opting for conventional career paths without exploring their true potential, simply because they lacked access to comprehensive career information and personalized guidance.</p>
+                        <p>This realization sparked the creation of विद्याRoute - a platform that would democratize career guidance and make it accessible to every student in India, regardless of their background or location.</p>
+                    </div>
+                    <div class="flex justify-center">
+                        <div class="bg-secondary bg-opacity-20 p-6 rounded-xl max-w-md">
+                            <div class="text-center mb-4">
+                                <div class="team-icon">
+                                    <i class="fas fa-lightbulb"></i>
+                                </div>
+                                <h4 class="text-xl font-semibold">Our Inspiration</h4>
+                            </div>
+                            <p class="text-center">"Every student deserves the right guidance to discover their true potential and build a fulfilling career."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission & Vision Section -->
+    <section class="py-16 bg-gray-100 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center">Mission & <span class="gradient-text">Vision</span></h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-card p-8 rounded-xl text-center hover-scale">
+                    <div class="team-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4 text-primary">Our Mission</h3>
+                    <p class="mb-6">To democratize career guidance and make personalized, data-driven career counseling accessible to every student in India. We aim to bridge the information gap that prevents students from making informed decisions about their future.</p>
+                    <ul class="text-left space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-primary mr-2 mt-1"></i>
+                            <span>Provide accurate, up-to-date information about careers and educational opportunities</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-primary mr-2 mt-1"></i>
+                            <span>Offer personalized guidance based on individual strengths, interests, and aspirations</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-primary mr-2 mt-1"></i>
+                            <span>Empower students to explore unconventional career paths and emerging fields</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-primary mr-2 mt-1"></i>
+                            <span>Support students from underserved communities with free access to career resources</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-card p-8 rounded-xl text-center hover-scale">
+                    <div class="team-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4 text-primary">Our Vision</h3>
+                    <p class="mb-6">To become India's most trusted career guidance platform, transforming how students approach career decisions and helping millions discover career paths that align with their potential and passions.</p>
+                    <ul class="text-left space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-star text-primary mr-2 mt-1"></i>
+                            <span>Revolutionize career counseling with AI-powered personalized recommendations</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-star text-primary mr-2 mt-1"></i>
+                            <span>Partner with educational institutions to integrate career guidance into curriculum</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-star text-primary mr-2 mt-1"></i>
+                            <span>Expand our reach to serve 10 million students across India by 2027</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-star text-primary mr-2 mt-1"></i>
+                            <span>Create a thriving ecosystem connecting students, educators, and industry professionals</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Values Section -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center">Our <span class="gradient-text">Values</span></h2>
+            <p class="text-xl text-center mb-12 max-w-3xl mx-auto text-gray-600 dark:text-gray-300">The principles that guide everything we do at विद्याRoute</p>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-card p-6 rounded-xl text-center hover-scale">
+                    <div class="team-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-primary">Student First</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Every decision we make is centered around what's best for students. Their success and satisfaction are our ultimate measures of achievement.</p>
+                </div>
+
+                <div class="bg-card p-6 rounded-xl text-center hover-scale">
+                    <div class="team-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-primary">Integrity</h3>
+                    <p class="text-gray-600 dark:text-gray-300">We provide honest, unbiased guidance based on data and research, not commissions or partnerships. Our recommendations are always in the student's best interest.</p>
+                </div>
+
+                <div class="bg-card p-6 rounded-xl text-center hover-scale">
+                    <div class="team-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-primary">Innovation</h3>
+                    <p class="text-gray-600 dark:text-gray-300">We continuously evolve our platform with cutting-edge technology to provide the most accurate, personalized, and effective career guidance possible.</p>
+                </div>
+
+                <div class="bg-card p-6 rounded-xl text-center hover-scale">
+                    <div class="team-icon">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-primary">Accessibility</h3>
+                    <p class="text-gray-600 dark:text-gray-300">We believe quality career guidance should be available to all students, regardless of their socioeconomic background or geographical location.</p>
+                </div>
+
+                <div class="bg-card p-6 rounded-xl text-center hover-scale">
+                    <div class="team-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-primary">Excellence</h3>
+                    <p class="text-gray-600 dark:text-gray-300">We strive for excellence in everything we do, from the accuracy of our information to the quality of our user experience and customer support.</p>
+                </div>
+
+                <div class="bg-card p-6 rounded-xl text-center hover-scale">
+                    <div class="team-icon">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-primary">Collaboration</h3>
+                    <p class="text-gray-600 dark:text-gray-300">We work closely with educators, industry experts, and institutions to ensure our guidance remains relevant, accurate, and comprehensive.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Team Section -->
+   <!-- Our Team Section -->
+<section class="py-16 bg-gray-100 dark:bg-gray-800">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-4 glow section-title center">Meet Our <span class="gradient-text">Team</span></h2>
+        <p class="text-xl text-center mb-12 max-w-3xl mx-auto text-gray-600 dark:text-gray-300">The passionate individuals behind विद्याRoute</p>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="team-member-card fade-in">
+                <img src="anubratabhattacharyya.jpeg" alt="Team Member" class="team-member-img">
+                <h3 class="text-xl font-semibold mb-2">Anubrata Bhattacharyya</h3>
+                <p class="text-primary font-medium mb-3">Founder & CEO</p>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">Visionary leader with 1+ years in ed-tech and passion for transforming career guidance in India.Full-stack developer passionate about creating intuitive platforms that solve real-world problems.</p>
+                <div class="social-links">
+                    <a href="https://linkedin.com/in/anubrata-bhattacharyya" target="_blank" class="social-link">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://github.com/anubrr21" target="_blank" class="social-link">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://wa.me/918977039397" target="_blank" class="social-link">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="team-member-card fade-in">
+                <img src="ashtamishree.jpeg" alt="Team Member" class="team-member-img">
+                <h3 class="text-xl font-semibold mb-2">Ashtami Shree</h3>
+                <p class="text-primary font-medium mb-3">Head of Career Counseling, Backend Software Developer, and UI/UX Designer</p>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">Certified career counselor with 3 months+ experience guiding students toward fulfilling career goals.Also,the backend developer of this website.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="team-member-card fade-in">
+                <img src="" alt="Team Member" class="team-member-img">
+                <h3 class="text-xl font-semibold mb-2">Ayan Mandal</h3>
+                <p class="text-primary font-medium mb-3">Idea and Project Researcher</p>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">Developer of the Base Model of the project. Constantly updates data with the new informations available.Frontend Developer of this website,along with Anubrata.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="team-member-card fade-in">
+                <img src="" alt="Team Member" class="team-member-img">
+                <h3 class="text-xl font-semibold mb-2">Aarav Ayan</h3>
+                <p class="text-primary font-medium mb-3">Idea Creator</p>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">Works alongwith Ayan and Anubrata to provide accurate data and helps in maintaining the database efficiently.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="team-member-card fade-in">
+                <img src="" alt="Team Member" class="team-member-img">
+                <h3 class="text-xl font-semibold mb-2">Rahul Savani</h3>
+                <p class="text-primary font-medium mb-3">UI/UX Designer</p>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">UI/UX designer of the logo and the layout of the website.Also, the backend developer of this website.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="team-member-card fade-in">
+                <img src="soumilichatterjee.jpeg" alt="Team Member" class="team-member-img">
+                <h3 class="text-xl font-semibold mb-2">Soumili Chatterjee</h3>
+                <p class="text-primary font-medium mb-3">Content & Research Head</p>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">Education researcher dedicated to providing accurate, comprehensive career information to students.Worked along with Ashtami in order to provide accurate information.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-12">
+            <p class="text-lg mb-6">We're growing! Join our mission to transform career guidance in India.</p>
+            <button class="btn-primary">View Open Positions</button>
+        </div>
+    </div>
+</section>
+
+    <!-- Our Impact Section -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center">Our <span class="gradient-text">Impact</span></h2>
+            <p class="text-xl text-center mb-12 max-w-3xl mx-auto text-gray-600 dark:text-gray-300">The difference we're making in students' lives across India</p>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+                <div class="stat-card animate-fade-in-up" style="animation-delay: 0.1s">
+                    <div class="stat-number">50,000+</div>
+                    <div class="stat-label">Students Helped</div>
+                </div>
+                <div class="stat-card animate-fade-in-up" style="animation-delay: 0.2s">
+                    <div class="stat-number">1,600+</div>
+                    <div class="stat-label">Colleges Listed</div>
+                </div>
+                <div class="stat-card animate-fade-in-up" style="animation-delay: 0.3s">
+                    <div class="stat-number">95%</div>
+                    <div class="stat-label">Satisfaction Rate</div>
+                </div>
+                <div class="stat-card animate-fade-in-up" style="animation-delay: 0.4s">
+                    <div class="stat-number">25+</div>
+                    <div class="stat-label">States Covered</div>
+                </div>
+            </div>
+
+            <div class="bg-card p-6 rounded-xl">
+                <div class="chart-container">
+                    <canvas id="impactChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-16 bg-gray-100 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center">What <span class="gradient-text">Students Say</span></h2>
+            <p class="text-xl text-center mb-12 max-w-3xl mx-auto text-gray-600 dark:text-gray-300">Hear from students who have transformed their career paths with विद्याRoute</p>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="testimonial-card fade-in">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white font-bold mr-3">RS</div>
+                        <div>
+                            <h4 class="font-semibold">Rahul Sharma</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Engineering Student, IIT Delhi</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300">"विद्याRoute helped me discover my passion for computer science when I was confused between engineering and medical. The assessment was spot-on and the college recommendations were perfect for my career goals."</p>
+                    <div class="flex mt-4 text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+
+                <div class="testimonial-card fade-in">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white font-bold mr-3">PM</div>
+                        <div>
+                            <h4 class="font-semibold">Priya Mehta</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Medical Student, AIIMS Delhi</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300">"The career mapping feature showed me exactly what I needed to do to pursue a career in medicine. The timeline tracker kept me organized throughout the admission process and helped me secure a seat at AIIMS."</p>
+                    <div class="flex mt-4 text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+
+                <div class="testimonial-card fade-in">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white font-bold mr-3">AK</div>
+                        <div>
+                            <h4 class="font-semibold">Amit Kumar</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Commerce Graduate, Chartered Accountant</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300">"I was confused between CA and MBA, but the aptitude assessment helped me understand which path suited my skills better. The detailed career information was invaluable in making my decision."</p>
+                    <div class="flex mt-4 text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center">Get In <span class="gradient-text">Touch</span></h2>
+            <p class="text-xl text-center mb-12 max-w-3xl mx-auto text-gray-600 dark:text-gray-300">We'd love to hear from you. Reach out with questions, feedback, or partnership opportunities.</p>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-card p-8 rounded-xl">
+                    <h3 class="text-2xl font-semibold mb-6 text-primary">Contact Information</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="team-icon flex-shrink-0 mr-4">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-1">Our Office</h4>
+                                <p class="text-gray-600 dark:text-gray-400">Kolkata, West Bengal, India</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="team-icon flex-shrink-0 mr-4">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-1">Email Us</h4>
+                                <p class="text-gray-600 dark:text-gray-400">info@vidyaroute.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="team-icon flex-shrink-0 mr-4">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-1">Call Us</h4>
+                                <p class="text-gray-600 dark:text-gray-400">+91 8977039397</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="team-icon flex-shrink-0 mr-4">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-1">Business Hours</h4>
+                                <p class="text-gray-600 dark:text-gray-400">Monday - Friday: 9:00 AM - 6:00 PM</p>
+                                <p class="text-gray-600 dark:text-gray-400">Saturday: 10:00 AM - 4:00 PM</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <h4 class="font-semibold mb-4">Follow Us</h4>
+                        <div class="flex space-x-4">
+                            <a href="https://github.com/anubrr21" target="_blank" class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white hover:bg-accent transition">
+                                <i class="fab fa-github"></i>
+                            </a>
+                            <a href="https://linkedin.com/in/anubrata-bhattacharyya" target="_blank" class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white hover:bg-accent transition">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="https://wa.me/918977039397" target="_blank" class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white hover:bg-accent transition">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                            <a href="mailto:info@vidyaroute.com" class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white hover:bg-accent transition">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-card p-8 rounded-xl">
+                    <h3 class="text-2xl font-semibold mb-6 text-primary">Send Us a Message</h3>
+                    <form class="contact-form" id="contactForm">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <input type="text" placeholder="First Name" required>
+                            </div>
+                            <div>
+                                <input type="text" placeholder="Last Name" required>
+                            </div>
+                        </div>
+                        <input type="email" placeholder="Email Address" required>
+                        <input type="tel" placeholder="Phone Number">
+                        <select required>
+                            <option value="">Select Inquiry Type</option>
+                            <option value="general">General Inquiry</option>
+                            <option value="partnership">Partnership Opportunity</option>
+                            <option value="career">Career Counseling</option>
+                            <option value="technical">Technical Support</option>
+                            <option value="feedback">Feedback</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <textarea rows="5" placeholder="Your Message" required></textarea>
+                        <button type="submit" class="btn-primary w-full">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-16 bg-gray-100 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center">Frequently <span class="gradient-text">Asked Questions</span></h2>
+            
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="bg-card p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3 text-primary">Is विद्याRoute completely free to use?</h3>
+                    <p class="text-gray-700 dark:text-gray-300">Yes, our basic features including career assessment, college search, career information, and timeline tracking are completely free. We offer premium services for personalized counseling and detailed reports at affordable prices, but the core platform will always remain accessible to all students.</p>
+                </div>
+                
+                <div class="bg-card p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3 text-primary">How accurate are the career recommendations?</h3>
+                    <p class="text-gray-700 dark:text-gray-300">Our recommendations are based on extensive research, data analysis, and validated assessment methodologies. While we strive for accuracy, we always recommend using our suggestions as a starting point for further research and discussion with career counselors or mentors.</p>
+                </div>
+                
+                <div class="bg-card p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3 text-primary">Do you provide one-on-one counseling services?</h3>
+                    <p class="text-gray-700 dark:text-gray-300">Yes, we have a network of experienced career counselors who provide one-on-one guidance sessions. These can be booked through our platform for personalized advice based on your assessment results and specific circumstances.</p>
+                </div>
+                
+                <div class="bg-card p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3 text-primary">How often is your college and course information updated?</h3>
+                    <p class="text-gray-700 dark:text-gray-300">We update our database regularly with the latest information from official sources. Our team continuously monitors changes in admission criteria, fees, courses, and other important details to ensure our information remains accurate and current.</p>
+                </div>
+                
+                <div class="bg-card p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3 text-primary">Can I use विद्याRoute on my mobile phone?</h3>
+                    <p class="text-gray-700 dark:text-gray-300">Absolutely! Our website is fully responsive and works seamlessly on all devices including smartphones, tablets, and desktops. We're also developing a dedicated mobile app for an even better experience on the go.</p>
+                </div>
+                
+                <div class="bg-card p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3 text-primary">How can educational institutions partner with विद्याRoute?</h3>
+                    <p class="text-gray-700 dark:text-gray-300">We welcome partnerships with schools, colleges, and educational organizations. Please reach out to us through our contact form or email us directly at partnerships@vidyaroute.com to discuss collaboration opportunities.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Thank You Note -->
+    <section class="py-16 bg-gradient-to-r from-primary to-secondary text-white">
+        <div class="container mx-auto px-4 text-center">
+            <div class="max-w-3xl mx-auto">
+                <div class="team-icon bg-white bg-opacity-20 mx-auto mb-6">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h2 class="text-3xl font-bold mb-6">Thank You for Visiting विद्याRoute</h2>
+                <p class="text-xl mb-8">From all of us at <span class="font-bold">PseudoCoderz</span>, we extend our heartfelt gratitude for exploring our platform and trusting us with your career journey.</p>
+                
+                <div class="bg-white bg-opacity-10 rounded-xl p-6 mb-8">
+                    <p class="text-lg italic mb-4">"We believe that every student deserves the right guidance to unlock their true potential. Your dreams and aspirations inspire us to continuously improve and expand our platform."</p>
+                    <p class="font-semibold">- The PseudoCoderz Team</p>
+                </div>
+                
+                <p class="text-lg mb-8">We're committed to supporting you at every step of your academic and career path. Whether you're just beginning to explore options or making crucial decisions about your future, we're here to help.</p>
+                
+                <div class="flex flex-wrap justify-center gap-4">
+                    <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                        <i class="fas fa-hands-helping text-2xl mb-2"></i>
+                        <p>Your Success Is Our Mission</p>
+                    </div>
+                    <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                        <i class="fas fa-lightbulb text-2xl mb-2"></i>
+                        <p>Innovating For You</p>
+                    </div>
+                    <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                        <i class="fas fa-graduation-cap text-2xl mb-2"></i>
+                        <p>Empowering Futures</p>
+                    </div>
+                </div>
+                
+                <div class="mt-8">
+                    <p class="text-lg">With gratitude and best wishes for your journey ahead,</p>
+                    <p class="text-2xl font-bold mt-2">Team PseudoCoderz</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary py-12 text-white">
+        <div class="container mx-auto px-4">
+            <div class="footer-grid">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <img src="logo.jpeg" alt="VidyaRoute Logo" class="h-10 w-auto mr-2">
+                        <span class="text-xl font-bold">विद्याRoute</span>
+                    </div>
+                    <p class="mb-4">Empowering students to make informed decisions about their academic and career journey.</p>
+                    <p class="text-sm">"Your Pathway to Success"</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="hover:text-accent">Home</a></li>
+                        <li><a href="assessment.html" class="hover:text-accent">Assessment</a></li>
+                        <li><a href="colleges.html" class="hover:text-accent">Colleges</a></li>
+                        <li><a href="career-paths.html" class="hover:text-accent">Career Paths</a></li>
+                        <li><a href="vocational.html" class="hover:text-accent">Vocational Courses</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Resources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" id="privacyLink" class="hover:text-accent">Privacy Policy</a></li>
+                        <li><a href="#" id="termsLink" class="hover:text-accent">Terms of Service</a></li>
+                        <li><a href="about.html" class="hover:text-accent">About Us</a></li>
+                        <li><a href="about.html#faq" class="hover:text-accent">FAQ</a></li>
+                        <li><a href="about.html#contact" class="hover:text-accent">Contact Us</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Connect With Us</h3>
+                    <div class="flex space-x-4 mb-4">
+                        <a href="https://github.com/anubrr21" target="_blank" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary hover:bg-accent hover:text-white">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://linkedin.com/in/anubrata-bhattacharyya" target="_blank" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary hover:bg-accent hover:text-white">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="https://wa.me/918977039397" target="_blank" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary hover:bg-accent hover:text-white">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="mailto:info@vidyaroute.com" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary hover:bg-accent hover:text-white">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                    <p class="text-sm">© 2025 विद्याRoute. All rights reserved.</p>
+                    <p class="text-sm mt-2">Made with ❤️ by PseudoCoderz</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize the page
+        function initAboutPage() {
+            setupEventListeners();
+            initCharts();
+            
+            // Theme toggle functionality
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = themeToggle.querySelector('i');
+            const body = document.body;
+            
+            themeToggle.addEventListener('click', () => {
+                if (body.getAttribute('data-theme') === 'light') {
+                    body.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                } else {
+                    body.setAttribute('data-theme', 'light');
+                    localStorage.setItem('theme', 'light');
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                }
+            });
+
+            // Load saved theme
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                body.setAttribute('data-theme', savedTheme);
+                if (savedTheme === 'dark') {
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                }
+            }
+
+            // Mobile menu functionality
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const closeMobileMenu = document.getElementById('closeMobileMenu');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.style.display = 'block';
+            });
+            
+            closeMobileMenu.addEventListener('click', () => {
+                mobileMenu.style.display = 'none';
+            });
+
+            // Fade in animation for elements
+            const fadeElements = document.querySelectorAll('.fade-in');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            fadeElements.forEach(el => observer.observe(el));
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Contact form submission
+            document.getElementById('contactForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('Thank you for your message! We will get back to you soon.');
+                e.target.reset();
+            });
+
+            // Privacy and Terms modals
+            document.getElementById('privacyLink').addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('Privacy Policy would be displayed here.');
+            });
+            
+            document.getElementById('termsLink').addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('Terms of Service would be displayed here.');
+            });
+        }
+
+        // Initialize charts
+        function initCharts() {
+            // Impact chart
+            const impactCtx = document.getElementById('impactChart').getContext('2d');
+            new Chart(impactCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Career Assessment', 'College Search', 'Career Mapping', 'Vocational Guidance', 'Timeline Planning'],
+                    datasets: [{
+                        label: 'Monthly Users (in thousands)',
+                        data: [25, 18, 15, 12, 10],
+                        backgroundColor: [
+                            'rgba(52, 152, 219, 0.7)',
+                            'rgba(46, 204, 113, 0.7)',
+                            'rgba(155, 89, 182, 0.7)',
+                            'rgba(241, 196, 15, 0.7)',
+                            'rgba(230, 126, 34, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(52, 152, 219, 1)',
+                            'rgba(46, 204, 113, 1)',
+                            'rgba(155, 89, 182, 1)',
+                            'rgba(241, 196, 15, 1)',
+                            'rgba(230, 126, 34, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Users (in thousands)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize the page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initAboutPage);
+    </script>
+</body>
+</html>

@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocational Courses - विद्याRoute</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --text-light: #2c3e50;
+            --text-dark: #ecf0f1;
+            --bg-light: #ffffff;
+            --bg-dark: #121212;
+            --card-light: #ffffff;
+            --card-dark: #1e1e1e;
+            --border-light: #ddd;
+            --border-dark: #444;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: var(--bg-light);
+            --bg-secondary: var(--light);
+            --text-primary: var(--text-light);
+            --text-secondary: #4a5568;
+            --card-bg: var(--card-light);
+            --border-color: var(--border-light);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: var(--bg-dark);
+            --bg-secondary: #2d3748;
+            --text-primary: var(--text-dark);
+            --text-secondary: #a0aec0;
+            --card-bg: var(--card-dark);
+            --border-color: var(--border-dark);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .bg-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        .text-primary {
+            color: var(--primary);
+        }
+
+        .bg-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            color: var(--text-primary);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .hover-scale {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .hover-scale:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glow {
+            text-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(15deg);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            color: white;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+            cursor: pointer;
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 40px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        .section-title.center::after {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .skill-tag {
+            display: inline-block;
+            background: rgba(52, 152, 219, 0.1);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin: 2px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(52, 152, 219, 0.2);
+        }
+
+        .salary-badge {
+            background: linear-gradient(135deg, var(--success), #27ae60);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .growth-badge {
+            background: linear-gradient(135deg, var(--warning), #e67e22);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .category-active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .comparison-table th, .comparison-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .comparison-table th {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background-color: var(--bg-secondary);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        footer a {
+            transition: color 0.3s;
+        }
+        
+        footer a:hover {
+            color: var(--accent) !important;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        .vocational-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--bg-secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .vocational-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .vocational-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .vocational-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        .course-pathway {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .course-pathway::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+        }
+
+        .course-pathway::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 20px;
+            width: 2px;
+            height: calc(100% + 12px);
+            background: var(--primary);
+        }
+
+        .course-pathway:last-child::after {
+            display: none;
+        }
+
+        .training-center-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .training-center-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        .success-story-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .success-story-card::before {
+            content: "";
+            font-size: 5rem;
+            color: var(--primary);
+            opacity: 0.2;
+            position: absolute;
+            top: 10px;
+            left: 15px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.open {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 0.8rem;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <!-- Header/Navigation -->
+    <header class="bg-header shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="logo flex items-center">
+                    <img src="logo.jpeg" alt="VidyaRoute Logo" class="h-12 w-auto mr-3">
+                    <span class="text-white font-bold text-xl">विद्याRoute</span>
+                </a>
+                
+                <nav class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-white hover:text-accent font-medium">Home</a>
+                    <a href="assessment.html" class="text-white hover:text-accent font-medium">Assessment</a>
+                    <a href="colleges.html" class="text-white hover:text-accent font-medium">Colleges</a>
+                    <a href="career-paths.html" class="text-white hover:text-accent font-medium">Career Paths</a>
+                    <a href="vocational.html" class="text-white hover:text-accent font-medium border-b-2 border-white">Vocational</a>
+                    <a href="timeline.html" class="text-white hover:text-accent font-medium">Timeline</a>
+                    <a href="about.html" class="text-white hover:text-accent font-medium">About</a>
+                </nav>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <button id="loginBtn" class="bg-white text-primary px-4 py-2 rounded-lg hover:bg-accent hover:text-white transition">
+                        Login
+                    </button>
+                    <button id="mobileMenuBtn" class="md:hidden text-white">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu fixed inset-0 bg-primary z-40 p-6 md:hidden" style="display: none;">
+        <div class="flex justify-between items-center mb-8">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <span class="text-white">विद्याRoute</span>
+            </div>
+            <button id="closeMobileMenu" class="text-white">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+        
+        <nav class="flex flex-col space-y-6">
+            <a href="index.html" class="text-white hover:text-accent font-medium text-lg">Home</a>
+            <a href="assessment.html" class="text-white hover:text-accent font-medium text-lg">Assessment</a>
+            <a href="colleges.html" class="text-white hover:text-accent font-medium text-lg">Colleges</a>
+            <a href="career-paths.html" class="text-white hover:text-accent font-medium text-lg">Career Paths</a>
+            <a href="vocational.html" class="text-white hover:text-accent font-medium text-lg border-b-2 border-white">Vocational</a>
+            <a href="timeline.html" class="text-white hover:text-accent font-medium text-lg">Timeline</a>
+            <a href="about.html" class="text-white hover:text-accent font-medium text-lg">About</a>
+            <button id="mobileLoginBtn" class="bg-white text-primary px-4 py-3 rounded-lg font-semibold text-left mt-4">
+                Login
+            </button>
+        </nav>
+    </div>
+
+    <!-- Vocational Courses Hero Section -->
+    <section class="py-16 bg-gradient-to-r from-primary to-secondary text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Vocational Courses & Skill Development</h1>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">Master practical skills for immediate employment and entrepreneurship opportunities with industry-relevant training</p>
+            <div class="flex justify-center space-x-4">
+                <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                    <i class="fas fa-tools text-2xl mb-2"></i>
+                    <p>50+ Vocational Courses</p>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                    <i class="fas fa-briefcase text-2xl mb-2"></i>
+                    <p>Direct Job Placement</p>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                    <i class="fas fa-graduation-cap text-2xl mb-2"></i>
+                    <p>Industry Certifications</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vocational Categories Navigation -->
+    <section class="py-8 bg-gray-100 dark:bg-gray-800 sticky top-16 z-40 shadow-md">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap justify-center gap-4">
+                <button class="category-filter btn-primary category-active" data-category="all">
+                    <i class="fas fa-th-large mr-2"></i> All Categories
+                </button>
+                <button class="category-filter btn-outline" data-category="it">
+                    <i class="fas fa-laptop-code mr-2"></i> IT & Technology
+                </button>
+                <button class="category-filter btn-outline" data-category="healthcare">
+                    <i class="fas fa-heartbeat mr-2"></i> Healthcare
+                </button>
+                <button class="category-filter btn-outline" data-category="hospitality">
+                    <i class="fas fa-hotel mr-2"></i> Hospitality
+                </button>
+                <button class="category-filter btn-outline" data-category="automotive">
+                    <i class="fas fa-car mr-2"></i> Automotive
+                </button>
+                <button class="category-filter btn-outline" data-category="beauty">
+                    <i class="fas fa-spa mr-2"></i> Beauty & Wellness
+                </button>
+                <button class="category-filter btn-outline" data-category="construction">
+                    <i class="fas fa-hard-hat mr-2"></i> Construction
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vocational Courses Overview -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center">Vocational <span class="gradient-text">Courses Overview</span></h2>
+            <p class="text-xl text-center mb-12 max-w-3xl mx-auto text-gray-600 dark:text-gray-300">Explore skill-based vocational courses that provide practical training and direct employment opportunities across various industries</p>
+            
+            <div class="bg-card p-6 rounded-xl mb-12">
+                <div class="chart-container">
+                    <canvas id="vocationalDemandChart"></canvas>
+                </div>
+            </div>
+
+            <!-- All Categories -->
+            <div id="all-category" class="vocational-category">
+                <div class="vocational-grid">
+                    <!-- IT & Technology -->
+                    <div class="vocational-card fade-in" data-category="it">
+                        <div class="vocational-icon">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3 text-primary">Information Technology</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Develop technical skills for the digital economy with hands-on training in software, hardware, and digital services.</p>
+                        <ul class="list-disc pl-5 space-y-1 mb-4 flex-grow">
+                            <li>Web Development & Design</li>
+                            <li>Digital Marketing & SEO</li>
+                            <li>Graphic Design & Multimedia</li>
+                            <li>Data Entry & Office Automation</li>
+                            <li>Computer Hardware & Networking</li>
+                            <li>Mobile App Development</li>
+                            <li>Cybersecurity Fundamentals</li>
+                        </ul>
+                        <div class="mt-auto">
+                            <p class="text-sm mb-3"><strong>Duration:</strong> 3 months to 2 years</p>
+                            <p class="text-sm mb-3"><strong>Job Roles:</strong> Web Developer, Digital Marketer, IT Support, Graphic Designer</p>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="salary-badge">₹3-15 LPA</span>
+                                <span class="growth-badge">High Growth</span>
+                            </div>
+                            <button class="btn-primary w-full mt-2 explore-course" data-course="it">Explore IT Courses</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Healthcare -->
+                    <div class="vocational-card fade-in" data-category="healthcare">
+                        <div class="vocational-icon">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3 text-primary">Healthcare & Medical</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Train for essential healthcare roles with practical skills for hospitals, clinics, and community health settings.</p>
+                        <ul class="list-disc pl-5 space-y-1 mb-4 flex-grow">
+                            <li>Medical Laboratory Technology</li>
+                            <li>Patient Care Assistant</li>
+                            <li>Pharmacy Assistant</li>
+                            <li>Emergency Medical Technician</li>
+                            <li>Home Health Aide</li>
+                            <li>Medical Transcription</li>
+                            <li>Dental Assistant</li>
+                        </ul>
+                        <div class="mt-auto">
+                            <p class="text-sm mb-3"><strong>Duration:</strong> 6 months to 2 years</p>
+                            <p class="text-sm mb-3"><strong>Job Roles:</strong> Lab Technician, Healthcare Assistant, Pharmacy Technician</p>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="salary-badge">₹3-12 LPA</span>
+                                <span class="growth-badge">High Growth</span>
+                            </div>
+                            <button class="btn-primary w-full mt-2 explore-course" data-course="healthcare">Explore Healthcare Courses</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Hospitality -->
+                    <div class="vocational-card fade-in" data-category="hospitality">
+                        <div class="vocational-icon">
+                            <i class="fas fa-hotel"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3 text-primary">Hospitality & Tourism</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Learn skills for the thriving hospitality industry with training in food service, hotel operations, and tourism.</p>
+                        <ul class="list-disc pl-5 space-y-1 mb-4 flex-grow">
+                            <li>Food Production & Culinary Arts</li>
+                            <li>Food & Beverage Service</li>
+                            <li>Housekeeping Operations</li>
+                            <li>Front Office Operations</li>
+                            <li>Tour Guide Training</li>
+                            <li>Event Management</li>
+                            <li>Bakery & Confectionery</li>
+                        </ul>
+                        <div class="mt-auto">
+                            <p class="text-sm mb-3"><strong>Duration:</strong> 6 months to 2 years</p>
+                            <p class="text-sm mb-3"><strong>Job Roles:</strong> Chef, Hotel Staff, Tour Guide, Event Manager</p>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="salary-badge">₹3-10 LPA</span>
+                                <span class="growth-badge">Moderate Growth</span>
+                            </div>
+                            <button class="btn-primary w-full mt-2 explore-course" data-course="hospitality">Explore Hospitality Courses</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Automotive -->
+                    <div class="vocational-card fade-in" data-category="automotive">
+                        <div class="vocational-icon">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3 text-primary">Automotive Technology</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Master vehicle maintenance and repair with hands-on training in automotive systems and diagnostics.</p>
+                        <ul class="list-disc pl-5 space-y-1 mb-4 flex-grow">
+                            <li>Automotive Repair & Maintenance</li>
+                            <li>Diesel Mechanics</li>
+                            <li>Auto Electrical Systems</li>
+                            <li>Two-Wheeler Repair</li>
+                            <li>CNG Engine Maintenance</li>
+                            <li>Auto Body Repair</li>
+                            <li>Electric Vehicle Technology</li>
+                        </ul>
+                        <div class="mt-auto">
+                            <p class="text-sm mb-3"><strong>Duration:</strong> 6 months to 2 years</p>
+                            <p class="text-sm mb-3"><strong>Job Roles:</strong> Automotive Technician, Mechanic, Service Advisor</p>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="salary-badge">₹3-12 LPA</span>
+                                <span class="growth-badge">Stable Growth</span>
+                            </div>
+                            <button class="btn-primary w-full mt-2 explore-course" data-course="automotive">Explore Automotive Courses</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Beauty & Wellness -->
+                    <div class="vocational-card fade-in" data-category="beauty">
+                        <div class="vocational-icon">
+                            <i class="fas fa-spa"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3 text-primary">Beauty & Wellness</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Develop skills in personal care services with training in beauty treatments, therapies, and wellness practices.</p>
+                        <ul class="list-disc pl-5 space-y-1 mb-4 flex-grow">
+                            <li>Beauty Therapy & Cosmetology</li>
+                            <li>Hair Styling & Design</li>
+                            <li>Makeup Artistry</li>
+                            <li>Spa Therapy & Massage</li>
+                            <li>Nail Artistry</li>
+                            <li>Skin Care & Aesthetics</li>
+                            <li>Yoga & Fitness Training</li>
+                        </ul>
+                        <div class="mt-auto">
+                            <p class="text-sm mb-3"><strong>Duration:</strong> 3 months to 1 year</p>
+                            <p class="text-sm mb-3"><strong>Job Roles:</strong> Beautician, Hair Stylist, Makeup Artist, Spa Therapist</p>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="salary-badge">₹3-18 LPA</span>
+                                <span class="growth-badge">High Growth</span>
+                            </div>
+                            <button class="btn-primary w-full mt-2 explore-course" data-course="beauty">Explore Beauty Courses</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Construction -->
+                    <div class="vocational-card fade-in" data-category="construction">
+                        <div class="vocational-icon">
+                            <i class="fas fa-hard-hat"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3 text-primary">Construction & Trades</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Learn skilled trades for construction industry with practical training in building techniques and safety.</p>
+                        <ul class="list-disc pl-5 space-y-1 mb-4 flex-grow">
+                            <li>Electrical & Wiring</li>
+                            <li>Plumbing & Sanitation</li>
+                            <li>Carpentry & Woodwork</li>
+                            <li>Masonry & Concrete Work</li>
+                            <li>Welding & Fabrication</li>
+                            <li>Painting & Decorating</li>
+                            <li>HVAC Systems</li>
+                        </ul>
+                        <div class="mt-auto">
+                            <p class="text-sm mb-3"><strong>Duration:</strong> 6 months to 2 years</p>
+                            <p class="text-sm mb-3"><strong>Job Roles:</strong> Electrician, Plumber, Carpenter, Construction Worker</p>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="salary-badge">₹4-15 LPA</span>
+                                <span class="growth-badge">Stable Growth</span>
+                            </div>
+                            <button class="btn-primary w-full mt-2 explore-course" data-course="construction">Explore Construction Courses</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Individual categories (initially hidden) -->
+            <div id="it-category" class="vocational-category" style="display: none;">
+                <!-- IT category content will be loaded dynamically -->
+            </div>
+
+            <div id="healthcare-category" class="vocational-category" style="display: none;">
+                <!-- Healthcare category content will be loaded dynamically -->
+            </div>
+
+            <div id="hospitality-category" class="vocational-category" style="display: none;">
+                <!-- Hospitality category content will be loaded dynamically -->
+            </div>
+
+            <div id="automotive-category" class="vocational-category" style="display: none;">
+                <!-- Automotive category content will be loaded dynamically -->
+            </div>
+
+            <div id="beauty-category" class="vocational-category" style="display: none;">
+                <!-- Beauty category content will be loaded dynamically -->
+            </div>
+
+            <div id="construction-category" class="vocational-category" style="display: none;">
+                <!-- Construction category content will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits of Vocational Education -->
+    <section class="py-16 bg-gray-100 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center">Benefits of <span class="gradient-text">Vocational Education</span></h2>
+            <p class="text-xl text-center mb-12 max-w-3xl mx-auto text-gray-600 dark:text-gray-300">Discover why vocational training offers unique advantages for career development and employment</p>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-card p-6 rounded-xl text-center hover-scale">
+                    <div class="vocational-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Faster Employment</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Shorter duration courses mean you can enter the workforce quickly with job-ready skills.</p>
+                </div>
+
+                <div class="bg-card p-6 rounded-xl text-center hover-scale">
+                    <div class="vocational-icon">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Hands-on Training</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Practical, skill-based learning prepares you for real-world job requirements.</p>
+                </div>
+
+                <div class="bg-card p-6 rounded-xl text-center hover-scale">
+                    <div class="vocational-icon">
+                        <i class="fas fa-rupee-sign"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Cost Effective</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Lower tuition fees and shorter duration reduce overall education costs.</p>
+                </div>
+
+                <div class="bg-card p-6 rounded-xl text-center hover-scale">
+                    <div class="vocational-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Industry Relevant</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Courses designed to meet current industry demands and skill gaps.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Career Progression Section -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center">Vocational <span class="gradient-text">Career Progression</span></h2>
+            <p class="text-xl text-center mb-12 max-w-3xl mx-auto text-gray-600 dark:text-gray-300">Understand the growth trajectory and advancement opportunities in vocational careers</p>
+            
+            <div class="bg-card p-6 rounded-xl">
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <div>
+                        <h4 class="text-xl font-semibold mb-4 text-primary">Typical Career Pathway</h4>
+                        <div class="course-pathway">
+                            <h5 class="font-semibold">Entry Level (0-2 years)</h5>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Trainee, Apprentice, Junior Technician, Assistant</p>
+                            <span class="salary-badge">₹3-5 LPA</span>
+                        </div>
+                        <div class="course-pathway">
+                            <h5 class="font-semibold">Mid Level (3-7 years)</h5>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Technician, Supervisor, Team Lead, Specialist</p>
+                            <span class="salary-badge">₹5-10 LPA</span>
+                        </div>
+                        <div class="course-pathway">
+                            <h5 class="font-semibold">Senior Level (8+ years)</h5>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Master Technician, Business Owner, Trainer, Consultant</p>
+                            <span class="salary-badge">₹10-25+ LPA</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-xl font-semibold mb-4 text-primary">Salary Growth Projection</h4>
+                        <div class="chart-container">
+                            <canvas id="vocationalSalaryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="text-xl font-semibold mb-4 text-primary">Industry Distribution</h4>
+                        <div class="chart-container">
+                            <canvas id="vocationalIndustryChart"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-semibold mb-4 text-primary">Employment Opportunities</h4>
+                        <div class="chart-container">
+                            <canvas id="vocationalEmploymentChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Training Centers & Institutes -->
+    <section class="py-16 bg-gray-100 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center">Vocational <span class="gradient-text">Training Centers</span></h2>
+            <p class="text-xl text-center mb-12 max-w-3xl mx-auto text-gray-600 dark:text-gray-300">Discover government and private institutes offering quality vocational training across India</p>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="training-center-card fade-in">
+                    <h3 class="text-xl font-semibold mb-3 text-primary">Industrial Training Institutes (ITI)</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Government-run institutes offering trades in engineering and non-engineering fields.</p>
+                    <ul class="list-disc pl-5 space-y-1 mb-4">
+                        <li>Wide network across India</li>
+                        <li>Affordable fees</li>
+                        <li>Industry-recognized certificates</li>
+                        <li>Apprenticeship opportunities</li>
+                    </ul>
+                    <p class="text-sm mb-3"><strong>Courses:</strong> Electrician, Fitter, Welder, Mechanic, etc.</p>
+                    <p class="text-sm mb-3"><strong>Duration:</strong> 1-2 years</p>
+                    <button class="btn-primary w-full">Find ITI Centers</button>
+                </div>
+                
+                <div class="training-center-card fade-in">
+                    <h3 class="text-xl font-semibold mb-3 text-primary">National Skill Development Corporation (NSDC)</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Public-private partnership for skill development across various sectors.</p>
+                    <ul class="list-disc pl-5 space-y-1 mb-4">
+                        <li>Industry-aligned training</li>
+                        <li>Job placement assistance</li>
+                        <li>Short-term courses</li>
+                        <li>Financial support available</li>
+                    </ul>
+                    <p class="text-sm mb-3"><strong>Courses:</strong> Retail, Healthcare, IT, Hospitality, etc.</p>
+                    <p class="text-sm mb-3"><strong>Duration:</strong> 3-12 months</p>
+                    <button class="btn-primary w-full">Explore NSDC Programs</button>
+                </div>
+                
+                <div class="training-center-card fade-in">
+                    <h3 class="text-xl font-semibold mb-3 text-primary">Private Vocational Institutes</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Specialized private training centers offering niche skill development.</p>
+                    <ul class="list-disc pl-5 space-y-1 mb-4">
+                        <li>Advanced technology training</li>
+                        <li>International certifications</li>
+                        <li>Industry partnerships</li>
+                        <li>Premium placement services</li>
+                    </ul>
+                    <p class="text-sm mb-3"><strong>Courses:</strong> Digital Marketing, Animation, Aviation, etc.</p>
+                    <p class="text-sm mb-3"><strong>Duration:</strong> 6 months to 2 years</p>
+                    <button class="btn-primary w-full">Find Private Institutes</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Stories -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center">Vocational <span class="gradient-text">Success Stories</span></h2>
+            <p class="text-xl text-center mb-12 max-w-3xl mx-auto text-gray-600 dark:text-gray-300">Inspiring stories of individuals who transformed their careers through vocational education</p>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="success-story-card fade-in">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white font-bold mr-3">RS</div>
+                        <div>
+                            <h4 class="font-semibold">Rajesh Singh</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Automotive Technician</p>
+                            <p class="text-sm text-green-600 dark:text-green-400 font-semibold mt-1">₹8 LPA salary</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300">"After completing my ITI in automobile engineering, I started as a trainee at a local garage. Within 3 years, I became a senior technician at a premium car service center. Vocational training gave me practical skills that are always in demand."</p>
+                    <div class="flex mt-4 text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+
+                <div class="success-story-card fade-in">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white font-bold mr-3">PM</div>
+                        <div>
+                            <h4 class="font-semibold">Priya Mehta</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Beauty Salon Owner</p>
+                            <p class="text-sm text-green-600 dark:text-green-400 font-semibold mt-1">₹12 LPA earnings</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300">"I did a 6-month beautician course after 12th grade. Started working at a salon, saved money, and now I own my beauty studio with 4 employees. Vocational education gave me the confidence and skills to become an entrepreneur."</p>
+                    <div class="flex mt-4 text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+
+                <div class="success-story-card fade-in">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white font-bold mr-3">AK</div>
+                        <div>
+                            <h4 class="font-semibold">Amit Kumar</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Web Developer</p>
+                            <p class="text-sm text-green-600 dark:text-green-400 font-semibold mt-1">₹10 LPA salary</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300">"I couldn't afford engineering college, so I enrolled in a 1-year web development course. Got placed as a junior developer before completing the course. Now I lead a team of 3 developers. Vocational courses open doors to tech careers without expensive degrees."</p>
+                    <div class="flex mt-4 text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-16 bg-gray-100 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center">Vocational Education <span class="gradient-text">FAQs</span></h2>
+            
+            <div class="max-w-3xl mx-auto">
+                <div class="bg-card p-6 rounded-lg mb-4">
+                    <h3 class="text-xl font-semibold mb-3 text-primary">What is the difference between vocational education and traditional degrees?</h3>
+                    <p class="text-gray-700 dark:text-gray-300">Vocational education focuses on practical skills and job-specific training, while traditional degrees provide broader theoretical knowledge. Vocational courses are typically shorter, more affordable, and directly prepare students for specific careers.</p>
+                </div>
+                
+                <div class="bg-card p-6 rounded-lg mb-4">
+                    <h3 class="text-xl font-semibold mb-3 text-primary">Are vocational courses recognized by employers?</h3>
+                    <p class="text-gray-700 dark:text-gray-300">Yes, vocational courses from recognized institutions are highly valued by employers, especially in technical and skill-based industries. Many vocational certifications are industry-standard and sometimes even required for certain jobs.</p>
+                </div>
+                
+                <div class="bg-card p-6 rounded-lg mb-4">
+                    <h3 class="text-xl font-semibold mb-3 text-primary">Can I pursue higher education after vocational courses?</h3>
+                    <p class="text-gray-700 dark:text-gray-300">Yes, many vocational courses provide pathways to higher education. For example, diploma holders can often enroll in degree programs with credit transfers. Some universities offer lateral entry to vocational course graduates.</p>
+                </div>
+                
+                <div class="bg-card p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3 text-primary">What financial assistance is available for vocational courses?</h3>
+                    <p class="text-gray-700 dark:text-gray-300">Government schemes like Pradhan Mantri Kaushal Vikas Yojana (PMKVY) provide financial support for vocational training. Many states offer scholarships, and some private institutes have installment plans or education loans specifically for vocational courses.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary py-12 text-white">
+        <div class="container mx-auto px-4">
+            <div class="footer-grid">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <img src="logo.jpeg" alt="VidyaRoute Logo" class="h-10 w-auto mr-2">
+                        <span class="text-xl font-bold">विद्याRoute</span>
+                    </div>
+                    <p class="mb-4">Empowering students to make informed decisions about their academic and career journey.</p>
+                    <p class="text-sm">"Your Pathway to Success"</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="hover:text-accent">Home</a></li>
+                        <li><a href="assessment.html" class="hover:text-accent">Assessment</a></li>
+                        <li><a href="colleges.html" class="hover:text-accent">Colleges</a></li>
+                        <li><a href="career-paths.html" class="hover:text-accent">Career Paths</a></li>
+                        <li><a href="vocational.html" class="hover:text-accent">Vocational Courses</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Resources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" id="privacyLink" class="hover:text-accent">Privacy Policy</a></li>
+                        <li><a href="#" id="termsLink" class="hover:text-accent">Terms of Service</a></li>
+                        <li><a href="about.html" class="hover:text-accent">About Us</a></li>
+                        <li><a href="about.html#faq" class="hover:text-accent">FAQ</a></li>
+                        <li><a href="about.html#contact" class="hover:text-accent">Contact Us</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Connect With Us</h3>
+                    <div class="flex space-x-4 mb-4">
+                        <a href="https://github.com/anubrr21" target="_blank" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary hover:bg-accent hover:text-white">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://linkedin.com/in/anubrata-bhattacharyya" target="_blank" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary hover:bg-accent hover:text-white">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="https://wa.me/918977039397" target="_blank" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary hover:bg-accent hover:text-white">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="mailto:info@vidyaroute.com" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary hover:bg-accent hover:text-white">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                    <p class="text-sm">© 2025 विद्याRoute. All rights reserved.</p>
+                    <p class="text-sm mt-2">Made with ❤️ by PseudoCoderz</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Course Details Modal -->
+    <div id="courseModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-primary" id="modalCourseTitle">Course Details</h3>
+                <button class="close-modal text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="courseDetails">
+                <!-- Course details will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Vocational Courses Data
+        const vocationalData = {
+            it: {
+                title: "Information Technology Courses",
+                description: "Comprehensive IT training programs designed to equip you with in-demand digital skills for the modern workforce.",
+                courses: [
+                    {
+                        name: "Web Development",
+                        duration: "6 months",
+                        fees: "₹25,000 - ₹50,000",
+                        skills: ["HTML/CSS", "JavaScript", "React", "Node.js", "Database Management"],
+                        jobRoles: ["Frontend Developer", "Backend Developer", "Full Stack Developer"],
+                        salary: "₹4-12 LPA",
+                        certification: "Industry-recognized certificate"
+                    },
+                    {
+                        name: "Digital Marketing",
+                        duration: "4 months",
+                        fees: "₹20,000 - ₹40,000",
+                        skills: ["SEO", "Social Media Marketing", "Google Ads", "Content Marketing", "Analytics"],
+                        jobRoles: ["Digital Marketer", "SEO Specialist", "Social Media Manager"],
+                        salary: "₹3-8 LPA",
+                        certification: "Google & Facebook certified"
+                    },
+                    {
+                        name: "Graphic Design",
+                        duration: "5 months",
+                        fees: "₹30,000 - ₹60,000",
+                        skills: ["Adobe Photoshop", "Illustrator", "InDesign", "UI/UX Design", "Branding"],
+                        jobRoles: ["Graphic Designer", "UI/UX Designer", "Visual Designer"],
+                        salary: "₹3-10 LPA",
+                        certification: "Adobe Certified Professional"
+                    }
+                ]
+            },
+            healthcare: {
+                title: "Healthcare & Medical Courses",
+                description: "Essential healthcare training programs that prepare you for rewarding careers in medical services.",
+                courses: [
+                    {
+                        name: "Medical Laboratory Technology",
+                        duration: "2 years",
+                        fees: "₹40,000 - ₹80,000",
+                        skills: ["Pathology Testing", "Microbiology", "Biochemistry", "Hematology", "Lab Safety"],
+                        jobRoles: ["Lab Technician", "Pathology Assistant", "Research Assistant"],
+                        salary: "₹3-8 LPA",
+                        certification: "MLT Certification"
+                    },
+                    {
+                        name: "Patient Care Assistant",
+                        duration: "1 year",
+                        fees: "₹25,000 - ₹50,000",
+                        skills: ["Patient Care", "Vital Signs Monitoring", "Basic Nursing", "Emergency Response"],
+                        jobRoles: ["Nursing Assistant", "Patient Care Technician", "Home Health Aide"],
+                        salary: "₹2-6 LPA",
+                        certification: "Healthcare Assistant Certificate"
+                    },
+                    {
+                        name: "Pharmacy Assistant",
+                        duration: "1 year",
+                        fees: "₹30,000 - ₹60,000",
+                        skills: ["Medication Dispensing", "Inventory Management", "Customer Service", "Pharmacy Laws"],
+                        jobRoles: ["Pharmacy Technician", "Drug Store Assistant", "Hospital Pharmacy Staff"],
+                        salary: "₹3-7 LPA",
+                        certification: "Pharmacy Assistant Certificate"
+                    }
+                ]
+            }
+            // Additional categories can be added similarly
+        };
+
+        // Initialize the page
+        function initVocationalPage() {
+            setupEventListeners();
+            initCharts();
+            
+            // Theme toggle functionality
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = themeToggle.querySelector('i');
+            const body = document.body;
+            
+            themeToggle.addEventListener('click', () => {
+                if (body.getAttribute('data-theme') === 'light') {
+                    body.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                } else {
+                    body.setAttribute('data-theme', 'light');
+                    localStorage.setItem('theme', 'light');
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                }
+            });
+
+            // Load saved theme
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                body.setAttribute('data-theme', savedTheme);
+                if (savedTheme === 'dark') {
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                }
+            }
+
+            // Mobile menu functionality
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const closeMobileMenu = document.getElementById('closeMobileMenu');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.style.display = 'block';
+            });
+            
+            closeMobileMenu.addEventListener('click', () => {
+                mobileMenu.style.display = 'none';
+            });
+
+            // Fade in animation for elements
+            const fadeElements = document.querySelectorAll('.fade-in');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            fadeElements.forEach(el => observer.observe(el));
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Category filter buttons
+            document.querySelectorAll('.category-filter').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const category = e.target.getAttribute('data-category');
+                    switchVocationalCategory(category);
+                });
+            });
+
+            // Explore course buttons
+            document.querySelectorAll('.explore-course').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const course = e.target.getAttribute('data-course');
+                    showCourseDetails(course);
+                });
+            });
+
+            // Privacy and Terms modals
+            document.getElementById('privacyLink').addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('Privacy Policy would be displayed here.');
+            });
+            
+            document.getElementById('termsLink').addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('Terms of Service would be displayed here.');
+            });
+
+            // Close modal buttons
+            document.querySelectorAll('.close-modal').forEach(button => {
+                button.addEventListener('click', () => {
+                    document.querySelectorAll('.modal').forEach(modal => {
+                        modal.classList.remove('open');
+                    });
+                });
+            });
+        }
+
+        // Switch vocational category
+        function switchVocationalCategory(category) {
+            // Update active button
+            document.querySelectorAll('.category-filter').forEach(button => {
+                button.classList.remove('category-active', 'btn-primary');
+                button.classList.add('btn-outline');
+            });
+            
+            const activeButton = document.querySelector(`.category-filter[data-category="${category}"]`);
+            activeButton.classList.add('category-active', 'btn-primary');
+            activeButton.classList.remove('btn-outline');
+            
+            // Hide all categories
+            document.querySelectorAll('.vocational-category').forEach(categoryElement => {
+                categoryElement.style.display = 'none';
+            });
+            
+            // Show selected category
+            if (category === 'all') {
+                document.getElementById('all-category').style.display = 'block';
+            } else {
+                document.getElementById(`${category}-category`).style.display = 'block';
+                // Load category content if not already loaded
+                loadCategoryContent(category);
+            }
+        }
+
+        // Load category content
+        function loadCategoryContent(category) {
+            const categoryElement = document.getElementById(`${category}-category`);
+            
+            // Only load if empty
+            if (categoryElement.innerHTML.trim() === '') {
+                // In a real implementation, this would fetch data from a server
+                // For now, we'll use the sample data
+                if (vocationalData[category]) {
+                    const data = vocationalData[category];
+                    let html = `
+                        <div class="text-center mb-12">
+                            <h3 class="text-3xl font-bold mb-4 text-primary">${data.title}</h3>
+                            <p class="text-xl max-w-3xl mx-auto text-gray-600 dark:text-gray-300">${data.description}</p>
+                        </div>
+                        <div class="vocational-grid">
+                    `;
+                    
+                    data.courses.forEach(course => {
+                        html += `
+                            <div class="vocational-card fade-in">
+                                <h3 class="text-xl font-semibold mb-3 text-primary">${course.name}</h3>
+                                <p class="text-gray-600 dark:text-gray-400 mb-4">Comprehensive training in ${course.name.toLowerCase()} with hands-on projects and industry exposure.</p>
+                                <ul class="list-disc pl-5 space-y-1 mb-4 flex-grow">
+                                    ${course.skills.map(skill => `<li>${skill}</li>`).join('')}
+                                </ul>
+                                <div class="mt-auto">
+                                    <p class="text-sm mb-3"><strong>Duration:</strong> ${course.duration}</p>
+                                    <p class="text-sm mb-3"><strong>Fees:</strong> ${course.fees}</p>
+                                    <p class="text-sm mb-3"><strong>Job Roles:</strong> ${course.jobRoles.join(', ')}</p>
+                                    <div class="flex justify-between items-center mb-3">
+                                        <span class="salary-badge">${course.salary}</span>
+                                        <span class="growth-badge">Certified Program</span>
+                                    </div>
+                                    <button class="btn-primary w-full mt-2" data-course-details='${JSON.stringify(course)}'>View Course Details</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    html += `</div>`;
+                    categoryElement.innerHTML = html;
+                    
+                    // Add event listeners to the new buttons
+                    categoryElement.querySelectorAll('button[data-course-details]').forEach(button => {
+                        button.addEventListener('click', (e) => {
+                            const courseData = JSON.parse(e.target.getAttribute('data-course-details'));
+                            showCourseModal(courseData);
+                        });
+                    });
+                }
+            }
+        }
+
+        // Show course details
+        function showCourseDetails(course) {
+            // In a real implementation, this would navigate to a detailed course page
+            // For now, we'll show a modal with basic information
+            alert(`Exploring ${course} courses. In a full implementation, this would show detailed course information.`);
+        }
+
+        // Show course modal
+        function showCourseModal(courseData) {
+            const modal = document.getElementById('courseModal');
+            const courseTitle = document.getElementById('modalCourseTitle');
+            const courseDetails = document.getElementById('courseDetails');
+            
+            courseTitle.textContent = courseData.name;
+            courseDetails.innerHTML = `
+                <p class="mb-4">${courseData.name} is a comprehensive vocational program designed to equip you with practical skills for immediate employment.</p>
+                
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <p><strong>Duration:</strong> ${courseData.duration}</p>
+                        <p><strong>Fees:</strong> ${courseData.fees}</p>
+                        <p><strong>Certification:</strong> ${courseData.certification}</p>
+                    </div>
+                    <div>
+                        <p><strong>Expected Salary:</strong> ${courseData.salary}</p>
+                        <p><strong>Job Roles:</strong> ${courseData.jobRoles.join(', ')}</p>
+                    </div>
+                </div>
+                
+                <h4 class="font-semibold mb-2">Skills You'll Learn:</h4>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    ${courseData.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+                </div>
+                
+                <h4 class="font-semibold mb-2">Course Highlights:</h4>
+                <ul class="list-disc pl-5 space-y-1 mb-4">
+                    <li>Hands-on practical training</li>
+                    <li>Industry-relevant curriculum</li>
+                    <li>Placement assistance</li>
+                    <li>Experienced instructors</li>
+                    <li>Project-based learning</li>
+                </ul>
+                
+                <button class="btn-primary w-full">Enroll Now</button>
+            `;
+            
+            modal.classList.add('open');
+        }
+
+        // Initialize charts
+        function initCharts() {
+            // Vocational demand chart
+            const demandCtx = document.getElementById('vocationalDemandChart').getContext('2d');
+            new Chart(demandCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['IT & Technology', 'Healthcare', 'Hospitality', 'Automotive', 'Beauty & Wellness', 'Construction'],
+                    datasets: [{
+                        label: 'Industry Demand (out of 10)',
+                        data: [9, 8, 7, 7, 8, 7],
+                        backgroundColor: [
+                            'rgba(52, 152, 219, 0.7)',
+                            'rgba(231, 76, 60, 0.7)',
+                            'rgba(46, 204, 113, 0.7)',
+                            'rgba(155, 89, 182, 0.7)',
+                            'rgba(241, 196, 15, 0.7)',
+                            'rgba(230, 126, 34, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(52, 152, 219, 1)',
+                            'rgba(231, 76, 60, 1)',
+                            'rgba(46, 204, 113, 1)',
+                            'rgba(155, 89, 182, 1)',
+                            'rgba(241, 196, 15, 1)',
+                            'rgba(230, 126, 34, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 10,
+                            title: {
+                                display: true,
+                                text: 'Demand Score'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Vocational salary chart
+            const salaryCtx = document.getElementById('vocationalSalaryChart').getContext('2d');
+            new Chart(salaryCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Entry Level (0-2 yrs)', 'Mid Level (3-7 yrs)', 'Senior Level (8+ yrs)', 'Expert Level (12+ yrs)'],
+                    datasets: [{
+                        label: 'Average Salary (LPA)',
+                        data: [4, 6, 8, 12],
+                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                        borderColor: 'rgba(52, 152, 219, 1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Salary (LPA)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Vocational industry chart
+            const industryCtx = document.getElementById('vocationalIndustryChart').getContext('2d');
+            new Chart(industryCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Manufacturing', 'Services', 'IT', 'Healthcare', 'Construction', 'Retail'],
+                    datasets: [{
+                        data: [25, 20, 15, 15, 15, 10],
+                        backgroundColor: [
+                            'rgba(52, 152, 219, 0.8)',
+                            'rgba(46, 204, 113, 0.8)',
+                            'rgba(155, 89, 182, 0.8)',
+                            'rgba(241, 196, 15, 0.8)',
+                            'rgba(230, 126, 34, 0.8)',
+                            'rgba(149, 165, 166, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Vocational employment chart
+            const employmentCtx = document.getElementById('vocationalEmploymentChart').getContext('2d');
+            new Chart(employmentCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['IT & Tech', 'Healthcare', 'Hospitality', 'Automotive', 'Beauty', 'Construction'],
+                    datasets: [{
+                        label: 'Employment Rate (%)',
+                        data: [85, 90, 80, 75, 82, 78],
+                        backgroundColor: 'rgba(46, 204, 113, 0.7)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'Employment Rate (%)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize the page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initVocationalPage);
+    </script>
+</body>
+</html>

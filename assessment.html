@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Assessment - विद्याRoute</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --text-light: #2c3e50;
+            --text-dark: #ecf0f1;
+            --bg-light: #ffffff;
+            --bg-dark: #121212;
+            --card-light: #ffffff;
+            --card-dark: #1e1e1e;
+            --border-light: #ddd;
+            --border-dark: #444;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: var(--bg-light);
+            --bg-secondary: var(--light);
+            --text-primary: var(--text-light);
+            --text-secondary: #4a5568;
+            --card-bg: var(--card-light);
+            --border-color: var(--border-light);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: var(--bg-dark);
+            --bg-secondary: #2d3748;
+            --text-primary: var(--text-dark);
+            --text-secondary: #a0aec0;
+            --card-bg: var(--card-dark);
+            --border-color: var(--border-dark);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .bg-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        .text-primary {
+            color: var(--primary);
+        }
+
+        .bg-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            color: var(--text-primary);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .hover-scale {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .hover-scale:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glow {
+            text-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(15deg);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            color: white;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+            cursor: pointer;
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 40px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        .section-title.center::after {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .assessment-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .option-card {
+            padding: 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option-card:hover {
+            border-color: var(--primary);
+            background: rgba(52, 152, 219, 0.05);
+        }
+
+        .option-card.selected {
+            border-color: var(--primary);
+            background: rgba(52, 152, 219, 0.1);
+        }
+
+        .progress-bar {
+            height: 10px;
+            border-radius: 5px;
+            background: var(--bg-secondary);
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        .result-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .stream-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .stream-highlight {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        footer a {
+            transition: color 0.3s;
+        }
+        
+        footer a:hover {
+            color: var(--accent) !important;
+        }
+
+        /* New styles for improved UI */
+        .assessment-image {
+            max-width: 100%;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .step-card {
+            background: linear-gradient(135deg, #2c3e50 0%, #4a5568 100%);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            color: white;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.1) 0%, rgba(231, 76, 60, 0.1) 100%);
+            z-index: 0;
+        }
+
+        .step-number {
+            width: 70px;
+            height: 70px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 0 auto 20px;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .step-card h3 {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 15px;
+        }
+
+        .step-card p {
+            position: relative;
+            z-index: 1;
+            opacity: 0.9;
+        }
+
+        .step-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <!-- Header/Navigation -->
+    <header class="bg-header shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="logo flex items-center">
+                    <img src="logo.jpeg" alt="VidyaRoute Logo" class="h-12 w-auto mr-3">
+                    <span class="text-white font-bold text-xl">विद्याRoute</span>
+                </a>
+                
+                <nav class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-white hover:text-accent font-medium">Home</a>
+                    <a href="assessment.html" class="text-white hover:text-accent font-medium border-b-2 border-white">Assessment</a>
+                    <a href="colleges.html" class="text-white hover:text-accent font-medium">Colleges</a>
+                    <a href="career-paths.html" class="text-white hover:text-accent font-medium">Career Paths</a>
+                    <a href="vocational.html" class="text-white hover:text-accent font-medium">Vocational</a>
+                    <a href="timeline.html" class="text-white hover:text-accent font-medium">Timeline</a>
+                    <a href="about.html" class="text-white hover:text-accent font-medium">About</a>
+                </nav>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <button id="loginBtn" class="bg-white text-primary px-4 py-2 rounded-lg hover:bg-accent hover:text-white transition">
+                        Login
+                    </button>
+                    <button id="mobileMenuBtn" class="md:hidden text-white">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu fixed inset-0 bg-primary z-40 p-6 md:hidden" style="display: none;">
+        <div class="flex justify-between items-center mb-8">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <span class="text-white">विद्याRoute</span>
+            </div>
+            <button id="closeMobileMenu" class="text-white">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+        
+        <nav class="flex flex-col space-y-6">
+            <a href="index.html" class="text-white hover:text-accent font-medium text-lg">Home</a>
+            <a href="assessment.html" class="text-white hover:text-accent font-medium text-lg border-b-2 border-white">Assessment</a>
+            <a href="colleges.html" class="text-white hover:text-accent font-medium text-lg">Colleges</a>
+            <a href="career-paths.html" class="text-white hover:text-accent font-medium text-lg">Career Paths</a>
+            <a href="vocational.html" class="text-white hover:text-accent font-medium text-lg">Vocational</a>
+            <a href="timeline.html" class="text-white hover:text-accent font-medium text-lg">Timeline</a>
+            <a href="about.html" class="text-white hover:text-accent font-medium text-lg">About</a>
+            <button id="mobileLoginBtn" class="bg-white text-primary px-4 py-3 rounded-lg font-semibold text-left mt-4">
+                Login
+            </button>
+        </nav>
+    </div>
+
+    <!-- Assessment Hero Section -->
+    <section class="py-16 bg-gradient-to-r from-primary to-secondary text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Career Aptitude Assessment</h1>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">Discover your ideal career path with our scientifically designed assessment. Answer 15 questions to get personalized career recommendations.</p>
+            <div class="flex justify-center space-x-4">
+                <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                    <i class="fas fa-clock text-2xl mb-2"></i>
+                    <p>10-15 minutes</p>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                    <i class="fas fa-chart-bar text-2xl mb-2"></i>
+                    <p>Personalized Report</p>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                    <i class="fas fa-graduation-cap text-2xl mb-2"></i>
+                    <p>College Suggestions</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Assessment Container -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <div class="assessment-container">
+                <!-- Assessment Intro -->
+                <div id="assessmentIntro" class="question-card fade-in visible">
+                    <h2 class="text-2xl font-bold mb-4 text-center">Welcome to Your Career Assessment</h2>
+                    <p class="mb-6 text-center">This assessment will help us understand your interests, skills, and personality to recommend the best career paths for you.</p>
+                    
+                    <!-- Added Image -->
+                    <div class="flex justify-center mb-6">
+                        <img src="career_assessment.png" alt="Career Assessment" class="assessment-image">
+                    </div>
+                    
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-lg mb-6 border border-blue-200 dark:border-gray-700 shadow-sm">
+    <h3 class="text-xl font-bold mb-4 text-blue-800 dark:text-blue-300 flex items-center">
+        <i class="fas fa-info-circle mr-2"></i>
+        How it works:
+    </h3>
+    <ul class="list-none space-y-3">
+        <li class="flex items-start">
+            <span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5 flex-shrink-0">1</span>
+            <span class="text-gray-700 dark:text-gray-300">Answer 15 questions about your preferences and strengths</span>
+        </li>
+        <li class="flex items-start">
+            <span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5 flex-shrink-0">2</span>
+            <span class="text-gray-700 dark:text-gray-300">Be honest - there are no right or wrong answers</span>
+        </li>
+        <li class="flex items-start">
+            <span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5 flex-shrink-0">3</span>
+            <span class="text-gray-700 dark:text-gray-300">Your responses are completely confidential</span>
+        </li>
+        <li class="flex items-start">
+            <span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5 flex-shrink-0">4</span>
+            <span class="text-gray-700 dark:text-gray-300">Get a detailed report with career recommendations</span>
+        </li>
+    </ul>
+</div>
+                    
+                    <div class="text-center">
+                        <button id="startAssessment" class="btn-primary pulse">
+                            Start Assessment
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Assessment Questions -->
+                <div id="assessmentQuestions" style="display: none;">
+                    <div class="mb-6">
+                        <div class="flex justify-between mb-2">
+                            <span id="progressText">Question 1 of 15</span>
+                            <span class="text-primary font-semibold" id="progressPercent">7%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 7%"></div>
+                        </div>
+                    </div>
+                    
+                    <div id="questionContainer" class="question-card">
+                        <!-- Questions will be loaded here dynamically -->
+                    </div>
+                    
+                    <div class="flex justify-between">
+                        <button id="prevQuestion" class="btn-outline" disabled>
+                            <i class="fas fa-arrow-left mr-2"></i> Previous
+                        </button>
+                        <button id="nextQuestion" class="btn-primary">
+                            Next <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Assessment Results -->
+                <div id="assessmentResults" style="display: none;">
+                    <div class="text-center mb-8">
+                        <h2 class="text-3xl font-bold mb-4 glow">Your Career Assessment Results</h2>
+                        <p class="text-xl">Based on your responses, here are your recommended career paths</p>
+                    </div>
+                    
+                    <div class="result-card">
+                        <h3 class="text-2xl font-bold mb-6 text-center">Your Career Match Scores</h3>
+                        <div class="mb-8">
+                            <canvas id="resultsChart" height="300"></canvas>
+                        </div>
+                        
+                        <div id="streamResults">
+                            <!-- Stream results will be loaded here dynamically -->
+                        </div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <h3 class="text-2xl font-bold mb-4">Recommended Next Steps</h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-semibold mb-2 text-primary">Explore Career Paths</h4>
+                                <p>Learn more about the careers that match your profile</p>
+                                <a href="career-paths.html" class="btn-primary mt-3 inline-block">Explore Careers</a>
+                            </div>
+                            <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-semibold mb-2 text-primary">Find Colleges</h4>
+                                <p>Discover colleges that offer programs in your recommended fields</p>
+                                <a href="colleges.html" class="btn-primary mt-3 inline-block">Find Colleges</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-8">
+                        <button id="retakeAssessment" class="btn-outline mr-4">
+                            Retake Assessment
+                        </button>
+                        <button id="downloadReport" class="btn-primary">
+                            <i class="fas fa-download mr-2"></i> Download Full Report
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-16 bg-gray-100 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center"> <span class="gradient-text">How Our Assessment Works</span></h2>
+            
+            <div class="grid md:grid-cols-3 gap-8 mt-12">
+                <div class="step-card fade-in hover-scale">
+                    <div class="step-number">1</div>
+                    <h3 class="text-xl font-semibold mb-2">Answer Questions</h3>
+                    <p>Complete our 15-question assessment about your interests, skills, and preferences.</p>
+                </div>
+                
+                <div class="step-card fade-in hover-scale">
+                    <div class="step-number">2</div>
+                    <h3 class="text-xl font-semibold mb-2">Get Analyzed</h3>
+                    <p>Our AI algorithm analyzes your responses to identify your strengths and preferences.</p>
+                </div>
+                
+                <div class="step-card fade-in hover-scale">
+                    <div class="step-number">3</div>
+                    <h3 class="text-xl font-semibold mb-2">Receive Recommendations</h3>
+                    <p>Get personalized career recommendations with detailed information and next steps.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center">Assessment <span class="gradient-text">FAQs</span></h2>
+            
+            <div class="max-w-3xl mx-auto">
+                <div class="bg-card p-6 rounded-lg mb-4">
+                    <h3 class="text-xl font-semibold mb-3 text-primary">How long does the assessment take?</h3>
+                    <p class="text-white-700 dark:text-white-300">The assessment typically takes 10-15 minutes to complete. There are 15 questions, and you can take as much time as you need for each one.</p>
+                </div>
+                
+                <div class="bg-card p-6 rounded-lg mb-4">
+                    <h3 class="text-xl font-semibold mb-3 text-primary">Is my data secure?</h3>
+                    <p class="text-white-700 dark:text-white-300">Yes, we take your privacy seriously. All assessment responses are anonymous and stored securely. We do not share your personal information with third parties.</p>
+                </div>
+                
+                <div class="bg-card p-6 rounded-lg mb-4">
+                    <h3 class="text-xl font-semibold mb-3 text-primary">Can I retake the assessment?</h3>
+                    <p class="text-white-700 dark:text-white-300">Absolutely! You can retake the assessment as many times as you'd like. Your interests may change over time, so we encourage periodic reassessments.</p>
+                </div>
+                
+                <div class="bg-card p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3 text-primary">How accurate are the results?</h3>
+                    <p class="text-white-700 dark:text-white-300">Our assessment is based on established career counseling principles and has been validated with thousands of students. However, we recommend using the results as a starting point for further exploration rather than a definitive answer.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary py-12 text-white">
+        <div class="container mx-auto px-4">
+            <div class="footer-grid">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <img src="logo.jpeg" alt="VidyaRoute Logo" class="h-10 w-auto mr-2">
+                        <span class="text-xl font-bold">विद्याRoute</span>
+                    </div>
+                    <p class="mb-4">Empowering students to make informed decisions about their academic and career journey.</p>
+                    <p class="text-sm">"Your Pathway to Success"</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="hover:text-accent">Home</a></li>
+                        <li><a href="assessment.html" class="hover:text-accent">Assessment</a></li>
+                        <li><a href="colleges.html" class="hover:text-accent">Colleges</a></li>
+                        <li><a href="career-paths.html" class="hover:text-accent">Career Paths</a></li>
+                        <li><a href="vocational.html" class="hover:text-accent">Vocational Courses</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Resources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" id="privacyLink" class="hover:text-accent">Privacy Policy</a></li>
+                        <li><a href="#" id="termsLink" class="hover:text-accent">Terms of Service</a></li>
+                        <li><a href="about.html" class="hover:text-accent">About Us</a></li>
+                        <li><a href="about.html#faq" class="hover:text-accent">FAQ</a></li>
+                        <li><a href="about.html#contact" class="hover:text-accent">Contact Us</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Connect With Us</h3>
+                    <div class="flex space-x-4 mb-4">
+                        <a href="https://github.com/anubrr21" target="_blank" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary hover:bg-accent hover:text-white">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://linkedin.com/in/anubrata-bhattacharyya" target="_blank" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary hover:bg-accent hover:text-white">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="https://wa.me/918977039397" target="_blank" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary hover:bg-accent hover:text-white">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="mailto:info@vidyaroute.com" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary hover:bg-accent hover:text-white">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                    <p class="text-sm">© 2025 विद्याRoute. All rights reserved.</p>
+                    <p class="text-sm mt-2">Made with ❤️ by PseudoCoderz</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Assessment Data
+        const assessmentData = {
+            questions: [
+                {
+                    id: 1,
+                    text: "Which subjects do you enjoy the most?",
+                    options: [
+                        { text: "Mathematics & Physics", scores: [3, 0, 0, 0, 0] },
+                        { text: "Biology & Chemistry", scores: [0, 3, 0, 0, 0] },
+                        { text: "Accounts & Business Studies", scores: [0, 0, 3, 0, 0] },
+                        { text: "History & Literature", scores: [0, 0, 0, 3, 0] }
+                    ]
+                },
+                {
+                    id: 2,
+                    text: "Which activity excites you?",
+                    options: [
+                        { text: "Solving complex problems", scores: [3, 0, 0, 0, 0] },
+                        { text: "Caring for people & life sciences", scores: [0, 3, 0, 0, 0] },
+                        { text: "Running projects or businesses", scores: [0, 0, 3, 0, 0] },
+                        { text: "Creating art, writing, media", scores: [0, 0, 0, 3, 0] }
+                    ]
+                },
+                {
+                    id: 3,
+                    text: "Preferred work environment?",
+                    options: [
+                        { text: "Labs / R&D", scores: [3, 1, 0, 0, 0] },
+                        { text: "Hospitals / Clinics", scores: [0, 3, 0, 0, 0] },
+                        { text: "Corporate / Offices", scores: [0, 0, 3, 1, 0] },
+                        { text: "Studios / Field work", scores: [0, 0, 0, 3, 2] }
+                    ]
+                },
+                {
+                    id: 4,
+                    text: "How do you prefer to spend weekends?",
+                    options: [
+                        { text: "Learning coding or electronics", scores: [3, 0, 0, 0, 0] },
+                        { text: "Volunteering / mentoring", scores: [0, 3, 0, 0, 0] },
+                        { text: "Business competitions / stock games", scores: [0, 0, 3, 0, 0] },
+                        { text: "Reading novels / visiting museums", scores: [0, 0, 0, 3, 0] }
+                    ]
+                },
+                {
+                    id: 5,
+                    text: "What skill are you most proud of?",
+                    options: [
+                        { text: "Analytical thinking", scores: [3, 1, 0, 0, 0] },
+                        { text: "Empathy & communication", scores: [0, 3, 0, 0, 0] },
+                        { text: "Numeracy & negotiation", scores: [0, 0, 3, 0, 0] },
+                        { text: "Creative expression", scores: [0, 0, 0, 3, 0] }
+                    ]
+                },
+                {
+                    id: 6,
+                    text: "Do you prefer hands-on practical work?",
+                    options: [
+                        { text: "Yes, technical labs", scores: [2, 1, 0, 0, 2] },
+                        { text: "Yes, patient care", scores: [0, 3, 0, 0, 1] },
+                        { text: "No, prefer office-based", scores: [0, 0, 3, 0, 0] },
+                        { text: "Depends — creativity involved", scores: [0, 0, 0, 3, 2] }
+                    ]
+                },
+                {
+                    id: 7,
+                    text: "Which problem would you rather solve?",
+                    options: [
+                        { text: "Optimization / algorithms", scores: [3, 0, 0, 0, 0] },
+                        { text: "Diagnose a health issue", scores: [0, 3, 0, 0, 0] },
+                        { text: "Improve business profits", scores: [0, 0, 3, 0, 0] },
+                        { text: "Design an engaging campaign", scores: [0, 0, 0, 3, 0] }
+                    ]
+                },
+                {
+                    id: 8,
+                    text: "How important is job stability to you?",
+                    options: [
+                        { text: "Important", scores: [1, 1, 1, 2, 3] },
+                        { text: "Very important", scores: [1, 2, 1, 2, 3] },
+                        { text: "I prefer high growth risk", scores: [3, 1, 3, 2, 1] },
+                        { text: "Creativity and freedom matter", scores: [0, 0, 1, 3, 1] }
+                    ]
+                },
+                {
+                    id: 9,
+                    text: "Do you enjoy math-heavy topics?",
+                    options: [
+                        { text: "Love it", scores: [3, 0, 0, 0, 0] },
+                        { text: "Somewhat", scores: [1, 0, 1, 0, 0] },
+                        { text: "Not really", scores: [0, 0, 0, 3, 2] },
+                        { text: "Only applied math", scores: [2, 0, 1, 1, 1] }
+                    ]
+                },
+                {
+                    id: 10,
+                    text: "Which describes your communication style?",
+                    options: [
+                        { text: "Technical & precise", scores: [3, 0, 0, 0, 0] },
+                        { text: "Compassionate & clear", scores: [0, 3, 0, 0, 0] },
+                        { text: "Persuasive & concise", scores: [0, 0, 3, 0, 0] },
+                        { text: "Storyteller/visual", scores: [0, 0, 0, 3, 0] }
+                    ]
+                },
+                {
+                    id: 11,
+                    text: "Would you relocate for job/education?",
+                    options: [
+                        { text: "Yes, anywhere for the right role", scores: [2, 2, 2, 1, 2] },
+                        { text: "Prefer in-city / nearby", scores: [1, 1, 1, 2, 1] },
+                        { text: "Only if field demands it", scores: [2, 3, 1, 1, 1] },
+                        { text: "Prefer local / community roles", scores: [0, 0, 1, 3, 3] }
+                    ]
+                },
+                {
+                    id: 12,
+                    text: "How do you approach learning?",
+                    options: [
+                        { text: "Structured courses & labs", scores: [3, 1, 0, 0, 0] },
+                        { text: "Mentored/apprenticeship", scores: [0, 3, 0, 0, 2] },
+                        { text: "Self-study & case studies", scores: [1, 0, 3, 1, 1] },
+                        { text: "Workshops & portfolio", scores: [0, 0, 0, 3, 3] }
+                    ]
+                },
+                {
+                    id: 13,
+                    text: "Which tool would you rather use daily?",
+                    options: [
+                        { text: "IDE / simulation tools", scores: [3, 0, 0, 0, 1] },
+                        { text: "Medical instruments / reports", scores: [0, 3, 0, 0, 1] },
+                        { text: "Excel / analytics platforms", scores: [0, 0, 3, 0, 0] },
+                        { text: "Design suites / cameras", scores: [0, 0, 0, 3, 2] }
+                    ]
+                },
+                {
+                    id: 14,
+                    text: "What's your long-term priority?",
+                    options: [
+                        { text: "Technical leadership / R&D", scores: [3, 0, 0, 0, 0] },
+                        { text: "Clinical expertise / service", scores: [0, 3, 0, 0, 0] },
+                        { text: "Business owner / finance head", scores: [0, 0, 3, 0, 0] },
+                        { text: "Creative director / educator", scores: [0, 0, 0, 3, 0] }
+                    ]
+                },
+                {
+                    id: 15,
+                    text: "Would you like work with tangible results?",
+                    options: [
+                        { text: "Yes, build products/systems", scores: [3, 0, 0, 0, 2] },
+                        { text: "Yes — patient outcomes", scores: [0, 3, 0, 0, 1] },
+                        { text: "Yes — business impact", scores: [0, 0, 3, 0, 1] },
+                        { text: "Yes — creative outputs", scores: [0, 0, 0, 3, 2] }
+                    ]
+                }
+            ],
+            streams: [
+                { name: "Engineering & Technology", color: "rgba(52, 152, 219, 0.7)" },
+                { name: "Medical & Health Sciences", color: "rgba(231, 76, 60, 0.7)" },
+                { name: "Commerce & Business", color: "rgba(46, 204, 113, 0.7)" },
+                { name: "Arts & Humanities", color: "rgba(155, 89, 182, 0.7)" },
+                { name: "Vocational & Skill-based", color: "rgba(241, 196, 15, 0.7)" }
+            ],
+            streamDetails: {
+                "Engineering & Technology": {
+                    description: "Engineering & Technology focuses on applying scientific principles to design, build, and maintain structures, machines, devices, systems, and processes.",
+                    careers: ["Software Engineer", "Mechanical Engineer", "Civil Engineer", "Data Scientist", "AI Specialist"],
+                    courses: ["B.Tech/B.E. in various specializations", "B.Sc in Computer Science", "Diploma in Engineering"],
+                    skills: ["Analytical thinking", "Problem-solving", "Mathematics", "Technical knowledge"],
+                    growth: "High demand with competitive salaries. Continuous learning required due to rapid technological advancements."
+                },
+                "Medical & Health Sciences": {
+                    description: "Medical & Health Sciences involve the study, diagnosis, treatment, and prevention of human diseases and the maintenance of health.",
+                    careers: ["Doctor", "Surgeon", "Dentist", "Pharmacist", "Medical Researcher"],
+                    courses: ["MBBS", "BDS", "B.Pharm", "B.Sc Nursing", "Physiotherapy"],
+                    skills: ["Empathy", "Attention to detail", "Scientific knowledge", "Communication skills"],
+                    growth: "High job security and respect. Requires extensive education but offers rewarding careers helping others."
+                },
+                "Commerce & Business": {
+                    description: "Commerce & Business focus on trade, finance, accounting, economics, and management of commercial enterprises.",
+                    careers: ["Chartered Accountant", "Business Analyst", "Financial Advisor", "Marketing Manager", "Entrepreneur"],
+                    courses: ["B.Com", "BBA", "CA", "CS", "MBA"],
+                    skills: ["Numerical ability", "Analytical skills", "Business acumen", "Communication"],
+                    growth: "Diverse opportunities in corporate sector, banking, and entrepreneurship. Good earning potential with experience."
+                },
+                "Arts & Humanities": {
+                    description: "Arts & Humanities encompass the study of human culture, creativity, history, languages, literature, philosophy, and social sciences.",
+                    careers: ["Writer", "Historian", "Psychologist", "Teacher", "Social Worker"],
+                    courses: ["B.A. in various subjects", "B.F.A.", "B.Ed.", "Mass Communication"],
+                    skills: ["Creative thinking", "Communication", "Critical analysis", "Research skills"],
+                    growth: "Diverse career paths in education, media, civil services, and creative industries. Opportunities for social impact."
+                },
+                "Vocational & Skill-based": {
+                    description: "Vocational & Skill-based education focuses on practical training for specific trades, crafts, and technical careers.",
+                    careers: ["Electrician", "Automotive Technician", "Chef", "Graphic Designer", "Beautician"],
+                    courses: ["Diploma courses", "ITI programs", "Certificate courses", "Apprenticeships"],
+                    skills: ["Hands-on skills", "Technical knowledge", "Problem-solving", "Attention to detail"],
+                    growth: "High demand for skilled technicians. Faster entry into workforce with practical, job-ready skills."
+                }
+            }
+        };
+
+        // Assessment State
+        let currentQuestion = 0;
+        let userAnswers = new Array(assessmentData.questions.length).fill(null);
+        let userScores = [0, 0, 0, 0, 0]; // Scores for each stream
+
+        // DOM Elements
+        const assessmentIntro = document.getElementById('assessmentIntro');
+        const assessmentQuestions = document.getElementById('assessmentQuestions');
+        const assessmentResults = document.getElementById('assessmentResults');
+        const questionContainer = document.getElementById('questionContainer');
+        const progressText = document.getElementById('progressText');
+        const progressPercent = document.getElementById('progressPercent');
+        const progressFill = document.getElementById('progressFill');
+        const prevButton = document.getElementById('prevQuestion');
+        const nextButton = document.getElementById('nextQuestion');
+        const startButton = document.getElementById('startAssessment');
+        const retakeButton = document.getElementById('retakeAssessment');
+        const downloadButton = document.getElementById('downloadReport');
+        const streamResults = document.getElementById('streamResults');
+
+        // Initialize Assessment
+        function initAssessment() {
+            // Event Listeners
+            startButton.addEventListener('click', startAssessment);
+            prevButton.addEventListener('click', goToPreviousQuestion);
+            nextButton.addEventListener('click', goToNextQuestion);
+            retakeButton.addEventListener('click', retakeAssessment);
+            downloadButton.addEventListener('click', downloadReport);
+
+            // Theme toggle functionality
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = themeToggle.querySelector('i');
+            const body = document.body;
+            
+            themeToggle.addEventListener('click', () => {
+                if (body.getAttribute('data-theme') === 'light') {
+                    body.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                } else {
+                    body.setAttribute('data-theme', 'light');
+                    localStorage.setItem('theme', 'light');
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                }
+            });
+
+            // Load saved theme
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                body.setAttribute('data-theme', savedTheme);
+                if (savedTheme === 'dark') {
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                }
+            }
+
+            // Mobile menu functionality
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const closeMobileMenu = document.getElementById('closeMobileMenu');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.style.display = 'block';
+            });
+            
+            closeMobileMenu.addEventListener('click', () => {
+                mobileMenu.style.display = 'none';
+            });
+
+            // Fade in animation for elements
+            const fadeElements = document.querySelectorAll('.fade-in');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            fadeElements.forEach(el => observer.observe(el));
+        }
+
+        // Start Assessment
+        function startAssessment() {
+            assessmentIntro.style.display = 'none';
+            assessmentQuestions.style.display = 'block';
+            loadQuestion(currentQuestion);
+        }
+
+        // Load Question
+        function loadQuestion(index) {
+            const question = assessmentData.questions[index];
+            
+            // Update progress
+            progressText.textContent = `Question ${index + 1} of ${assessmentData.questions.length}`;
+            const progressPercentage = ((index + 1) / assessmentData.questions.length) * 100;
+            progressPercent.textContent = `${Math.round(progressPercentage)}%`;
+            progressFill.style.width = `${progressPercentage}%`;
+            
+            // Update navigation buttons
+            prevButton.disabled = index === 0;
+            nextButton.textContent = index === assessmentData.questions.length - 1 ? 'See Results' : 'Next';
+            
+            // Render question
+            let questionHTML = `
+                <h3 class="text-xl font-semibold mb-6">${question.text}</h3>
+                <div class="space-y-4">
+            `;
+            
+            question.options.forEach((option, optionIndex) => {
+                const isSelected = userAnswers[index] === optionIndex;
+                questionHTML += `
+                    <div class="option-card ${isSelected ? 'selected' : ''}" data-option="${optionIndex}">
+                        <div class="flex items-center">
+                            <div class="w-6 h-6 rounded-full border-2 ${isSelected ? 'border-primary bg-primary' : 'border-gray-400'} flex items-center justify-center mr-3">
+                                ${isSelected ? '<i class="fas fa-check text-white text-xs"></i>' : ''}
+                            </div>
+                            <span>${option.text}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            questionHTML += `</div>`;
+            questionContainer.innerHTML = questionHTML;
+            
+            // Add event listeners to options
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const optionIndex = parseInt(this.getAttribute('data-option'));
+                    selectOption(index, optionIndex);
+                });
+            });
+        }
+
+        // Select Option
+        function selectOption(questionIndex, optionIndex) {
+            userAnswers[questionIndex] = optionIndex;
+            
+            // Update selected option UI
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.querySelector(`.option-card[data-option="${optionIndex}"]`).classList.add('selected');
+            
+            // Enable next button
+            nextButton.disabled = false;
+        }
+
+        // Go to Previous Question
+        function goToPreviousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion(currentQuestion);
+            }
+        }
+
+        // Go to Next Question
+        function goToNextQuestion() {
+            if (userAnswers[currentQuestion] === null) {
+                alert('Please select an option to continue.');
+                return;
+            }
+            
+            if (currentQuestion < assessmentData.questions.length - 1) {
+                currentQuestion++;
+                loadQuestion(currentQuestion);
+            } else {
+                calculateResults();
+                showResults();
+            }
+        }
+
+        // Calculate Results
+        function calculateResults() {
+            // Reset scores
+            userScores = [0, 0, 0, 0, 0];
+            
+            // Calculate scores based on answers
+            userAnswers.forEach((answer, questionIndex) => {
+                if (answer !== null) {
+                    const optionScores = assessmentData.questions[questionIndex].options[answer].scores;
+                    optionScores.forEach((score, streamIndex) => {
+                        userScores[streamIndex] += score;
+                    });
+                }
+            });
+        }
+
+        // Show Results
+        function showResults() {
+            assessmentQuestions.style.display = 'none';
+            assessmentResults.style.display = 'block';
+            
+            // Create results chart
+            const ctx = document.getElementById('resultsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: assessmentData.streams.map(stream => stream.name),
+                    datasets: [{
+                        label: 'Your Match Score',
+                        data: userScores,
+                        backgroundColor: assessmentData.streams.map(stream => stream.color),
+                        borderColor: assessmentData.streams.map(stream => stream.color.replace('0.7', '1')),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: Math.max(...userScores) + 5,
+                            title: {
+                                display: true,
+                                text: 'Match Score'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+            
+            // Display stream results
+            let resultsHTML = '';
+            const maxScore = Math.max(...userScores);
+            
+            assessmentData.streams.forEach((stream, index) => {
+                const score = userScores[index];
+                const isTopStream = score === maxScore;
+                
+                resultsHTML += `
+                    <div class="stream-card ${isTopStream ? 'stream-highlight' : ''} animate-fade-in-up" style="animation-delay: ${index * 0.1}s">
+                        <div class="flex justify-between items-start mb-3">
+                            <h4 class="text-xl font-semibold">${stream.name}</h4>
+                            <span class="text-lg font-bold">${score}/45</span>
+                        </div>
+                        <p class="mb-3">${assessmentData.streamDetails[stream.name].description}</p>
+                        
+                        <div class="grid md:grid-cols-2 gap-4 mb-3">
+                            <div>
+                                <h5 class="font-semibold mb-1">Top Careers:</h5>
+                                <ul class="list-disc pl-5">
+                                    ${assessmentData.streamDetails[stream.name].careers.map(career => `<li>${career}</li>`).join('')}
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="font-semibold mb-1">Recommended Courses:</h5>
+                                <ul class="list-disc pl-5">
+                                    ${assessmentData.streamDetails[stream.name].courses.map(course => `<li>${course}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <h5 class="font-semibold mb-1">Key Skills:</h5>
+                            <p>${assessmentData.streamDetails[stream.name].skills.join(', ')}</p>
+                        </div>
+                        
+                        <div>
+                            <h5 class="font-semibold mb-1">Growth Outlook:</h5>
+                            <p>${assessmentData.streamDetails[stream.name].growth}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            streamResults.innerHTML = resultsHTML;
+        }
+
+        // Retake Assessment
+        function retakeAssessment() {
+            currentQuestion = 0;
+            userAnswers.fill(null);
+            userScores = [0, 0, 0, 0, 0];
+            
+            assessmentResults.style.display = 'none';
+            assessmentIntro.style.display = 'block';
+        }
+
+        // Download Report
+        function downloadReport() {
+            alert('Your detailed career assessment report has been downloaded!');
+            // In a real implementation, this would generate and download a PDF report
+        }
+
+        // Initialize the assessment when the page loads
+        document.addEventListener('DOMContentLoaded', initAssessment);
+    </script>
+</body>
+</html>
